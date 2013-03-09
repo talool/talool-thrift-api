@@ -1,6 +1,6 @@
 package com.talool.service;
 
-import org.apache.thrift.protocol.TCompactProtocol;
+import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServlet;
 
 import com.talool.thrift.TaloolService;
@@ -18,7 +18,6 @@ public class TServletTaloolService extends TServlet
 
 	public TServletTaloolService()
 	{
-		super(new TaloolService.Processor(new TaloolThriftServiceImpl()),
-				new TCompactProtocol.Factory());
+		super(new TaloolService.Processor(new TaloolThriftServiceImpl()), new TBinaryProtocol.Factory());
 	}
 }
