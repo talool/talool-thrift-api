@@ -7,10 +7,10 @@
  */
 package com.talool.service;
 
+import com.talool.api.thrift.Customer_t;
+import com.talool.api.thrift.Sex_t;
 import com.talool.core.Customer;
 import com.talool.core.Sex;
-import com.talool.thrift.TCustomer;
-import com.talool.thrift.TSex;
 
 /**
  * @author clintz
@@ -25,7 +25,7 @@ public final class ConversionUtil
 	 * @param thriftCustomer
 	 * @return
 	 */
-	public static Customer convertFromThrift(TCustomer thriftCustomer)
+	public static Customer convertFromThrift(Customer_t thriftCustomer)
 	{
 		final Customer cust = ServiceFactory.get().getTaloolService().newCustomer();
 
@@ -41,9 +41,9 @@ public final class ConversionUtil
 		return cust;
 	}
 
-	public static TCustomer convertToThrift(Customer customer)
+	public static Customer_t convertToThrift(Customer customer)
 	{
-		final TCustomer thriftCust = new TCustomer();
+		final Customer_t thriftCust = new Customer_t();
 		thriftCust.setCustomerId(customer.getId());
 		thriftCust.setEmail(customer.getEmail());
 		thriftCust.setFirstName(customer.getFirstName());
@@ -53,7 +53,7 @@ public final class ConversionUtil
 
 		if (customer.getSex() != null)
 		{
-			thriftCust.setSex(TSex.valueOf(customer.getSex().getLetter()));
+			thriftCust.setSex(Sex_t.valueOf(customer.getSex().getLetter()));
 		}
 
 		return thriftCust;
