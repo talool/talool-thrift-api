@@ -7,10 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.api.thrift.CTokenAccess_t;
+import com.talool.api.thrift.CustomerServiceConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
+import com.talool.api.thrift.Token_t;
 import com.talool.core.Customer;
 import com.talool.service.util.TokenUtil;
 
@@ -49,7 +51,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			taloolService.registerCustomer(ConversionUtil.convertFromThrift(customer), password);
+			taloolService.createAccount(ConversionUtil.convertFromThrift(customer), password);
 			token = TokenUtil.createTokenAccess(customer);
 		}
 		catch (Exception e)
@@ -65,12 +67,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	public CTokenAccess_t authenticate(String email, String password) throws ServiceException_t, TException
 	{
 		CTokenAccess_t token = null;
-		final HttpServletRequest request = RequestUtils.getRequest();
-		final String taloolToken = request.getHeader("ttok");
 
 		try
 		{
-			final Customer customer = taloolService.authCustomer(email, password);
+			final Customer customer = taloolService.authenticateCustomer(email, password);
 			final Customer_t thriftCust = ConversionUtil.convertToThrift(customer);
 			token = TokenUtil.createTokenAccess(thriftCust);
 			return token;
@@ -80,5 +80,45 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem authenticatiing customer: " + e, e);
 			throw new ServiceException_t(1000, e.getLocalizedMessage());
 		}
+	}
+
+	private Token_t getToken() throws ServiceException_t
+	{
+		final HttpServletRequest request = RequestUtils.getRequest();
+		final String tokenStr = request.getHeader(CustomerServiceConstants.CTOKEN_NAME);
+
+		if (tokenStr == null)
+		{
+			throw new ServiceException_t(101, "Missing token");
+		}
+
+		final Token_t token = TokenUtil.getToken(tokenStr);
+
+		if (token == null)
+		{
+			throw new ServiceException_t(101, "Invalid token token");
+		}
+
+		return token;
+	}
+
+	@Override
+	public void save(final Customer_t cust_t) throws ServiceException_t, TException
+	{
+		final Token_t token = getToken();
+
+		try
+		{
+			final Customer customer = taloolService.getCustomerByEmail(token.getEmail());
+			ConversionUtil.copyFromThrift(cust_t, customer);
+			taloolService.save(customer);
+
+		}
+		catch (Exception ex)
+		{
+			LOG.error("Problem saving customer: " + ex, ex);
+			throw new ServiceException_t(102, "Problem saving customer");
+		}
+
 	}
 }

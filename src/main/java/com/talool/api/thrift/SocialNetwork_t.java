@@ -12,9 +12,9 @@ import java.util.HashMap;
 import org.apache.thrift.TEnum;
 
 public enum SocialNetwork_t implements org.apache.thrift.TEnum {
-  FACEBOOK(0),
-  TWITTER(1),
-  PINTEREST(2);
+  Facebook(0),
+  Twitter(1),
+  Pinterest(2);
 
   private final int value;
 
@@ -36,11 +36,11 @@ public enum SocialNetwork_t implements org.apache.thrift.TEnum {
   public static SocialNetwork_t findByValue(int value) { 
     switch (value) {
       case 0:
-        return FACEBOOK;
+        return Facebook;
       case 1:
-        return TWITTER;
+        return Twitter;
       case 2:
-        return PINTEREST;
+        return Pinterest;
       default:
         return null;
     }

@@ -13,7 +13,7 @@
             http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<context:component-scan base-package="com.talool" />
+	<!--  <context:component-scan base-package="com.talool" />-->
 	
 	<import resource="./dataSource.xml"/>
 	<import resource="./taloolService.xml"/>

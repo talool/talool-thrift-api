@@ -24,7 +24,7 @@
 
 	<filter-mapping>
 		<filter-name>hibernateFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/api</url-pattern>
 	</filter-mapping>
 
 	<servlet>
@@ -35,7 +35,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TServletExample</servlet-name>
-		<url-pattern>/talool</url-pattern>
+		<url-pattern>/api</url-pattern>
 	</servlet-mapping>
 
 	

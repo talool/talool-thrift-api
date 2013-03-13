@@ -7,14 +7,18 @@ import org.apache.thrift.transport.THttpClient;
 import org.apache.thrift.transport.TTransportException;
 
 import com.talool.api.thrift.CTokenAccess_t;
+import com.talool.api.thrift.CustomerServiceConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
+import com.talool.api.thrift.SocialAccount_t;
+import com.talool.api.thrift.SocialNetwork_t;
 
 public class TServletTalookServiceTest
 {
-	static String servletUrl = "http://localhost:8080/talool";
+	// static String servletUrl = "http://www.talool.com/api";
+	static String servletUrl = "http://localhost:8080/api";
 
 	public static void main(String args[]) throws TTransportException, TException
 	{
@@ -35,8 +39,29 @@ public class TServletTalookServiceTest
 		{
 			// client.registerCustomer(customer, "pass123");
 			CTokenAccess_t accessToken = client.authenticate("christopher5.justin@gmail.com", "pass123");
+
 			System.out.println("Customer: " + accessToken.getCustomer());
 			System.out.println("Token: " + accessToken.getToken());
+
+			// test update account
+			SocialAccount_t sac = accessToken.getCustomer().getSocialAccounts().get(SocialNetwork_t.Facebook);
+			Customer_t cust = accessToken.getCustomer();
+
+			// set header on all calls!
+			thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
+
+			sac.setLoginId("cupdate-123");
+
+			client.save(cust);
+
+			// test adding social account
+			SocialAccount_t twitterAccount = new SocialAccount_t();
+			twitterAccount.setLoginId("twitter-login");
+			twitterAccount.setSocalNetwork(SocialNetwork_t.Twitter);
+			twitterAccount.setToken("twitter-token");
+			cust.getSocialAccounts().put(SocialNetwork_t.Twitter, twitterAccount);
+			client.save(cust);
+
 		}
 		catch (ServiceException_t e)
 		{

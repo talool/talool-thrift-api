@@ -10,7 +10,7 @@ typedef i64 Timestamp
 
 enum Sex_t { M,F,U }
 
-enum SocialNetwork_t { FACEBOOK, TWITTER, PINTEREST }
+enum SocialNetwork_t { Facebook, Twitter, Pinterest }
 
 exception ServiceException_t {
   1: required i32 errorCode,
@@ -28,9 +28,7 @@ struct SocialAccount_t {
   1: required SocialNetwork_t socalNetwork;
   2: required string loginId;
   3: optional string token;
-  4: optional string apiUrl;
   20: optional Timestamp created;
-  
   21: optional Timestamp updated;
 }
 
