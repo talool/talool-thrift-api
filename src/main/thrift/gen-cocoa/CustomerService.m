@@ -1580,29 +1580,20 @@ static NSString * CTOKEN_NAME = @"ctok";
 @end
 
 @interface addSocialAccount_args : NSObject <NSCoding> {
-  NSString * __email;
   SocialAccount_t * __socialAccount;
 
-  BOOL __email_isset;
   BOOL __socialAccount_isset;
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=email, setter=setEmail:) NSString * email;
 @property (nonatomic, retain, getter=socialAccount, setter=setSocialAccount:) SocialAccount_t * socialAccount;
 #endif
 
 - (id) init;
-- (id) initWithEmail: (NSString *) email socialAccount: (SocialAccount_t *) socialAccount;
+- (id) initWithSocialAccount: (SocialAccount_t *) socialAccount;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
-
-#if !__has_feature(objc_arc)
-- (NSString *) email;
-- (void) setEmail: (NSString *) email;
-#endif
-- (BOOL) emailIsSet;
 
 #if !__has_feature(objc_arc)
 - (SocialAccount_t *) socialAccount;
@@ -1622,11 +1613,9 @@ static NSString * CTOKEN_NAME = @"ctok";
   return self;
 }
 
-- (id) initWithEmail: (NSString *) email socialAccount: (SocialAccount_t *) socialAccount
+- (id) initWithSocialAccount: (SocialAccount_t *) socialAccount
 {
   self = [super init];
-  __email = [email retain_stub];
-  __email_isset = YES;
   __socialAccount = [socialAccount retain_stub];
   __socialAccount_isset = YES;
   return self;
@@ -1635,11 +1624,6 @@ static NSString * CTOKEN_NAME = @"ctok";
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
-  if ([decoder containsValueForKey: @"email"])
-  {
-    __email = [[decoder decodeObjectForKey: @"email"] retain_stub];
-    __email_isset = YES;
-  }
   if ([decoder containsValueForKey: @"socialAccount"])
   {
     __socialAccount = [[decoder decodeObjectForKey: @"socialAccount"] retain_stub];
@@ -1650,10 +1634,6 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
-  if (__email_isset)
-  {
-    [encoder encodeObject: __email forKey: @"email"];
-  }
   if (__socialAccount_isset)
   {
     [encoder encodeObject: __socialAccount forKey: @"socialAccount"];
@@ -1662,30 +1642,8 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 - (void) dealloc
 {
-  [__email release_stub];
   [__socialAccount release_stub];
   [super dealloc_stub];
-}
-
-- (NSString *) email {
-  return [[__email retain_stub] autorelease_stub];
-}
-
-- (void) setEmail: (NSString *) email {
-  [email retain_stub];
-  [__email release_stub];
-  __email = email;
-  __email_isset = YES;
-}
-
-- (BOOL) emailIsSet {
-  return __email_isset;
-}
-
-- (void) unsetEmail {
-  [__email release_stub];
-  __email = nil;
-  __email_isset = NO;
 }
 
 - (SocialAccount_t *) socialAccount {
@@ -1725,14 +1683,6 @@ static NSString * CTOKEN_NAME = @"ctok";
     switch (fieldID)
     {
       case 1:
-        if (fieldType == TType_STRING) {
-          NSString * fieldValue = [inProtocol readString];
-          [self setEmail: fieldValue];
-        } else { 
-          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
-        }
-        break;
-      case 2:
         if (fieldType == TType_STRUCT) {
           SocialAccount_t *fieldValue = [[SocialAccount_t alloc] init];
           [fieldValue read: inProtocol];
@@ -1753,16 +1703,9 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 - (void) write: (id <TProtocol>) outProtocol {
   [outProtocol writeStructBeginWithName: @"addSocialAccount_args"];
-  if (__email_isset) {
-    if (__email != nil) {
-      [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
-      [outProtocol writeString: __email];
-      [outProtocol writeFieldEnd];
-    }
-  }
   if (__socialAccount_isset) {
     if (__socialAccount != nil) {
-      [outProtocol writeFieldBeginWithName: @"socialAccount" type: TType_STRUCT fieldID: 2];
+      [outProtocol writeFieldBeginWithName: @"socialAccount" type: TType_STRUCT fieldID: 1];
       [__socialAccount write: outProtocol];
       [outProtocol writeFieldEnd];
     }
@@ -1773,9 +1716,7 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 - (NSString *) description {
   NSMutableString * ms = [NSMutableString stringWithString: @"addSocialAccount_args("];
-  [ms appendString: @"email:"];
-  [ms appendFormat: @"\"%@\"", __email];
-  [ms appendString: @",socialAccount:"];
+  [ms appendString: @"socialAccount:"];
   [ms appendFormat: @"%@", __socialAccount];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
@@ -2123,17 +2064,12 @@ static NSString * CTOKEN_NAME = @"ctok";
   [self recv_save];
 }
 
-- (void) send_addSocialAccount: (NSString *) email socialAccount: (SocialAccount_t *) socialAccount
+- (void) send_addSocialAccount: (SocialAccount_t *) socialAccount
 {
   [outProtocol writeMessageBeginWithName: @"addSocialAccount" type: TMessageType_CALL sequenceID: 0];
   [outProtocol writeStructBeginWithName: @"addSocialAccount_args"];
-  if (email != nil)  {
-    [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
-    [outProtocol writeString: email];
-    [outProtocol writeFieldEnd];
-  }
   if (socialAccount != nil)  {
-    [outProtocol writeFieldBeginWithName: @"socialAccount" type: TType_STRUCT fieldID: 2];
+    [outProtocol writeFieldBeginWithName: @"socialAccount" type: TType_STRUCT fieldID: 1];
     [socialAccount write: outProtocol];
     [outProtocol writeFieldEnd];
   }
@@ -2161,9 +2097,9 @@ static NSString * CTOKEN_NAME = @"ctok";
   return;
 }
 
-- (void) addSocialAccount: (NSString *) email socialAccount: (SocialAccount_t *) socialAccount
+- (void) addSocialAccount: (SocialAccount_t *) socialAccount
 {
-  [self send_addSocialAccount : email socialAccount: socialAccount];
+  [self send_addSocialAccount : socialAccount];
   [self recv_addSocialAccount];
 }
 
@@ -2334,7 +2270,7 @@ static NSString * CTOKEN_NAME = @"ctok";
   [args read: inProtocol];
   [inProtocol readMessageEnd];
   AddSocialAccount_result * result = [[AddSocialAccount_result alloc] init];
-  [mService addSocialAccount: [args email] socialAccount: [args socialAccount]];
+  [mService addSocialAccount: [args socialAccount]];
   [outProtocol writeMessageBeginWithName: @"addSocialAccount"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];

@@ -9,12 +9,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.thrift.TBase;
 import org.apache.thrift.TBaseHelper;
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
 import org.apache.thrift.TSerializer;
 import org.apache.thrift.protocol.TProtocolFactory;
+
+import com.talool.api.thrift.CustomerServiceConstants;
+import com.talool.api.thrift.ServiceException_t;
+import com.talool.api.thrift.Token_t;
+import com.talool.service.RequestUtils;
 
 /**
  * @author clintz

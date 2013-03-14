@@ -2,15 +2,20 @@ package com.talool.service.util;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.talool.api.thrift.CTokenAccess_t;
+import com.talool.api.thrift.CustomerServiceConstants;
 import com.talool.api.thrift.Customer_t;
+import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.core.TokenProviderException;
+import com.talool.service.RequestUtils;
 import com.talool.service.ThriftBasedTokenProvider;
 
 /**
@@ -67,4 +72,41 @@ public class TokenUtil
 		return tokenT;
 
 	}
+
+	/**
+	 * Gets the token from the Http header, optionally throws a Token expired
+	 * error if the token is invalid
+	 * 
+	 * @param throwExceptionOnExpired
+	 * @return
+	 * @throws ServiceException_t
+	 */
+	public static Token_t getTokenFromRequest(final boolean throwExceptionOnExpired) throws ServiceException_t
+	{
+		final HttpServletRequest request = RequestUtils.getRequest();
+		final String tokenStr = request.getHeader(CustomerServiceConstants.CTOKEN_NAME);
+
+		if (tokenStr == null)
+		{
+			throw new ServiceException_t(101, "Missing token");
+		}
+
+		final Token_t token = TokenUtil.getToken(tokenStr);
+
+		if (token == null)
+		{
+			throw new ServiceException_t(101, "Invalid token token");
+		}
+
+		if (throwExceptionOnExpired)
+		{
+			if (System.currentTimeMillis() > token.getExpires())
+			{
+				throw new ServiceException_t(1005, "Token has expired. Invalid request");
+			}
+		}
+
+		return token;
+	}
+
 }

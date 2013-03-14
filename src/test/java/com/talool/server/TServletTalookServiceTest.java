@@ -62,6 +62,14 @@ public class TServletTalookServiceTest
 			cust.getSocialAccounts().put(SocialNetwork_t.Twitter, twitterAccount);
 			client.save(cust);
 
+			// test adding
+			SocialAccount_t pinterest = new SocialAccount_t();
+			pinterest.setLoginId("pinterest-login");
+			pinterest.setSocalNetwork(SocialNetwork_t.Pinterest);
+			pinterest.setToken("pinterest-token");
+
+			client.addSocialAccount(pinterest);
+
 		}
 		catch (ServiceException_t e)
 		{

@@ -42,7 +42,7 @@ public class CustomerService_t {
 
     public void save(com.talool.api.thrift.Customer_t customer) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
-    public void addSocialAccount(String email, com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+    public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
   }
 
@@ -56,7 +56,7 @@ public class CustomerService_t {
 
     public void save(com.talool.api.thrift.Customer_t customer, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.save_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void addSocialAccount(String email, com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.addSocialAccount_call> resultHandler) throws org.apache.thrift.TException;
+    public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.addSocialAccount_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -182,16 +182,15 @@ public class CustomerService_t {
       return;
     }
 
-    public void addSocialAccount(String email, com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      send_addSocialAccount(email, socialAccount);
+      send_addSocialAccount(socialAccount);
       recv_addSocialAccount();
     }
 
-    public void send_addSocialAccount(String email, com.talool.api.thrift.SocialAccount_t socialAccount) throws org.apache.thrift.TException
+    public void send_addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws org.apache.thrift.TException
     {
       addSocialAccount_args args = new addSocialAccount_args();
-      args.setEmail(email);
       args.setSocialAccount(socialAccount);
       sendBase("addSocialAccount", args);
     }
@@ -355,26 +354,23 @@ public class CustomerService_t {
       }
     }
 
-    public void addSocialAccount(String email, com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<addSocialAccount_call> resultHandler) throws org.apache.thrift.TException {
+    public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<addSocialAccount_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      addSocialAccount_call method_call = new addSocialAccount_call(email, socialAccount, resultHandler, this, ___protocolFactory, ___transport);
+      addSocialAccount_call method_call = new addSocialAccount_call(socialAccount, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class addSocialAccount_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private String email;
       private com.talool.api.thrift.SocialAccount_t socialAccount;
-      public addSocialAccount_call(String email, com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<addSocialAccount_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public addSocialAccount_call(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<addSocialAccount_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.email = email;
         this.socialAccount = socialAccount;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("addSocialAccount", org.apache.thrift.protocol.TMessageType.CALL, 0));
         addSocialAccount_args args = new addSocialAccount_args();
-        args.setEmail(email);
         args.setSocialAccount(socialAccount);
         args.write(prot);
         prot.writeMessageEnd();
@@ -523,7 +519,7 @@ public class CustomerService_t {
       public addSocialAccount_result getResult(I iface, addSocialAccount_args args) throws org.apache.thrift.TException {
         addSocialAccount_result result = new addSocialAccount_result();
         try {
-          iface.addSocialAccount(args.email, args.socialAccount);
+          iface.addSocialAccount(args.socialAccount);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -3785,8 +3781,7 @@ public class CustomerService_t {
   public static class addSocialAccount_args implements org.apache.thrift.TBase<addSocialAccount_args, addSocialAccount_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("addSocialAccount_args");
 
-    private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField SOCIAL_ACCOUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("socialAccount", org.apache.thrift.protocol.TType.STRUCT, (short)2);
+    private static final org.apache.thrift.protocol.TField SOCIAL_ACCOUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("socialAccount", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -3794,13 +3789,11 @@ public class CustomerService_t {
       schemes.put(TupleScheme.class, new addSocialAccount_argsTupleSchemeFactory());
     }
 
-    public String email; // required
     public com.talool.api.thrift.SocialAccount_t socialAccount; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      EMAIL((short)1, "email"),
-      SOCIAL_ACCOUNT((short)2, "socialAccount");
+      SOCIAL_ACCOUNT((short)1, "socialAccount");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -3815,9 +3808,7 @@ public class CustomerService_t {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // EMAIL
-            return EMAIL;
-          case 2: // SOCIAL_ACCOUNT
+          case 1: // SOCIAL_ACCOUNT
             return SOCIAL_ACCOUNT;
           default:
             return null;
@@ -3862,8 +3853,6 @@ public class CustomerService_t {
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.SOCIAL_ACCOUNT, new org.apache.thrift.meta_data.FieldMetaData("socialAccount", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.SocialAccount_t.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -3874,11 +3863,9 @@ public class CustomerService_t {
     }
 
     public addSocialAccount_args(
-      String email,
       com.talool.api.thrift.SocialAccount_t socialAccount)
     {
       this();
-      this.email = email;
       this.socialAccount = socialAccount;
     }
 
@@ -3886,9 +3873,6 @@ public class CustomerService_t {
      * Performs a deep copy on <i>other</i>.
      */
     public addSocialAccount_args(addSocialAccount_args other) {
-      if (other.isSetEmail()) {
-        this.email = other.email;
-      }
       if (other.isSetSocialAccount()) {
         this.socialAccount = new com.talool.api.thrift.SocialAccount_t(other.socialAccount);
       }
@@ -3899,32 +3883,7 @@ public class CustomerService_t {
     }
 
     public void clear() {
-      this.email = null;
       this.socialAccount = null;
-    }
-
-    public String getEmail() {
-      return this.email;
-    }
-
-    public addSocialAccount_args setEmail(String email) {
-      this.email = email;
-      return this;
-    }
-
-    public void unsetEmail() {
-      this.email = null;
-    }
-
-    /** Returns true if field email is set (has been assigned a value) and false otherwise */
-    public boolean isSetEmail() {
-      return this.email != null;
-    }
-
-    public void setEmailIsSet(boolean value) {
-      if (!value) {
-        this.email = null;
-      }
     }
 
     public com.talool.api.thrift.SocialAccount_t getSocialAccount() {
@@ -3953,14 +3912,6 @@ public class CustomerService_t {
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
-      case EMAIL:
-        if (value == null) {
-          unsetEmail();
-        } else {
-          setEmail((String)value);
-        }
-        break;
-
       case SOCIAL_ACCOUNT:
         if (value == null) {
           unsetSocialAccount();
@@ -3974,9 +3925,6 @@ public class CustomerService_t {
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
-      case EMAIL:
-        return getEmail();
-
       case SOCIAL_ACCOUNT:
         return getSocialAccount();
 
@@ -3991,8 +3939,6 @@ public class CustomerService_t {
       }
 
       switch (field) {
-      case EMAIL:
-        return isSetEmail();
       case SOCIAL_ACCOUNT:
         return isSetSocialAccount();
       }
@@ -4011,15 +3957,6 @@ public class CustomerService_t {
     public boolean equals(addSocialAccount_args that) {
       if (that == null)
         return false;
-
-      boolean this_present_email = true && this.isSetEmail();
-      boolean that_present_email = true && that.isSetEmail();
-      if (this_present_email || that_present_email) {
-        if (!(this_present_email && that_present_email))
-          return false;
-        if (!this.email.equals(that.email))
-          return false;
-      }
 
       boolean this_present_socialAccount = true && this.isSetSocialAccount();
       boolean that_present_socialAccount = true && that.isSetSocialAccount();
@@ -4046,16 +3983,6 @@ public class CustomerService_t {
       int lastComparison = 0;
       addSocialAccount_args typedOther = (addSocialAccount_args)other;
 
-      lastComparison = Boolean.valueOf(isSetEmail()).compareTo(typedOther.isSetEmail());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetEmail()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.email, typedOther.email);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
       lastComparison = Boolean.valueOf(isSetSocialAccount()).compareTo(typedOther.isSetSocialAccount());
       if (lastComparison != 0) {
         return lastComparison;
@@ -4086,14 +4013,6 @@ public class CustomerService_t {
       StringBuilder sb = new StringBuilder("addSocialAccount_args(");
       boolean first = true;
 
-      sb.append("email:");
-      if (this.email == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.email);
-      }
-      first = false;
-      if (!first) sb.append(", ");
       sb.append("socialAccount:");
       if (this.socialAccount == null) {
         sb.append("null");
@@ -4147,15 +4066,7 @@ public class CustomerService_t {
             break;
           }
           switch (schemeField.id) {
-            case 1: // EMAIL
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.email = iprot.readString();
-                struct.setEmailIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // SOCIAL_ACCOUNT
+            case 1: // SOCIAL_ACCOUNT
               if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
                 struct.socialAccount = new com.talool.api.thrift.SocialAccount_t();
                 struct.socialAccount.read(iprot);
@@ -4179,11 +4090,6 @@ public class CustomerService_t {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.email != null) {
-          oprot.writeFieldBegin(EMAIL_FIELD_DESC);
-          oprot.writeString(struct.email);
-          oprot.writeFieldEnd();
-        }
         if (struct.socialAccount != null) {
           oprot.writeFieldBegin(SOCIAL_ACCOUNT_FIELD_DESC);
           struct.socialAccount.write(oprot);
@@ -4207,16 +4113,10 @@ public class CustomerService_t {
       public void write(org.apache.thrift.protocol.TProtocol prot, addSocialAccount_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
-        if (struct.isSetEmail()) {
+        if (struct.isSetSocialAccount()) {
           optionals.set(0);
         }
-        if (struct.isSetSocialAccount()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetEmail()) {
-          oprot.writeString(struct.email);
-        }
+        oprot.writeBitSet(optionals, 1);
         if (struct.isSetSocialAccount()) {
           struct.socialAccount.write(oprot);
         }
@@ -4225,12 +4125,8 @@ public class CustomerService_t {
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, addSocialAccount_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(2);
+        BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.email = iprot.readString();
-          struct.setEmailIsSet(true);
-        }
-        if (incoming.get(1)) {
           struct.socialAccount = new com.talool.api.thrift.SocialAccount_t();
           struct.socialAccount.read(iprot);
           struct.setSocialAccountIsSet(true);

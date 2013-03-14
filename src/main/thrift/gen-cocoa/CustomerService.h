@@ -53,7 +53,7 @@
 - (CTokenAccess_t *) authenticate: (NSString *) email password: (NSString *) password;  // throws ServiceException_t *, TException
 - (CTokenAccess_t *) newToken;  // throws ServiceException_t *, TException
 - (void) save: (Customer_t *) customer;  // throws ServiceException_t *, TException
-- (void) addSocialAccount: (NSString *) email socialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
+- (void) addSocialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
 @end
 
 @interface CustomerService_tClient : NSObject <CustomerService_t> {

@@ -75,9 +75,9 @@ public final class ConversionUtil
 			for (final Entry<SocialNetwork_t, SocialAccount_t> sac : thriftCustomer.getSocialAccounts().entrySet())
 			{
 				final SocialAccount_t sAcnt_t = sac.getValue();
+				final String socialNetworkName = sAcnt_t.getSocalNetwork().name();
 
-				final SocialNetwork socialNetwork = ServiceFactory.get().getTaloolService()
-						.getSocialNetwork(sAcnt_t.getSocalNetwork().name());
+				final SocialNetwork socialNetwork = ServiceFactory.get().getTaloolService().getSocialNetwork(socialNetworkName);
 
 				SocialAccount sAccnt = socialAccounts.get(socialNetwork);
 
@@ -85,11 +85,10 @@ public final class ConversionUtil
 				if (sAccnt == null)
 				{
 					LOG.info("No social account for: " + sAcnt_t.getSocalNetwork().name());
-					sAccnt = ServiceFactory.get().getTaloolService().newSocialAccount();
-					cust.addSocialAccount(sAccnt);
+					sAccnt = ServiceFactory.get().getTaloolService().newSocialAccount(socialNetworkName, AccountType.CUS);
 				}
 
-				copyFromThrift(sAcnt_t, sAccnt, AccountType.CUS, socialNetwork, cust.getId());
+				copyFromThrift(sAcnt_t, sAccnt, cust.getId());
 
 			}
 
@@ -98,13 +97,11 @@ public final class ConversionUtil
 	}
 
 	public static void copyFromThrift(final SocialAccount_t thriftSocialAccnt, final SocialAccount socialAccnt,
-			final AccountType accountType, SocialNetwork socialNetwork, final Long userId) throws ServiceException
+			final Long userId) throws ServiceException
 	{
-		socialAccnt.setAccountType(accountType);
 		socialAccnt.setLoginId(thriftSocialAccnt.getLoginId());
 		socialAccnt.setToken(thriftSocialAccnt.getToken());
 		socialAccnt.setUserId(userId);
-		socialAccnt.setSocialNetwork(socialNetwork);
 	}
 
 	public static Customer_t convertToThrift(Customer customer)
