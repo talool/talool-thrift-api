@@ -1016,32 +1016,92 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 @end
 
-@interface newToken_args : NSObject <NSCoding> {
+@interface customerEmailExists_args : NSObject <NSCoding> {
+  NSString * __email;
+
+  BOOL __email_isset;
 }
 
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=email, setter=setEmail:) NSString * email;
+#endif
+
 - (id) init;
+- (id) initWithEmail: (NSString *) email;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
+#if !__has_feature(objc_arc)
+- (NSString *) email;
+- (void) setEmail: (NSString *) email;
+#endif
+- (BOOL) emailIsSet;
+
 @end
 
-@implementation newToken_args
+@implementation customerEmailExists_args
 
 - (id) init
 {
   self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithEmail: (NSString *) email
+{
+  self = [super init];
+  __email = [email retain_stub];
+  __email_isset = YES;
   return self;
 }
 
 - (id) initWithCoder: (NSCoder *) decoder
 {
   self = [super init];
+  if ([decoder containsValueForKey: @"email"])
+  {
+    __email = [[decoder decodeObjectForKey: @"email"] retain_stub];
+    __email_isset = YES;
+  }
   return self;
 }
 
 - (void) encodeWithCoder: (NSCoder *) encoder
 {
+  if (__email_isset)
+  {
+    [encoder encodeObject: __email forKey: @"email"];
+  }
+}
+
+- (void) dealloc
+{
+  [__email release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) email {
+  return [[__email retain_stub] autorelease_stub];
+}
+
+- (void) setEmail: (NSString *) email {
+  [email retain_stub];
+  [__email release_stub];
+  __email = email;
+  __email_isset = YES;
+}
+
+- (BOOL) emailIsSet {
+  return __email_isset;
+}
+
+- (void) unsetEmail {
+  [__email release_stub];
+  __email = nil;
+  __email_isset = NO;
 }
 
 - (void) read: (id <TProtocol>) inProtocol
@@ -1059,6 +1119,14 @@ static NSString * CTOKEN_NAME = @"ctok";
     }
     switch (fieldID)
     {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setEmail: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
       default:
         [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         break;
@@ -1069,21 +1137,30 @@ static NSString * CTOKEN_NAME = @"ctok";
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"newToken_args"];
+  [outProtocol writeStructBeginWithName: @"customerEmailExists_args"];
+  if (__email_isset) {
+    if (__email != nil) {
+      [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __email];
+      [outProtocol writeFieldEnd];
+    }
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"newToken_args("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"customerEmailExists_args("];
+  [ms appendString: @"email:"];
+  [ms appendFormat: @"\"%@\"", __email];
   [ms appendString: @")"];
   return [NSString stringWithString: ms];
 }
 
 @end
 
-@interface NewToken_result : NSObject <NSCoding> {
-  CTokenAccess_t * __success;
+@interface CustomerEmailExists_result : NSObject <NSCoding> {
+  BOOL __success;
   ServiceException_t * __error;
 
   BOOL __success_isset;
@@ -1091,19 +1168,19 @@ static NSString * CTOKEN_NAME = @"ctok";
 }
 
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, retain, getter=success, setter=setSuccess:) CTokenAccess_t * success;
+@property (nonatomic, getter=success, setter=setSuccess:) BOOL success;
 @property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
 #endif
 
 - (id) init;
-- (id) initWithSuccess: (CTokenAccess_t *) success error: (ServiceException_t *) error;
+- (id) initWithSuccess: (BOOL) success error: (ServiceException_t *) error;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
 
 #if !__has_feature(objc_arc)
-- (CTokenAccess_t *) success;
-- (void) setSuccess: (CTokenAccess_t *) success;
+- (BOOL) success;
+- (void) setSuccess: (BOOL) success;
 #endif
 - (BOOL) successIsSet;
 
@@ -1115,7 +1192,7 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 @end
 
-@implementation NewToken_result
+@implementation CustomerEmailExists_result
 
 - (id) init
 {
@@ -1125,10 +1202,10 @@ static NSString * CTOKEN_NAME = @"ctok";
   return self;
 }
 
-- (id) initWithSuccess: (CTokenAccess_t *) success error: (ServiceException_t *) error
+- (id) initWithSuccess: (BOOL) success error: (ServiceException_t *) error
 {
   self = [super init];
-  __success = [success retain_stub];
+  __success = success;
   __success_isset = YES;
   __error = [error retain_stub];
   __error_isset = YES;
@@ -1140,7 +1217,7 @@ static NSString * CTOKEN_NAME = @"ctok";
   self = [super init];
   if ([decoder containsValueForKey: @"success"])
   {
-    __success = [[decoder decodeObjectForKey: @"success"] retain_stub];
+    __success = [decoder decodeBoolForKey: @"success"];
     __success_isset = YES;
   }
   if ([decoder containsValueForKey: @"error"])
@@ -1155,7 +1232,7 @@ static NSString * CTOKEN_NAME = @"ctok";
 {
   if (__success_isset)
   {
-    [encoder encodeObject: __success forKey: @"success"];
+    [encoder encodeBool: __success forKey: @"success"];
   }
   if (__error_isset)
   {
@@ -1165,18 +1242,15 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 - (void) dealloc
 {
-  [__success release_stub];
   [__error release_stub];
   [super dealloc_stub];
 }
 
-- (CTokenAccess_t *) success {
-  return [[__success retain_stub] autorelease_stub];
+- (BOOL) success {
+  return __success;
 }
 
-- (void) setSuccess: (CTokenAccess_t *) success {
-  [success retain_stub];
-  [__success release_stub];
+- (void) setSuccess: (BOOL) success {
   __success = success;
   __success_isset = YES;
 }
@@ -1186,8 +1260,6 @@ static NSString * CTOKEN_NAME = @"ctok";
 }
 
 - (void) unsetSuccess {
-  [__success release_stub];
-  __success = nil;
   __success_isset = NO;
 }
 
@@ -1228,11 +1300,9 @@ static NSString * CTOKEN_NAME = @"ctok";
     switch (fieldID)
     {
       case 0:
-        if (fieldType == TType_STRUCT) {
-          CTokenAccess_t *fieldValue = [[CTokenAccess_t alloc] init];
-          [fieldValue read: inProtocol];
+        if (fieldType == TType_BOOL) {
+          BOOL fieldValue = [inProtocol readBool];
           [self setSuccess: fieldValue];
-          [fieldValue release_stub];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
@@ -1257,14 +1327,12 @@ static NSString * CTOKEN_NAME = @"ctok";
 }
 
 - (void) write: (id <TProtocol>) outProtocol {
-  [outProtocol writeStructBeginWithName: @"NewToken_result"];
+  [outProtocol writeStructBeginWithName: @"CustomerEmailExists_result"];
 
   if (__success_isset) {
-    if (__success != nil) {
-      [outProtocol writeFieldBeginWithName: @"success" type: TType_STRUCT fieldID: 0];
-      [__success write: outProtocol];
-      [outProtocol writeFieldEnd];
-    }
+    [outProtocol writeFieldBeginWithName: @"success" type: TType_BOOL fieldID: 0];
+    [outProtocol writeBool: __success];
+    [outProtocol writeFieldEnd];
   } else if (__error_isset) {
     if (__error != nil) {
       [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
@@ -1277,9 +1345,9 @@ static NSString * CTOKEN_NAME = @"ctok";
 }
 
 - (NSString *) description {
-  NSMutableString * ms = [NSMutableString stringWithString: @"NewToken_result("];
+  NSMutableString * ms = [NSMutableString stringWithString: @"CustomerEmailExists_result("];
   [ms appendString: @"success:"];
-  [ms appendFormat: @"%@", __success];
+  [ms appendFormat: @"%i", __success];
   [ms appendString: @",error:"];
   [ms appendFormat: @"%@", __error];
   [ms appendString: @")"];
@@ -1987,17 +2055,22 @@ static NSString * CTOKEN_NAME = @"ctok";
   return [self recv_authenticate];
 }
 
-- (void) send_newToken
+- (void) send_customerEmailExists: (NSString *) email
 {
-  [outProtocol writeMessageBeginWithName: @"newToken" type: TMessageType_CALL sequenceID: 0];
-  [outProtocol writeStructBeginWithName: @"newToken_args"];
+  [outProtocol writeMessageBeginWithName: @"customerEmailExists" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"customerEmailExists_args"];
+  if (email != nil)  {
+    [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: email];
+    [outProtocol writeFieldEnd];
+  }
   [outProtocol writeFieldStop];
   [outProtocol writeStructEnd];
   [outProtocol writeMessageEnd];
   [[outProtocol transport] flush];
 }
 
-- (CTokenAccess_t *) recv_newToken
+- (BOOL) recv_customerEmailExists
 {
   int msgType = 0;
   [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
@@ -2006,7 +2079,7 @@ static NSString * CTOKEN_NAME = @"ctok";
     [inProtocol readMessageEnd];
     @throw x;
   }
-  NewToken_result * result = [[[NewToken_result alloc] init] autorelease_stub];
+  CustomerEmailExists_result * result = [[[CustomerEmailExists_result alloc] init] autorelease_stub];
   [result read: inProtocol];
   [inProtocol readMessageEnd];
   if ([result successIsSet]) {
@@ -2016,13 +2089,13 @@ static NSString * CTOKEN_NAME = @"ctok";
     @throw [result error];
   }
   @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
-                                           reason: @"newToken failed: unknown result"];
+                                           reason: @"customerEmailExists failed: unknown result"];
 }
 
-- (CTokenAccess_t *) newToken
+- (BOOL) customerEmailExists: (NSString *) email
 {
-  [self send_newToken];
-  return [self recv_newToken];
+  [self send_customerEmailExists : email];
+  return [self recv_customerEmailExists];
 }
 
 - (void) send_save: (Customer_t *) customer
@@ -2132,12 +2205,12 @@ static NSString * CTOKEN_NAME = @"ctok";
     [mMethodMap setValue: invocation forKey: @"authenticate"];
   }
   {
-    SEL s = @selector(process_newToken_withSequenceID:inProtocol:outProtocol:);
+    SEL s = @selector(process_customerEmailExists_withSequenceID:inProtocol:outProtocol:);
     NSMethodSignature * sig = [self methodSignatureForSelector: s];
     NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
     [invocation setSelector: s];
     [invocation retainArguments];
-    [mMethodMap setValue: invocation forKey: @"newToken"];
+    [mMethodMap setValue: invocation forKey: @"customerEmailExists"];
   }
   {
     SEL s = @selector(process_save_withSequenceID:inProtocol:outProtocol:);
@@ -2230,14 +2303,14 @@ static NSString * CTOKEN_NAME = @"ctok";
   [args release_stub];
 }
 
-- (void) process_newToken_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+- (void) process_customerEmailExists_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
 {
-  newToken_args * args = [[newToken_args alloc] init];
+  customerEmailExists_args * args = [[customerEmailExists_args alloc] init];
   [args read: inProtocol];
   [inProtocol readMessageEnd];
-  NewToken_result * result = [[NewToken_result alloc] init];
-  [result setSuccess: [mService newToken]];
-  [outProtocol writeMessageBeginWithName: @"newToken"
+  CustomerEmailExists_result * result = [[CustomerEmailExists_result alloc] init];
+  [result setSuccess: [mService customerEmailExists: [args email]]];
+  [outProtocol writeMessageBeginWithName: @"customerEmailExists"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];

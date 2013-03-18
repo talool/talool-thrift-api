@@ -38,7 +38,7 @@ public class CustomerService_t {
 
     public CTokenAccess_t authenticate(String email, String password) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
-    public CTokenAccess_t newToken() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+    public boolean customerEmailExists(String email) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
     public void save(com.talool.api.thrift.Customer_t customer) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
@@ -52,7 +52,7 @@ public class CustomerService_t {
 
     public void authenticate(String email, String password, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.authenticate_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void newToken(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.newToken_call> resultHandler) throws org.apache.thrift.TException;
+    public void customerEmailExists(String email, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.customerEmailExists_call> resultHandler) throws org.apache.thrift.TException;
 
     public void save(com.talool.api.thrift.Customer_t customer, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.save_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -134,29 +134,30 @@ public class CustomerService_t {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "authenticate failed: unknown result");
     }
 
-    public CTokenAccess_t newToken() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public boolean customerEmailExists(String email) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      send_newToken();
-      return recv_newToken();
+      send_customerEmailExists(email);
+      return recv_customerEmailExists();
     }
 
-    public void send_newToken() throws org.apache.thrift.TException
+    public void send_customerEmailExists(String email) throws org.apache.thrift.TException
     {
-      newToken_args args = new newToken_args();
-      sendBase("newToken", args);
+      customerEmailExists_args args = new customerEmailExists_args();
+      args.setEmail(email);
+      sendBase("customerEmailExists", args);
     }
 
-    public CTokenAccess_t recv_newToken() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public boolean recv_customerEmailExists() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      newToken_result result = new newToken_result();
-      receiveBase(result, "newToken");
+      customerEmailExists_result result = new customerEmailExists_result();
+      receiveBase(result, "customerEmailExists");
       if (result.isSetSuccess()) {
         return result.success;
       }
       if (result.error != null) {
         throw result.error;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "newToken failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "customerEmailExists failed: unknown result");
     }
 
     public void save(com.talool.api.thrift.Customer_t customer) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
@@ -293,32 +294,35 @@ public class CustomerService_t {
       }
     }
 
-    public void newToken(org.apache.thrift.async.AsyncMethodCallback<newToken_call> resultHandler) throws org.apache.thrift.TException {
+    public void customerEmailExists(String email, org.apache.thrift.async.AsyncMethodCallback<customerEmailExists_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      newToken_call method_call = new newToken_call(resultHandler, this, ___protocolFactory, ___transport);
+      customerEmailExists_call method_call = new customerEmailExists_call(email, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class newToken_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public newToken_call(org.apache.thrift.async.AsyncMethodCallback<newToken_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class customerEmailExists_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String email;
+      public customerEmailExists_call(String email, org.apache.thrift.async.AsyncMethodCallback<customerEmailExists_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.email = email;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("newToken", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        newToken_args args = new newToken_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("customerEmailExists", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        customerEmailExists_args args = new customerEmailExists_args();
+        args.setEmail(email);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public CTokenAccess_t getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
+      public boolean getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_newToken();
+        return (new Client(prot)).recv_customerEmailExists();
       }
     }
 
@@ -401,7 +405,7 @@ public class CustomerService_t {
     private static <I extends Iface> Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> getProcessMap(Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> processMap) {
       processMap.put("createAccount", new createAccount());
       processMap.put("authenticate", new authenticate());
-      processMap.put("newToken", new newToken());
+      processMap.put("customerEmailExists", new customerEmailExists());
       processMap.put("save", new save());
       processMap.put("addSocialAccount", new addSocialAccount());
       return processMap;
@@ -455,23 +459,24 @@ public class CustomerService_t {
       }
     }
 
-    public static class newToken<I extends Iface> extends org.apache.thrift.ProcessFunction<I, newToken_args> {
-      public newToken() {
-        super("newToken");
+    public static class customerEmailExists<I extends Iface> extends org.apache.thrift.ProcessFunction<I, customerEmailExists_args> {
+      public customerEmailExists() {
+        super("customerEmailExists");
       }
 
-      public newToken_args getEmptyArgsInstance() {
-        return new newToken_args();
+      public customerEmailExists_args getEmptyArgsInstance() {
+        return new customerEmailExists_args();
       }
 
       protected boolean isOneway() {
         return false;
       }
 
-      public newToken_result getResult(I iface, newToken_args args) throws org.apache.thrift.TException {
-        newToken_result result = new newToken_result();
+      public customerEmailExists_result getResult(I iface, customerEmailExists_args args) throws org.apache.thrift.TException {
+        customerEmailExists_result result = new customerEmailExists_result();
         try {
-          result.success = iface.newToken();
+          result.success = iface.customerEmailExists(args.email);
+          result.setSuccessIsSet(true);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -2360,20 +2365,22 @@ public class CustomerService_t {
 
   }
 
-  public static class newToken_args implements org.apache.thrift.TBase<newToken_args, newToken_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("newToken_args");
+  public static class customerEmailExists_args implements org.apache.thrift.TBase<customerEmailExists_args, customerEmailExists_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("customerEmailExists_args");
 
+    private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new newToken_argsStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new newToken_argsTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new customerEmailExists_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new customerEmailExists_argsTupleSchemeFactory());
     }
 
+    public String email; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      EMAIL((short)1, "email");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -2388,6 +2395,8 @@ public class CustomerService_t {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // EMAIL
+            return EMAIL;
           default:
             return null;
         }
@@ -2426,36 +2435,86 @@ public class CustomerService_t {
         return _fieldName;
       }
     }
+
+    // isset id assignments
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(newToken_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(customerEmailExists_args.class, metaDataMap);
     }
 
-    public newToken_args() {
+    public customerEmailExists_args() {
+    }
+
+    public customerEmailExists_args(
+      String email)
+    {
+      this();
+      this.email = email;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public newToken_args(newToken_args other) {
+    public customerEmailExists_args(customerEmailExists_args other) {
+      if (other.isSetEmail()) {
+        this.email = other.email;
+      }
     }
 
-    public newToken_args deepCopy() {
-      return new newToken_args(this);
+    public customerEmailExists_args deepCopy() {
+      return new customerEmailExists_args(this);
     }
 
     public void clear() {
+      this.email = null;
+    }
+
+    public String getEmail() {
+      return this.email;
+    }
+
+    public customerEmailExists_args setEmail(String email) {
+      this.email = email;
+      return this;
+    }
+
+    public void unsetEmail() {
+      this.email = null;
+    }
+
+    /** Returns true if field email is set (has been assigned a value) and false otherwise */
+    public boolean isSetEmail() {
+      return this.email != null;
+    }
+
+    public void setEmailIsSet(boolean value) {
+      if (!value) {
+        this.email = null;
+      }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case EMAIL:
+        if (value == null) {
+          unsetEmail();
+        } else {
+          setEmail((String)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case EMAIL:
+        return getEmail();
+
       }
       throw new IllegalStateException();
     }
@@ -2467,6 +2526,8 @@ public class CustomerService_t {
       }
 
       switch (field) {
+      case EMAIL:
+        return isSetEmail();
       }
       throw new IllegalStateException();
     }
@@ -2475,14 +2536,23 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof newToken_args)
-        return this.equals((newToken_args)that);
+      if (that instanceof customerEmailExists_args)
+        return this.equals((customerEmailExists_args)that);
       return false;
     }
 
-    public boolean equals(newToken_args that) {
+    public boolean equals(customerEmailExists_args that) {
       if (that == null)
         return false;
+
+      boolean this_present_email = true && this.isSetEmail();
+      boolean that_present_email = true && that.isSetEmail();
+      if (this_present_email || that_present_email) {
+        if (!(this_present_email && that_present_email))
+          return false;
+        if (!this.email.equals(that.email))
+          return false;
+      }
 
       return true;
     }
@@ -2492,14 +2562,24 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(newToken_args other) {
+    public int compareTo(customerEmailExists_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      newToken_args typedOther = (newToken_args)other;
+      customerEmailExists_args typedOther = (customerEmailExists_args)other;
 
+      lastComparison = Boolean.valueOf(isSetEmail()).compareTo(typedOther.isSetEmail());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEmail()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.email, typedOther.email);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -2517,9 +2597,16 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("newToken_args(");
+      StringBuilder sb = new StringBuilder("customerEmailExists_args(");
       boolean first = true;
 
+      sb.append("email:");
+      if (this.email == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.email);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -2545,15 +2632,15 @@ public class CustomerService_t {
       }
     }
 
-    private static class newToken_argsStandardSchemeFactory implements SchemeFactory {
-      public newToken_argsStandardScheme getScheme() {
-        return new newToken_argsStandardScheme();
+    private static class customerEmailExists_argsStandardSchemeFactory implements SchemeFactory {
+      public customerEmailExists_argsStandardScheme getScheme() {
+        return new customerEmailExists_argsStandardScheme();
       }
     }
 
-    private static class newToken_argsStandardScheme extends StandardScheme<newToken_args> {
+    private static class customerEmailExists_argsStandardScheme extends StandardScheme<customerEmailExists_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, newToken_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, customerEmailExists_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -2563,6 +2650,14 @@ public class CustomerService_t {
             break;
           }
           switch (schemeField.id) {
+            case 1: // EMAIL
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.email = iprot.readString();
+                struct.setEmailIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -2574,50 +2669,68 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, newToken_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, customerEmailExists_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.email != null) {
+          oprot.writeFieldBegin(EMAIL_FIELD_DESC);
+          oprot.writeString(struct.email);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
 
     }
 
-    private static class newToken_argsTupleSchemeFactory implements SchemeFactory {
-      public newToken_argsTupleScheme getScheme() {
-        return new newToken_argsTupleScheme();
+    private static class customerEmailExists_argsTupleSchemeFactory implements SchemeFactory {
+      public customerEmailExists_argsTupleScheme getScheme() {
+        return new customerEmailExists_argsTupleScheme();
       }
     }
 
-    private static class newToken_argsTupleScheme extends TupleScheme<newToken_args> {
+    private static class customerEmailExists_argsTupleScheme extends TupleScheme<customerEmailExists_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, newToken_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, customerEmailExists_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetEmail()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEmail()) {
+          oprot.writeString(struct.email);
+        }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, newToken_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, customerEmailExists_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.email = iprot.readString();
+          struct.setEmailIsSet(true);
+        }
       }
     }
 
   }
 
-  public static class newToken_result implements org.apache.thrift.TBase<newToken_result, newToken_result._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("newToken_result");
+  public static class customerEmailExists_result implements org.apache.thrift.TBase<customerEmailExists_result, customerEmailExists_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("customerEmailExists_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
     private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new newToken_resultStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new newToken_resultTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new customerEmailExists_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new customerEmailExists_resultTupleSchemeFactory());
     }
 
-    public CTokenAccess_t success; // required
+    public boolean success; // required
     public com.talool.api.thrift.ServiceException_t error; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -2682,79 +2795,81 @@ public class CustomerService_t {
     }
 
     // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, CTokenAccess_t.class)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(newToken_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(customerEmailExists_result.class, metaDataMap);
     }
 
-    public newToken_result() {
+    public customerEmailExists_result() {
     }
 
-    public newToken_result(
-      CTokenAccess_t success,
+    public customerEmailExists_result(
+      boolean success,
       com.talool.api.thrift.ServiceException_t error)
     {
       this();
       this.success = success;
+      setSuccessIsSet(true);
       this.error = error;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public newToken_result(newToken_result other) {
-      if (other.isSetSuccess()) {
-        this.success = new CTokenAccess_t(other.success);
-      }
+    public customerEmailExists_result(customerEmailExists_result other) {
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
       if (other.isSetError()) {
         this.error = new com.talool.api.thrift.ServiceException_t(other.error);
       }
     }
 
-    public newToken_result deepCopy() {
-      return new newToken_result(this);
+    public customerEmailExists_result deepCopy() {
+      return new customerEmailExists_result(this);
     }
 
     public void clear() {
-      this.success = null;
+      setSuccessIsSet(false);
+      this.success = false;
       this.error = null;
     }
 
-    public CTokenAccess_t getSuccess() {
+    public boolean isSuccess() {
       return this.success;
     }
 
-    public newToken_result setSuccess(CTokenAccess_t success) {
+    public customerEmailExists_result setSuccess(boolean success) {
       this.success = success;
+      setSuccessIsSet(true);
       return this;
     }
 
     public void unsetSuccess() {
-      this.success = null;
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     /** Returns true if field success is set (has been assigned a value) and false otherwise */
     public boolean isSetSuccess() {
-      return this.success != null;
+      return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     public void setSuccessIsSet(boolean value) {
-      if (!value) {
-        this.success = null;
-      }
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
     public com.talool.api.thrift.ServiceException_t getError() {
       return this.error;
     }
 
-    public newToken_result setError(com.talool.api.thrift.ServiceException_t error) {
+    public customerEmailExists_result setError(com.talool.api.thrift.ServiceException_t error) {
       this.error = error;
       return this;
     }
@@ -2780,7 +2895,7 @@ public class CustomerService_t {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((CTokenAccess_t)value);
+          setSuccess((Boolean)value);
         }
         break;
 
@@ -2798,7 +2913,7 @@ public class CustomerService_t {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return getSuccess();
+        return Boolean.valueOf(isSuccess());
 
       case ERROR:
         return getError();
@@ -2826,21 +2941,21 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof newToken_result)
-        return this.equals((newToken_result)that);
+      if (that instanceof customerEmailExists_result)
+        return this.equals((customerEmailExists_result)that);
       return false;
     }
 
-    public boolean equals(newToken_result that) {
+    public boolean equals(customerEmailExists_result that) {
       if (that == null)
         return false;
 
-      boolean this_present_success = true && this.isSetSuccess();
-      boolean that_present_success = true && that.isSetSuccess();
+      boolean this_present_success = true;
+      boolean that_present_success = true;
       if (this_present_success || that_present_success) {
         if (!(this_present_success && that_present_success))
           return false;
-        if (!this.success.equals(that.success))
+        if (this.success != that.success)
           return false;
       }
 
@@ -2861,13 +2976,13 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(newToken_result other) {
+    public int compareTo(customerEmailExists_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      newToken_result typedOther = (newToken_result)other;
+      customerEmailExists_result typedOther = (customerEmailExists_result)other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -2906,15 +3021,11 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("newToken_result(");
+      StringBuilder sb = new StringBuilder("customerEmailExists_result(");
       boolean first = true;
 
       sb.append("success:");
-      if (this.success == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.success);
-      }
+      sb.append(this.success);
       first = false;
       if (!first) sb.append(", ");
       sb.append("error:");
@@ -2931,9 +3042,6 @@ public class CustomerService_t {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
-      if (success != null) {
-        success.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -2946,21 +3054,23 @@ public class CustomerService_t {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te.getMessage());
       }
     }
 
-    private static class newToken_resultStandardSchemeFactory implements SchemeFactory {
-      public newToken_resultStandardScheme getScheme() {
-        return new newToken_resultStandardScheme();
+    private static class customerEmailExists_resultStandardSchemeFactory implements SchemeFactory {
+      public customerEmailExists_resultStandardScheme getScheme() {
+        return new customerEmailExists_resultStandardScheme();
       }
     }
 
-    private static class newToken_resultStandardScheme extends StandardScheme<newToken_result> {
+    private static class customerEmailExists_resultStandardScheme extends StandardScheme<customerEmailExists_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, newToken_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, customerEmailExists_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -2971,9 +3081,8 @@ public class CustomerService_t {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.success = new CTokenAccess_t();
-                struct.success.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -2999,13 +3108,13 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, newToken_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, customerEmailExists_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.success != null) {
+        if (struct.isSetSuccess()) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          struct.success.write(oprot);
+          oprot.writeBool(struct.success);
           oprot.writeFieldEnd();
         }
         if (struct.error != null) {
@@ -3019,16 +3128,16 @@ public class CustomerService_t {
 
     }
 
-    private static class newToken_resultTupleSchemeFactory implements SchemeFactory {
-      public newToken_resultTupleScheme getScheme() {
-        return new newToken_resultTupleScheme();
+    private static class customerEmailExists_resultTupleSchemeFactory implements SchemeFactory {
+      public customerEmailExists_resultTupleScheme getScheme() {
+        return new customerEmailExists_resultTupleScheme();
       }
     }
 
-    private static class newToken_resultTupleScheme extends TupleScheme<newToken_result> {
+    private static class customerEmailExists_resultTupleScheme extends TupleScheme<customerEmailExists_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, newToken_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, customerEmailExists_result struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetSuccess()) {
@@ -3039,7 +3148,7 @@ public class CustomerService_t {
         }
         oprot.writeBitSet(optionals, 2);
         if (struct.isSetSuccess()) {
-          struct.success.write(oprot);
+          oprot.writeBool(struct.success);
         }
         if (struct.isSetError()) {
           struct.error.write(oprot);
@@ -3047,12 +3156,11 @@ public class CustomerService_t {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, newToken_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, customerEmailExists_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
-          struct.success = new CTokenAccess_t();
-          struct.success.read(iprot);
+          struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
         }
         if (incoming.get(1)) {

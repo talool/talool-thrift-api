@@ -9,9 +9,10 @@
 		<session-timeout>60</session-timeout>
 	</session-config>
 	
+
 	<filter>
 		<filter-name>hibernateFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
 		 <init-param>
             <param-name>sessionFactoryBeanName</param-name>
             <param-value>sessionFactory</param-value>
@@ -21,11 +22,13 @@
       <param-value>true</param-value>
     </init-param>
 	</filter>
+	
 
 	<filter-mapping>
 		<filter-name>hibernateFilter</filter-name>
 		<url-pattern>/api</url-pattern>
 	</filter-mapping>
+
 
 	<servlet>
 		<description></description>

@@ -51,7 +51,7 @@
 @protocol CustomerService_t <NSObject>
 - (CTokenAccess_t *) createAccount: (Customer_t *) customer password: (NSString *) password;  // throws ServiceException_t *, TException
 - (CTokenAccess_t *) authenticate: (NSString *) email password: (NSString *) password;  // throws ServiceException_t *, TException
-- (CTokenAccess_t *) newToken;  // throws ServiceException_t *, TException
+- (BOOL) customerEmailExists: (NSString *) email;  // throws ServiceException_t *, TException
 - (void) save: (Customer_t *) customer;  // throws ServiceException_t *, TException
 - (void) addSocialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
 @end

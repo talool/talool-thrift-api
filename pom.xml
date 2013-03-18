@@ -11,7 +11,7 @@
 	<artifactId>talool-service</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Talool Service(Thrift)</name>
+	<name>Talool Service (Thrift)</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
