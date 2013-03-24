@@ -38,6 +38,6 @@ public class TServletTaloolService extends TServlet
 
 	public TServletTaloolService()
 	{
-		super(new CustomerService_t.Processor(new CustomerServiceThriftImpl()), new TBinaryProtocol.Factory());
+		super(new CustomerService_t.Processor<CustomerServiceThriftImpl>(new CustomerServiceThriftImpl()), new TBinaryProtocol.Factory());
 	}
 }

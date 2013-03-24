@@ -3,12 +3,13 @@
 	version="2.4"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Talool Service</display-name>
+	<display-name>Talool API Service</display-name>
 
+<!--  
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
-	
+	-->
 
 	<filter>
 		<filter-name>hibernateFilter</filter-name>
@@ -26,7 +27,7 @@
 
 	<filter-mapping>
 		<filter-name>hibernateFilter</filter-name>
-		<url-pattern>/api</url-pattern>
+		<url-pattern>/1.1</url-pattern>
 	</filter-mapping>
 
 
@@ -38,11 +39,10 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TServletExample</servlet-name>
-		<url-pattern>/api</url-pattern>
+		<url-pattern>/1.1</url-pattern>
 	</servlet-mapping>
 
 	
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

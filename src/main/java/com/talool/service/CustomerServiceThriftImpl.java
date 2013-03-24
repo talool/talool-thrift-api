@@ -148,7 +148,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			return taloolService.customerEmailExists(email);
+			return taloolService.emailExists(AccountType.CUS, email);
 		}
 		catch (Exception ex)
 		{

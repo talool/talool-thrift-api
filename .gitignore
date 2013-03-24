@@ -9,3 +9,5 @@
 bin*
 target*
 *.classpath
+.my*
+

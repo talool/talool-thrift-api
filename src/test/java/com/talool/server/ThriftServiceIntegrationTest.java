@@ -18,7 +18,7 @@ import com.talool.api.thrift.SocialNetwork_t;
 public class ThriftServiceIntegrationTest
 {
 	// static String servletUrl = "http://www.talool.com/api";
-	static String servletUrl = "http://localhost:8080/api";
+	static String servletUrl = "http://api.talool.com/1.1";
 
 	public static void main(String args[]) throws TTransportException, TException
 	{
@@ -30,9 +30,9 @@ public class ThriftServiceIntegrationTest
 		CustomerService_t.Client client = new CustomerService_t.Client(loPFactory);
 
 		Customer_t customer = new Customer_t();
-		customer.setFirstName("Christopher" + now);
+		customer.setFirstName("Billy" + now);
 		customer.setLastName("Lintz" + now);
-		customer.setSex(Sex_t.M);
+		customer.setSex(Sex_t.F);
 		customer.setEmail(email);
 
 		try
