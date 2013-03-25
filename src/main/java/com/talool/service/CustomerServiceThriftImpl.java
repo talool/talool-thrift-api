@@ -12,6 +12,7 @@ import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
+import com.talool.core.FactoryManager;
 import com.talool.core.SocialAccount;
 import com.talool.core.service.TaloolService;
 import com.talool.service.util.TokenUtil;
@@ -26,8 +27,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 {
 	private static final Logger LOG = LoggerFactory.getLogger(TaloolServiceImpl.class);
 
-	private static final transient TaloolService taloolService = ServiceFactory.get()
-			.getTaloolService();
+	private static final transient TaloolService taloolService = FactoryManager.get()
+			.getServiceFactory().getTaloolService();
 
 	@Override
 	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
@@ -44,8 +45,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			final Customer cust = taloolService.getCustomerById(Long.valueOf(token.getAccountId()));
-			final SocialAccount sac = taloolService.newSocialAccount(socialAccount_t.getSocalNetwork()
-					.name(), AccountType.CUS);
+			final SocialAccount sac = FactoryManager.get().getDomainFactory()
+					.newSocialAccount(socialAccount_t.getSocalNetwork().name(), AccountType.CUS);
 
 			ConversionUtil.copyFromThrift(socialAccount_t, sac, cust.getId());
 			cust.addSocialAccount(sac);

@@ -21,6 +21,7 @@ import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
+import com.talool.core.FactoryManager;
 import com.talool.core.Sex;
 import com.talool.core.SocialAccount;
 import com.talool.core.SocialNetwork;
@@ -43,7 +44,7 @@ public final class ConversionUtil
 	 */
 	public static Customer convertFromThrift(Customer_t thriftCustomer)
 	{
-		final Customer cust = ServiceFactory.get().getTaloolService().newCustomer();
+		final Customer cust = FactoryManager.get().getDomainFactory().newCustomer();
 
 		cust.setEmail(thriftCustomer.getEmail());
 		cust.setFirstName(thriftCustomer.getFirstName());
@@ -57,7 +58,8 @@ public final class ConversionUtil
 		return cust;
 	}
 
-	public static void copyFromThrift(final Customer_t thriftCustomer, final Customer cust) throws ServiceException
+	public static void copyFromThrift(final Customer_t thriftCustomer, final Customer cust)
+			throws ServiceException
 	{
 		cust.setEmail(thriftCustomer.getEmail());
 		cust.setFirstName(thriftCustomer.getFirstName());
@@ -72,12 +74,14 @@ public final class ConversionUtil
 
 		if (thriftCustomer.getSocialAccounts() != null)
 		{
-			for (final Entry<SocialNetwork_t, SocialAccount_t> sac : thriftCustomer.getSocialAccounts().entrySet())
+			for (final Entry<SocialNetwork_t, SocialAccount_t> sac : thriftCustomer.getSocialAccounts()
+					.entrySet())
 			{
 				final SocialAccount_t sAcnt_t = sac.getValue();
 				final String socialNetworkName = sAcnt_t.getSocalNetwork().name();
 
-				final SocialNetwork socialNetwork = ServiceFactory.get().getTaloolService().getSocialNetwork(socialNetworkName);
+				final SocialNetwork socialNetwork = FactoryManager.get().getServiceFactory()
+						.getTaloolService().getSocialNetwork(socialNetworkName);
 
 				SocialAccount sAccnt = socialAccounts.get(socialNetwork);
 
@@ -85,7 +89,8 @@ public final class ConversionUtil
 				if (sAccnt == null)
 				{
 					LOG.info("No social account for: " + sAcnt_t.getSocalNetwork().name());
-					sAccnt = ServiceFactory.get().getTaloolService().newSocialAccount(socialNetworkName, AccountType.CUS);
+					sAccnt = FactoryManager.get().getDomainFactory()
+							.newSocialAccount(socialNetworkName, AccountType.CUS);
 				}
 
 				copyFromThrift(sAcnt_t, sAccnt, cust.getId());
@@ -96,8 +101,8 @@ public final class ConversionUtil
 
 	}
 
-	public static void copyFromThrift(final SocialAccount_t thriftSocialAccnt, final SocialAccount socialAccnt,
-			final Long userId) throws ServiceException
+	public static void copyFromThrift(final SocialAccount_t thriftSocialAccnt,
+			final SocialAccount socialAccnt, final Long userId) throws ServiceException
 	{
 		socialAccnt.setLoginId(thriftSocialAccnt.getLoginId());
 		socialAccnt.setToken(thriftSocialAccnt.getToken());
