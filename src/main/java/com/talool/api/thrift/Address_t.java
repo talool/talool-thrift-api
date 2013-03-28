@@ -40,8 +40,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
   private static final org.apache.thrift.protocol.TField STATE_PROVINCE_COUNTY_FIELD_DESC = new org.apache.thrift.protocol.TField("stateProvinceCounty", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField ZIP_FIELD_DESC = new org.apache.thrift.protocol.TField("zip", org.apache.thrift.protocol.TType.STRING, (short)6);
   private static final org.apache.thrift.protocol.TField COUNTRY_FIELD_DESC = new org.apache.thrift.protocol.TField("country", org.apache.thrift.protocol.TType.STRING, (short)7);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)21);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -56,8 +54,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
   public String stateProvinceCounty; // optional
   public String zip; // optional
   public String country; // optional
-  public long created; // optional
-  public long updated; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -67,9 +63,7 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
     CITY((short)4, "city"),
     STATE_PROVINCE_COUNTY((short)5, "stateProvinceCounty"),
     ZIP((short)6, "zip"),
-    COUNTRY((short)7, "country"),
-    CREATED((short)20, "created"),
-    UPDATED((short)21, "updated");
+    COUNTRY((short)7, "country");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -98,10 +92,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
           return ZIP;
         case 7: // COUNTRY
           return COUNTRY;
-        case 20: // CREATED
-          return CREATED;
-        case 21: // UPDATED
-          return UPDATED;
         default:
           return null;
       }
@@ -143,10 +133,8 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
 
   // isset id assignments
   private static final int __ADDRESSID_ISSET_ID = 0;
-  private static final int __CREATED_ISSET_ID = 1;
-  private static final int __UPDATED_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.ADDRESS_ID,_Fields.ADDRESS2,_Fields.CITY,_Fields.STATE_PROVINCE_COUNTY,_Fields.ZIP,_Fields.COUNTRY,_Fields.CREATED,_Fields.UPDATED};
+  private _Fields optionals[] = {_Fields.ADDRESS_ID,_Fields.ADDRESS2,_Fields.CITY,_Fields.STATE_PROVINCE_COUNTY,_Fields.ZIP,_Fields.COUNTRY};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -164,10 +152,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.COUNTRY, new org.apache.thrift.meta_data.FieldMetaData("country", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.CREATED, new org.apache.thrift.meta_data.FieldMetaData("created", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
-    tmpMap.put(_Fields.UPDATED, new org.apache.thrift.meta_data.FieldMetaData("updated", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Address_t.class, metaDataMap);
   }
@@ -206,8 +190,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
     if (other.isSetCountry()) {
       this.country = other.country;
     }
-    this.created = other.created;
-    this.updated = other.updated;
   }
 
   public Address_t deepCopy() {
@@ -223,10 +205,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
     this.stateProvinceCounty = null;
     this.zip = null;
     this.country = null;
-    setCreatedIsSet(false);
-    this.created = 0;
-    setUpdatedIsSet(false);
-    this.updated = 0;
   }
 
   public long getAddressId() {
@@ -396,52 +374,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
     }
   }
 
-  public long getCreated() {
-    return this.created;
-  }
-
-  public Address_t setCreated(long created) {
-    this.created = created;
-    setCreatedIsSet(true);
-    return this;
-  }
-
-  public void unsetCreated() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __CREATED_ISSET_ID);
-  }
-
-  /** Returns true if field created is set (has been assigned a value) and false otherwise */
-  public boolean isSetCreated() {
-    return EncodingUtils.testBit(__isset_bitfield, __CREATED_ISSET_ID);
-  }
-
-  public void setCreatedIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CREATED_ISSET_ID, value);
-  }
-
-  public long getUpdated() {
-    return this.updated;
-  }
-
-  public Address_t setUpdated(long updated) {
-    this.updated = updated;
-    setUpdatedIsSet(true);
-    return this;
-  }
-
-  public void unsetUpdated() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  /** Returns true if field updated is set (has been assigned a value) and false otherwise */
-  public boolean isSetUpdated() {
-    return EncodingUtils.testBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  public void setUpdatedIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __UPDATED_ISSET_ID, value);
-  }
-
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ADDRESS_ID:
@@ -500,22 +432,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       }
       break;
 
-    case CREATED:
-      if (value == null) {
-        unsetCreated();
-      } else {
-        setCreated((Long)value);
-      }
-      break;
-
-    case UPDATED:
-      if (value == null) {
-        unsetUpdated();
-      } else {
-        setUpdated((Long)value);
-      }
-      break;
-
     }
   }
 
@@ -542,12 +458,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
     case COUNTRY:
       return getCountry();
 
-    case CREATED:
-      return Long.valueOf(getCreated());
-
-    case UPDATED:
-      return Long.valueOf(getUpdated());
-
     }
     throw new IllegalStateException();
   }
@@ -573,10 +483,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       return isSetZip();
     case COUNTRY:
       return isSetCountry();
-    case CREATED:
-      return isSetCreated();
-    case UPDATED:
-      return isSetUpdated();
     }
     throw new IllegalStateException();
   }
@@ -654,24 +560,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       if (!(this_present_country && that_present_country))
         return false;
       if (!this.country.equals(that.country))
-        return false;
-    }
-
-    boolean this_present_created = true && this.isSetCreated();
-    boolean that_present_created = true && that.isSetCreated();
-    if (this_present_created || that_present_created) {
-      if (!(this_present_created && that_present_created))
-        return false;
-      if (this.created != that.created)
-        return false;
-    }
-
-    boolean this_present_updated = true && this.isSetUpdated();
-    boolean that_present_updated = true && that.isSetUpdated();
-    if (this_present_updated || that_present_updated) {
-      if (!(this_present_updated && that_present_updated))
-        return false;
-      if (this.updated != that.updated)
         return false;
     }
 
@@ -761,26 +649,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetCreated()).compareTo(typedOther.isSetCreated());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetCreated()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.created, typedOther.created);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetUpdated()).compareTo(typedOther.isSetUpdated());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetUpdated()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.updated, typedOther.updated);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     return 0;
   }
 
@@ -862,18 +730,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       } else {
         sb.append(this.country);
       }
-      first = false;
-    }
-    if (isSetCreated()) {
-      if (!first) sb.append(", ");
-      sb.append("created:");
-      sb.append(this.created);
-      first = false;
-    }
-    if (isSetUpdated()) {
-      if (!first) sb.append(", ");
-      sb.append("updated:");
-      sb.append(this.updated);
       first = false;
     }
     sb.append(")");
@@ -980,22 +836,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 20: // CREATED
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.created = iprot.readI64();
-              struct.setCreatedIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 21: // UPDATED
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.updated = iprot.readI64();
-              struct.setUpdatedIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -1056,16 +896,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
           oprot.writeFieldEnd();
         }
       }
-      if (struct.isSetCreated()) {
-        oprot.writeFieldBegin(CREATED_FIELD_DESC);
-        oprot.writeI64(struct.created);
-        oprot.writeFieldEnd();
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeFieldBegin(UPDATED_FIELD_DESC);
-        oprot.writeI64(struct.updated);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1103,13 +933,7 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       if (struct.isSetCountry()) {
         optionals.set(5);
       }
-      if (struct.isSetCreated()) {
-        optionals.set(6);
-      }
-      if (struct.isSetUpdated()) {
-        optionals.set(7);
-      }
-      oprot.writeBitSet(optionals, 8);
+      oprot.writeBitSet(optionals, 6);
       if (struct.isSetAddressId()) {
         oprot.writeI64(struct.addressId);
       }
@@ -1128,12 +952,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       if (struct.isSetCountry()) {
         oprot.writeString(struct.country);
       }
-      if (struct.isSetCreated()) {
-        oprot.writeI64(struct.created);
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeI64(struct.updated);
-      }
     }
 
     @Override
@@ -1141,7 +959,7 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.address1 = iprot.readString();
       struct.setAddress1IsSet(true);
-      BitSet incoming = iprot.readBitSet(8);
+      BitSet incoming = iprot.readBitSet(6);
       if (incoming.get(0)) {
         struct.addressId = iprot.readI64();
         struct.setAddressIdIsSet(true);
@@ -1165,14 +983,6 @@ public class Address_t implements org.apache.thrift.TBase<Address_t, Address_t._
       if (incoming.get(5)) {
         struct.country = iprot.readString();
         struct.setCountryIsSet(true);
-      }
-      if (incoming.get(6)) {
-        struct.created = iprot.readI64();
-        struct.setCreatedIsSet(true);
-      }
-      if (incoming.get(7)) {
-        struct.updated = iprot.readI64();
-        struct.setUpdatedIsSet(true);
       }
     }
   }

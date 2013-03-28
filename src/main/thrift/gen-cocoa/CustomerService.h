@@ -54,6 +54,8 @@
 - (BOOL) customerEmailExists: (NSString *) email;  // throws ServiceException_t *, TException
 - (void) save: (Customer_t *) customer;  // throws ServiceException_t *, TException
 - (void) addSocialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getMerchants;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getDeals: (int64_t) merchantId;  // throws ServiceException_t *, TException
 @end
 
 @interface CustomerService_tClient : NSObject <CustomerService_t> {

@@ -7,7 +7,9 @@
  */
 package com.talool.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,13 +17,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
+import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Customer_t;
+import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.core.AccountType;
+import com.talool.core.Address;
 import com.talool.core.Customer;
 import com.talool.core.FactoryManager;
+import com.talool.core.Merchant;
+import com.talool.core.MerchantDeal;
 import com.talool.core.Sex;
 import com.talool.core.SocialAccount;
 import com.talool.core.SocialNetwork;
@@ -147,5 +155,78 @@ public final class ConversionUtil
 		}
 
 		return thriftCust;
+	}
+
+	public static Address_t convertToThrift(final Address address)
+	{
+		final Address_t thriftAddr = new Address_t();
+		thriftAddr.setAddress1(address.getAddress1());
+		thriftAddr.setAddress2(address.getAddress2());
+		thriftAddr.setCity(address.getCity());
+		thriftAddr.setZip(address.getZip());
+		thriftAddr.setStateProvinceCounty(address.getStateProvinceCounty());
+		thriftAddr.setCountry(address.getCountry());
+
+		return thriftAddr;
+	}
+
+	public static Merchant_t convertToThrift(final Merchant merchant)
+	{
+		final Merchant_t thriftMerch = new Merchant_t();
+		thriftMerch.setCreated(merchant.getCreated().getTime());
+		thriftMerch.setUpdated(merchant.getUpdated().getTime());
+
+		thriftMerch.setAddress(convertToThrift(merchant.getAddress()));
+		thriftMerch.setEmail(merchant.getEmail());
+		thriftMerch.setLogoUrl(merchant.getLogoUrl());
+		thriftMerch.setMerchantId(merchant.getId());
+		thriftMerch.setName(merchant.getName());
+		thriftMerch.setPhone(merchant.getPhone());
+		thriftMerch.setWebsiteUrl(merchant.getWebsiteUrl());
+
+		return thriftMerch;
+
+	}
+
+	public static List<Deal_t> convertToThriftDeals(final List<MerchantDeal> listOfDeals)
+	{
+		final List<Deal_t> deals = new ArrayList<Deal_t>();
+
+		for (final MerchantDeal mDeal : listOfDeals)
+		{
+			final Deal_t deal = new Deal_t();
+			deal.setCode(mDeal.getCode());
+			deal.setCreated(mDeal.getCreated().getTime());
+			deal.setDealId(mDeal.getId());
+			deal.setDetails(mDeal.geDetails());
+			if (mDeal.getExpires() != null)
+			{
+				deal.setExpires(mDeal.getExpires().getTime());
+			}
+
+			deal.setImageUrl(mDeal.getImageUrl());
+			deal.setMerchant(convertToThrift(mDeal.getMerchant()));
+			deal.setSummary(mDeal.getSummary());
+			deal.setUpdated(mDeal.getUpdated().getTime());
+			deal.setTitle(mDeal.getTitle());
+
+			deals.add(deal);
+
+		}
+
+		return deals;
+
+	}
+
+	public static List<Merchant_t> convertToThriftMerchants(final List<Merchant> listOfMerchants)
+	{
+		final List<Merchant_t> merchants = new ArrayList<Merchant_t>();
+
+		for (final Merchant merch : listOfMerchants)
+		{
+			merchants.add(convertToThrift(merch));
+		}
+
+		return merchants;
 	}
 }

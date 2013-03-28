@@ -41,8 +41,6 @@ struct Address_t {
   5: optional string stateProvinceCounty;
   6: optional string zip;
   7: optional string country;
-  20: optional Timestamp created;
-  21: optional Timestamp updated;
 }
 
 struct Customer_t {
@@ -61,4 +59,30 @@ struct Token_t {
  2: required string email;
  3: required i64 expires;
 }
+
+struct Merchant_t {
+  1: optional i64 merchantId;
+  2: required string name;
+  3: optional string email;
+  4: optional string websiteUrl;
+  5: optional string logoUrl;
+  6: optional string phone;
+  7: optional Address_t address;
+  20: optional Timestamp created;
+  21: optional Timestamp updated;
+}
+
+struct Deal_t {
+  1: optional i64 dealId;
+  2: required Merchant_t merchant;
+  3: required string title;
+  4: optional string summary;
+  5: optional string details;
+  6: optional string code;
+  7: optional string imageUrl;
+  8: optional Timestamp expires;
+  20: optional Timestamp created;
+  21: optional Timestamp updated;
+}
+
 

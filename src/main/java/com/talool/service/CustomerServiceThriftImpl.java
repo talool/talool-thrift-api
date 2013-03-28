@@ -1,18 +1,25 @@
 package com.talool.service;
 
+import java.util.List;
+
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
+import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
 import com.talool.core.FactoryManager;
+import com.talool.core.Merchant;
+import com.talool.core.MerchantDeal;
 import com.talool.core.SocialAccount;
 import com.talool.core.service.TaloolService;
 import com.talool.service.util.TokenUtil;
@@ -156,5 +163,57 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem saving customer: " + ex, ex);
 			throw new ServiceException_t(1033, "Problem customerEmailExists");
 		}
+	}
+
+	@Override
+	public List<Merchant_t> getMerchants() throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<Merchant> merchants = null;
+
+		try
+		{
+			merchants = taloolService.getMerchantsByCustomerId(Long.valueOf(token.getAccountId()));
+		}
+		catch (Exception ex)
+		{
+			LOG.error("Problem getting merchants for customer " + token.getAccountId(), ex);
+			throw new ServiceException_t(1087, "Problem getting merchants");
+		}
+
+		if (CollectionUtils.isEmpty(merchants))
+		{
+			LOG.error("No merchants for customer : " + token.getEmail());
+			throw new ServiceException_t(1088, "No merchants available");
+		}
+
+		return ConversionUtil.convertToThriftMerchants(merchants);
+
+	}
+
+	@Override
+	public List<Deal_t> getDeals(long merchantId) throws ServiceException_t, TException
+	{
+		TokenUtil.getTokenFromRequest(true);
+		List<MerchantDeal> deals = null;
+
+		try
+		{
+			deals = taloolService.getDealsByMerchantId(Long.valueOf(merchantId));
+		}
+		catch (Exception ex)
+		{
+			LOG.error("There was a problem retrieving deals for merchant: " + merchantId, ex);
+			throw new ServiceException_t(1087, "There was a problem retrieving deals for merchant");
+		}
+
+		if (CollectionUtils.isEmpty(deals))
+		{
+			LOG.error("No deals available for merchant: " + merchantId);
+			throw new ServiceException_t(1088, "No deals available for merchant");
+		}
+
+		return ConversionUtil.convertToThriftDeals(deals);
+
 	}
 }
