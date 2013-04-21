@@ -44,9 +44,9 @@ public class CustomerService_t {
 
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
-    public List<com.talool.api.thrift.Merchant_t> getMerchants() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+    public List<com.talool.api.thrift.Merchant_t> getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
-    public List<com.talool.api.thrift.Deal_t> getDeals(long merchantId) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+    public List<com.talool.api.thrift.DealAcquire_t> getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
   }
 
@@ -62,9 +62,9 @@ public class CustomerService_t {
 
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.addSocialAccount_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getMerchants(org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getMerchants_call> resultHandler) throws org.apache.thrift.TException;
+    public void getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getMerchantAcquires_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void getDeals(long merchantId, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getDeals_call> resultHandler) throws org.apache.thrift.TException;
+    public void getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getDealAcquires_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -214,55 +214,57 @@ public class CustomerService_t {
       return;
     }
 
-    public List<com.talool.api.thrift.Merchant_t> getMerchants() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public List<com.talool.api.thrift.Merchant_t> getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      send_getMerchants();
-      return recv_getMerchants();
+      send_getMerchantAcquires(searchOptions);
+      return recv_getMerchantAcquires();
     }
 
-    public void send_getMerchants() throws org.apache.thrift.TException
+    public void send_getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions) throws org.apache.thrift.TException
     {
-      getMerchants_args args = new getMerchants_args();
-      sendBase("getMerchants", args);
+      getMerchantAcquires_args args = new getMerchantAcquires_args();
+      args.setSearchOptions(searchOptions);
+      sendBase("getMerchantAcquires", args);
     }
 
-    public List<com.talool.api.thrift.Merchant_t> recv_getMerchants() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public List<com.talool.api.thrift.Merchant_t> recv_getMerchantAcquires() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      getMerchants_result result = new getMerchants_result();
-      receiveBase(result, "getMerchants");
+      getMerchantAcquires_result result = new getMerchantAcquires_result();
+      receiveBase(result, "getMerchantAcquires");
       if (result.isSetSuccess()) {
         return result.success;
       }
       if (result.error != null) {
         throw result.error;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getMerchants failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getMerchantAcquires failed: unknown result");
     }
 
-    public List<com.talool.api.thrift.Deal_t> getDeals(long merchantId) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public List<com.talool.api.thrift.DealAcquire_t> getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      send_getDeals(merchantId);
-      return recv_getDeals();
+      send_getDealAcquires(merchantId, searchOptions);
+      return recv_getDealAcquires();
     }
 
-    public void send_getDeals(long merchantId) throws org.apache.thrift.TException
+    public void send_getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions) throws org.apache.thrift.TException
     {
-      getDeals_args args = new getDeals_args();
+      getDealAcquires_args args = new getDealAcquires_args();
       args.setMerchantId(merchantId);
-      sendBase("getDeals", args);
+      args.setSearchOptions(searchOptions);
+      sendBase("getDealAcquires", args);
     }
 
-    public List<com.talool.api.thrift.Deal_t> recv_getDeals() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    public List<com.talool.api.thrift.DealAcquire_t> recv_getDealAcquires() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
-      getDeals_result result = new getDeals_result();
-      receiveBase(result, "getDeals");
+      getDealAcquires_result result = new getDealAcquires_result();
+      receiveBase(result, "getDealAcquires");
       if (result.isSetSuccess()) {
         return result.success;
       }
       if (result.error != null) {
         throw result.error;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getDeals failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getDealAcquires failed: unknown result");
     }
 
   }
@@ -449,21 +451,24 @@ public class CustomerService_t {
       }
     }
 
-    public void getMerchants(org.apache.thrift.async.AsyncMethodCallback<getMerchants_call> resultHandler) throws org.apache.thrift.TException {
+    public void getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<getMerchantAcquires_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getMerchants_call method_call = new getMerchants_call(resultHandler, this, ___protocolFactory, ___transport);
+      getMerchantAcquires_call method_call = new getMerchantAcquires_call(searchOptions, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class getMerchants_call extends org.apache.thrift.async.TAsyncMethodCall {
-      public getMerchants_call(org.apache.thrift.async.AsyncMethodCallback<getMerchants_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class getMerchantAcquires_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private com.talool.api.thrift.SearchOptions_t searchOptions;
+      public getMerchantAcquires_call(com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<getMerchantAcquires_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
+        this.searchOptions = searchOptions;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getMerchants", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        getMerchants_args args = new getMerchants_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getMerchantAcquires", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getMerchantAcquires_args args = new getMerchantAcquires_args();
+        args.setSearchOptions(searchOptions);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -474,39 +479,42 @@ public class CustomerService_t {
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getMerchants();
+        return (new Client(prot)).recv_getMerchantAcquires();
       }
     }
 
-    public void getDeals(long merchantId, org.apache.thrift.async.AsyncMethodCallback<getDeals_call> resultHandler) throws org.apache.thrift.TException {
+    public void getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<getDealAcquires_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getDeals_call method_call = new getDeals_call(merchantId, resultHandler, this, ___protocolFactory, ___transport);
+      getDealAcquires_call method_call = new getDealAcquires_call(merchantId, searchOptions, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class getDeals_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private long merchantId;
-      public getDeals_call(long merchantId, org.apache.thrift.async.AsyncMethodCallback<getDeals_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class getDealAcquires_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String merchantId;
+      private com.talool.api.thrift.SearchOptions_t searchOptions;
+      public getDealAcquires_call(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<getDealAcquires_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.merchantId = merchantId;
+        this.searchOptions = searchOptions;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getDeals", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        getDeals_args args = new getDeals_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getDealAcquires", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getDealAcquires_args args = new getDealAcquires_args();
         args.setMerchantId(merchantId);
+        args.setSearchOptions(searchOptions);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public List<com.talool.api.thrift.Deal_t> getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
+      public List<com.talool.api.thrift.DealAcquire_t> getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getDeals();
+        return (new Client(prot)).recv_getDealAcquires();
       }
     }
 
@@ -528,8 +536,8 @@ public class CustomerService_t {
       processMap.put("customerEmailExists", new customerEmailExists());
       processMap.put("save", new save());
       processMap.put("addSocialAccount", new addSocialAccount());
-      processMap.put("getMerchants", new getMerchants());
-      processMap.put("getDeals", new getDeals());
+      processMap.put("getMerchantAcquires", new getMerchantAcquires());
+      processMap.put("getDealAcquires", new getDealAcquires());
       return processMap;
     }
 
@@ -654,23 +662,23 @@ public class CustomerService_t {
       }
     }
 
-    public static class getMerchants<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getMerchants_args> {
-      public getMerchants() {
-        super("getMerchants");
+    public static class getMerchantAcquires<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getMerchantAcquires_args> {
+      public getMerchantAcquires() {
+        super("getMerchantAcquires");
       }
 
-      public getMerchants_args getEmptyArgsInstance() {
-        return new getMerchants_args();
+      public getMerchantAcquires_args getEmptyArgsInstance() {
+        return new getMerchantAcquires_args();
       }
 
       protected boolean isOneway() {
         return false;
       }
 
-      public getMerchants_result getResult(I iface, getMerchants_args args) throws org.apache.thrift.TException {
-        getMerchants_result result = new getMerchants_result();
+      public getMerchantAcquires_result getResult(I iface, getMerchantAcquires_args args) throws org.apache.thrift.TException {
+        getMerchantAcquires_result result = new getMerchantAcquires_result();
         try {
-          result.success = iface.getMerchants();
+          result.success = iface.getMerchantAcquires(args.searchOptions);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -678,23 +686,23 @@ public class CustomerService_t {
       }
     }
 
-    public static class getDeals<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getDeals_args> {
-      public getDeals() {
-        super("getDeals");
+    public static class getDealAcquires<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getDealAcquires_args> {
+      public getDealAcquires() {
+        super("getDealAcquires");
       }
 
-      public getDeals_args getEmptyArgsInstance() {
-        return new getDeals_args();
+      public getDealAcquires_args getEmptyArgsInstance() {
+        return new getDealAcquires_args();
       }
 
       protected boolean isOneway() {
         return false;
       }
 
-      public getDeals_result getResult(I iface, getDeals_args args) throws org.apache.thrift.TException {
-        getDeals_result result = new getDeals_result();
+      public getDealAcquires_result getResult(I iface, getDealAcquires_args args) throws org.apache.thrift.TException {
+        getDealAcquires_result result = new getDealAcquires_result();
         try {
-          result.success = iface.getDeals(args.merchantId);
+          result.success = iface.getDealAcquires(args.merchantId, args.searchOptions);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -4769,20 +4777,22 @@ public class CustomerService_t {
 
   }
 
-  public static class getMerchants_args implements org.apache.thrift.TBase<getMerchants_args, getMerchants_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMerchants_args");
+  public static class getMerchantAcquires_args implements org.apache.thrift.TBase<getMerchantAcquires_args, getMerchantAcquires_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMerchantAcquires_args");
 
+    private static final org.apache.thrift.protocol.TField SEARCH_OPTIONS_FIELD_DESC = new org.apache.thrift.protocol.TField("searchOptions", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getMerchants_argsStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getMerchants_argsTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getMerchantAcquires_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getMerchantAcquires_argsTupleSchemeFactory());
     }
 
+    public com.talool.api.thrift.SearchOptions_t searchOptions; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+      SEARCH_OPTIONS((short)1, "searchOptions");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -4797,6 +4807,8 @@ public class CustomerService_t {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
+          case 1: // SEARCH_OPTIONS
+            return SEARCH_OPTIONS;
           default:
             return null;
         }
@@ -4835,36 +4847,86 @@ public class CustomerService_t {
         return _fieldName;
       }
     }
+
+    // isset id assignments
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SEARCH_OPTIONS, new org.apache.thrift.meta_data.FieldMetaData("searchOptions", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.SearchOptions_t.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMerchants_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMerchantAcquires_args.class, metaDataMap);
     }
 
-    public getMerchants_args() {
+    public getMerchantAcquires_args() {
+    }
+
+    public getMerchantAcquires_args(
+      com.talool.api.thrift.SearchOptions_t searchOptions)
+    {
+      this();
+      this.searchOptions = searchOptions;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getMerchants_args(getMerchants_args other) {
+    public getMerchantAcquires_args(getMerchantAcquires_args other) {
+      if (other.isSetSearchOptions()) {
+        this.searchOptions = new com.talool.api.thrift.SearchOptions_t(other.searchOptions);
+      }
     }
 
-    public getMerchants_args deepCopy() {
-      return new getMerchants_args(this);
+    public getMerchantAcquires_args deepCopy() {
+      return new getMerchantAcquires_args(this);
     }
 
     public void clear() {
+      this.searchOptions = null;
+    }
+
+    public com.talool.api.thrift.SearchOptions_t getSearchOptions() {
+      return this.searchOptions;
+    }
+
+    public getMerchantAcquires_args setSearchOptions(com.talool.api.thrift.SearchOptions_t searchOptions) {
+      this.searchOptions = searchOptions;
+      return this;
+    }
+
+    public void unsetSearchOptions() {
+      this.searchOptions = null;
+    }
+
+    /** Returns true if field searchOptions is set (has been assigned a value) and false otherwise */
+    public boolean isSetSearchOptions() {
+      return this.searchOptions != null;
+    }
+
+    public void setSearchOptionsIsSet(boolean value) {
+      if (!value) {
+        this.searchOptions = null;
+      }
     }
 
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
+      case SEARCH_OPTIONS:
+        if (value == null) {
+          unsetSearchOptions();
+        } else {
+          setSearchOptions((com.talool.api.thrift.SearchOptions_t)value);
+        }
+        break;
+
       }
     }
 
     public Object getFieldValue(_Fields field) {
       switch (field) {
+      case SEARCH_OPTIONS:
+        return getSearchOptions();
+
       }
       throw new IllegalStateException();
     }
@@ -4876,6 +4938,8 @@ public class CustomerService_t {
       }
 
       switch (field) {
+      case SEARCH_OPTIONS:
+        return isSetSearchOptions();
       }
       throw new IllegalStateException();
     }
@@ -4884,14 +4948,23 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getMerchants_args)
-        return this.equals((getMerchants_args)that);
+      if (that instanceof getMerchantAcquires_args)
+        return this.equals((getMerchantAcquires_args)that);
       return false;
     }
 
-    public boolean equals(getMerchants_args that) {
+    public boolean equals(getMerchantAcquires_args that) {
       if (that == null)
         return false;
+
+      boolean this_present_searchOptions = true && this.isSetSearchOptions();
+      boolean that_present_searchOptions = true && that.isSetSearchOptions();
+      if (this_present_searchOptions || that_present_searchOptions) {
+        if (!(this_present_searchOptions && that_present_searchOptions))
+          return false;
+        if (!this.searchOptions.equals(that.searchOptions))
+          return false;
+      }
 
       return true;
     }
@@ -4901,14 +4974,24 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(getMerchants_args other) {
+    public int compareTo(getMerchantAcquires_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getMerchants_args typedOther = (getMerchants_args)other;
+      getMerchantAcquires_args typedOther = (getMerchantAcquires_args)other;
 
+      lastComparison = Boolean.valueOf(isSetSearchOptions()).compareTo(typedOther.isSetSearchOptions());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSearchOptions()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.searchOptions, typedOther.searchOptions);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -4926,9 +5009,16 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getMerchants_args(");
+      StringBuilder sb = new StringBuilder("getMerchantAcquires_args(");
       boolean first = true;
 
+      sb.append("searchOptions:");
+      if (this.searchOptions == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.searchOptions);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -4936,6 +5026,9 @@ public class CustomerService_t {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
+      if (searchOptions != null) {
+        searchOptions.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -4954,15 +5047,15 @@ public class CustomerService_t {
       }
     }
 
-    private static class getMerchants_argsStandardSchemeFactory implements SchemeFactory {
-      public getMerchants_argsStandardScheme getScheme() {
-        return new getMerchants_argsStandardScheme();
+    private static class getMerchantAcquires_argsStandardSchemeFactory implements SchemeFactory {
+      public getMerchantAcquires_argsStandardScheme getScheme() {
+        return new getMerchantAcquires_argsStandardScheme();
       }
     }
 
-    private static class getMerchants_argsStandardScheme extends StandardScheme<getMerchants_args> {
+    private static class getMerchantAcquires_argsStandardScheme extends StandardScheme<getMerchantAcquires_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getMerchants_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getMerchantAcquires_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -4972,6 +5065,15 @@ public class CustomerService_t {
             break;
           }
           switch (schemeField.id) {
+            case 1: // SEARCH_OPTIONS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.searchOptions = new com.talool.api.thrift.SearchOptions_t();
+                struct.searchOptions.read(iprot);
+                struct.setSearchOptionsIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -4983,47 +5085,66 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getMerchants_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getMerchantAcquires_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.searchOptions != null) {
+          oprot.writeFieldBegin(SEARCH_OPTIONS_FIELD_DESC);
+          struct.searchOptions.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
 
     }
 
-    private static class getMerchants_argsTupleSchemeFactory implements SchemeFactory {
-      public getMerchants_argsTupleScheme getScheme() {
-        return new getMerchants_argsTupleScheme();
+    private static class getMerchantAcquires_argsTupleSchemeFactory implements SchemeFactory {
+      public getMerchantAcquires_argsTupleScheme getScheme() {
+        return new getMerchantAcquires_argsTupleScheme();
       }
     }
 
-    private static class getMerchants_argsTupleScheme extends TupleScheme<getMerchants_args> {
+    private static class getMerchantAcquires_argsTupleScheme extends TupleScheme<getMerchantAcquires_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getMerchants_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getMerchantAcquires_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSearchOptions()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSearchOptions()) {
+          struct.searchOptions.write(oprot);
+        }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getMerchants_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getMerchantAcquires_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.searchOptions = new com.talool.api.thrift.SearchOptions_t();
+          struct.searchOptions.read(iprot);
+          struct.setSearchOptionsIsSet(true);
+        }
       }
     }
 
   }
 
-  public static class getMerchants_result implements org.apache.thrift.TBase<getMerchants_result, getMerchants_result._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMerchants_result");
+  public static class getMerchantAcquires_result implements org.apache.thrift.TBase<getMerchantAcquires_result, getMerchantAcquires_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMerchantAcquires_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
     private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getMerchants_resultStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getMerchants_resultTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getMerchantAcquires_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getMerchantAcquires_resultTupleSchemeFactory());
     }
 
     public List<com.talool.api.thrift.Merchant_t> success; // required
@@ -5100,13 +5221,13 @@ public class CustomerService_t {
       tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMerchants_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMerchantAcquires_result.class, metaDataMap);
     }
 
-    public getMerchants_result() {
+    public getMerchantAcquires_result() {
     }
 
-    public getMerchants_result(
+    public getMerchantAcquires_result(
       List<com.talool.api.thrift.Merchant_t> success,
       com.talool.api.thrift.ServiceException_t error)
     {
@@ -5118,7 +5239,7 @@ public class CustomerService_t {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getMerchants_result(getMerchants_result other) {
+    public getMerchantAcquires_result(getMerchantAcquires_result other) {
       if (other.isSetSuccess()) {
         List<com.talool.api.thrift.Merchant_t> __this__success = new ArrayList<com.talool.api.thrift.Merchant_t>();
         for (com.talool.api.thrift.Merchant_t other_element : other.success) {
@@ -5131,8 +5252,8 @@ public class CustomerService_t {
       }
     }
 
-    public getMerchants_result deepCopy() {
-      return new getMerchants_result(this);
+    public getMerchantAcquires_result deepCopy() {
+      return new getMerchantAcquires_result(this);
     }
 
     public void clear() {
@@ -5159,7 +5280,7 @@ public class CustomerService_t {
       return this.success;
     }
 
-    public getMerchants_result setSuccess(List<com.talool.api.thrift.Merchant_t> success) {
+    public getMerchantAcquires_result setSuccess(List<com.talool.api.thrift.Merchant_t> success) {
       this.success = success;
       return this;
     }
@@ -5183,7 +5304,7 @@ public class CustomerService_t {
       return this.error;
     }
 
-    public getMerchants_result setError(com.talool.api.thrift.ServiceException_t error) {
+    public getMerchantAcquires_result setError(com.talool.api.thrift.ServiceException_t error) {
       this.error = error;
       return this;
     }
@@ -5255,12 +5376,12 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getMerchants_result)
-        return this.equals((getMerchants_result)that);
+      if (that instanceof getMerchantAcquires_result)
+        return this.equals((getMerchantAcquires_result)that);
       return false;
     }
 
-    public boolean equals(getMerchants_result that) {
+    public boolean equals(getMerchantAcquires_result that) {
       if (that == null)
         return false;
 
@@ -5290,13 +5411,13 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(getMerchants_result other) {
+    public int compareTo(getMerchantAcquires_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getMerchants_result typedOther = (getMerchants_result)other;
+      getMerchantAcquires_result typedOther = (getMerchantAcquires_result)other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -5335,7 +5456,7 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getMerchants_result(");
+      StringBuilder sb = new StringBuilder("getMerchantAcquires_result(");
       boolean first = true;
 
       sb.append("success:");
@@ -5378,15 +5499,15 @@ public class CustomerService_t {
       }
     }
 
-    private static class getMerchants_resultStandardSchemeFactory implements SchemeFactory {
-      public getMerchants_resultStandardScheme getScheme() {
-        return new getMerchants_resultStandardScheme();
+    private static class getMerchantAcquires_resultStandardSchemeFactory implements SchemeFactory {
+      public getMerchantAcquires_resultStandardScheme getScheme() {
+        return new getMerchantAcquires_resultStandardScheme();
       }
     }
 
-    private static class getMerchants_resultStandardScheme extends StandardScheme<getMerchants_result> {
+    private static class getMerchantAcquires_resultStandardScheme extends StandardScheme<getMerchantAcquires_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getMerchants_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getMerchantAcquires_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -5435,7 +5556,7 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getMerchants_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getMerchantAcquires_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -5462,16 +5583,16 @@ public class CustomerService_t {
 
     }
 
-    private static class getMerchants_resultTupleSchemeFactory implements SchemeFactory {
-      public getMerchants_resultTupleScheme getScheme() {
-        return new getMerchants_resultTupleScheme();
+    private static class getMerchantAcquires_resultTupleSchemeFactory implements SchemeFactory {
+      public getMerchantAcquires_resultTupleScheme getScheme() {
+        return new getMerchantAcquires_resultTupleScheme();
       }
     }
 
-    private static class getMerchants_resultTupleScheme extends TupleScheme<getMerchants_result> {
+    private static class getMerchantAcquires_resultTupleScheme extends TupleScheme<getMerchantAcquires_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getMerchants_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getMerchantAcquires_result struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetSuccess()) {
@@ -5496,7 +5617,7 @@ public class CustomerService_t {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getMerchants_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getMerchantAcquires_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
@@ -5523,22 +5644,25 @@ public class CustomerService_t {
 
   }
 
-  public static class getDeals_args implements org.apache.thrift.TBase<getDeals_args, getDeals_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getDeals_args");
+  public static class getDealAcquires_args implements org.apache.thrift.TBase<getDealAcquires_args, getDealAcquires_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getDealAcquires_args");
 
-    private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.I64, (short)1);
+    private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField SEARCH_OPTIONS_FIELD_DESC = new org.apache.thrift.protocol.TField("searchOptions", org.apache.thrift.protocol.TType.STRUCT, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getDeals_argsStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getDeals_argsTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getDealAcquires_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getDealAcquires_argsTupleSchemeFactory());
     }
 
-    public long merchantId; // required
+    public String merchantId; // required
+    public com.talool.api.thrift.SearchOptions_t searchOptions; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      MERCHANT_ID((short)1, "merchantId");
+      MERCHANT_ID((short)1, "merchantId"),
+      SEARCH_OPTIONS((short)2, "searchOptions");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -5555,6 +5679,8 @@ public class CustomerService_t {
         switch(fieldId) {
           case 1: // MERCHANT_ID
             return MERCHANT_ID;
+          case 2: // SEARCH_OPTIONS
+            return SEARCH_OPTIONS;
           default:
             return null;
         }
@@ -5595,66 +5721,96 @@ public class CustomerService_t {
     }
 
     // isset id assignments
-    private static final int __MERCHANTID_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.MERCHANT_ID, new org.apache.thrift.meta_data.FieldMetaData("merchantId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.SEARCH_OPTIONS, new org.apache.thrift.meta_data.FieldMetaData("searchOptions", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.SearchOptions_t.class)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getDeals_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getDealAcquires_args.class, metaDataMap);
     }
 
-    public getDeals_args() {
+    public getDealAcquires_args() {
     }
 
-    public getDeals_args(
-      long merchantId)
+    public getDealAcquires_args(
+      String merchantId,
+      com.talool.api.thrift.SearchOptions_t searchOptions)
     {
       this();
       this.merchantId = merchantId;
-      setMerchantIdIsSet(true);
+      this.searchOptions = searchOptions;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getDeals_args(getDeals_args other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.merchantId = other.merchantId;
+    public getDealAcquires_args(getDealAcquires_args other) {
+      if (other.isSetMerchantId()) {
+        this.merchantId = other.merchantId;
+      }
+      if (other.isSetSearchOptions()) {
+        this.searchOptions = new com.talool.api.thrift.SearchOptions_t(other.searchOptions);
+      }
     }
 
-    public getDeals_args deepCopy() {
-      return new getDeals_args(this);
+    public getDealAcquires_args deepCopy() {
+      return new getDealAcquires_args(this);
     }
 
     public void clear() {
-      setMerchantIdIsSet(false);
-      this.merchantId = 0;
+      this.merchantId = null;
+      this.searchOptions = null;
     }
 
-    public long getMerchantId() {
+    public String getMerchantId() {
       return this.merchantId;
     }
 
-    public getDeals_args setMerchantId(long merchantId) {
+    public getDealAcquires_args setMerchantId(String merchantId) {
       this.merchantId = merchantId;
-      setMerchantIdIsSet(true);
       return this;
     }
 
     public void unsetMerchantId() {
-      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __MERCHANTID_ISSET_ID);
+      this.merchantId = null;
     }
 
     /** Returns true if field merchantId is set (has been assigned a value) and false otherwise */
     public boolean isSetMerchantId() {
-      return EncodingUtils.testBit(__isset_bitfield, __MERCHANTID_ISSET_ID);
+      return this.merchantId != null;
     }
 
     public void setMerchantIdIsSet(boolean value) {
-      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __MERCHANTID_ISSET_ID, value);
+      if (!value) {
+        this.merchantId = null;
+      }
+    }
+
+    public com.talool.api.thrift.SearchOptions_t getSearchOptions() {
+      return this.searchOptions;
+    }
+
+    public getDealAcquires_args setSearchOptions(com.talool.api.thrift.SearchOptions_t searchOptions) {
+      this.searchOptions = searchOptions;
+      return this;
+    }
+
+    public void unsetSearchOptions() {
+      this.searchOptions = null;
+    }
+
+    /** Returns true if field searchOptions is set (has been assigned a value) and false otherwise */
+    public boolean isSetSearchOptions() {
+      return this.searchOptions != null;
+    }
+
+    public void setSearchOptionsIsSet(boolean value) {
+      if (!value) {
+        this.searchOptions = null;
+      }
     }
 
     public void setFieldValue(_Fields field, Object value) {
@@ -5663,7 +5819,15 @@ public class CustomerService_t {
         if (value == null) {
           unsetMerchantId();
         } else {
-          setMerchantId((Long)value);
+          setMerchantId((String)value);
+        }
+        break;
+
+      case SEARCH_OPTIONS:
+        if (value == null) {
+          unsetSearchOptions();
+        } else {
+          setSearchOptions((com.talool.api.thrift.SearchOptions_t)value);
         }
         break;
 
@@ -5673,7 +5837,10 @@ public class CustomerService_t {
     public Object getFieldValue(_Fields field) {
       switch (field) {
       case MERCHANT_ID:
-        return Long.valueOf(getMerchantId());
+        return getMerchantId();
+
+      case SEARCH_OPTIONS:
+        return getSearchOptions();
 
       }
       throw new IllegalStateException();
@@ -5688,6 +5855,8 @@ public class CustomerService_t {
       switch (field) {
       case MERCHANT_ID:
         return isSetMerchantId();
+      case SEARCH_OPTIONS:
+        return isSetSearchOptions();
       }
       throw new IllegalStateException();
     }
@@ -5696,21 +5865,30 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getDeals_args)
-        return this.equals((getDeals_args)that);
+      if (that instanceof getDealAcquires_args)
+        return this.equals((getDealAcquires_args)that);
       return false;
     }
 
-    public boolean equals(getDeals_args that) {
+    public boolean equals(getDealAcquires_args that) {
       if (that == null)
         return false;
 
-      boolean this_present_merchantId = true;
-      boolean that_present_merchantId = true;
+      boolean this_present_merchantId = true && this.isSetMerchantId();
+      boolean that_present_merchantId = true && that.isSetMerchantId();
       if (this_present_merchantId || that_present_merchantId) {
         if (!(this_present_merchantId && that_present_merchantId))
           return false;
-        if (this.merchantId != that.merchantId)
+        if (!this.merchantId.equals(that.merchantId))
+          return false;
+      }
+
+      boolean this_present_searchOptions = true && this.isSetSearchOptions();
+      boolean that_present_searchOptions = true && that.isSetSearchOptions();
+      if (this_present_searchOptions || that_present_searchOptions) {
+        if (!(this_present_searchOptions && that_present_searchOptions))
+          return false;
+        if (!this.searchOptions.equals(that.searchOptions))
           return false;
       }
 
@@ -5722,13 +5900,13 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(getDeals_args other) {
+    public int compareTo(getDealAcquires_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getDeals_args typedOther = (getDeals_args)other;
+      getDealAcquires_args typedOther = (getDealAcquires_args)other;
 
       lastComparison = Boolean.valueOf(isSetMerchantId()).compareTo(typedOther.isSetMerchantId());
       if (lastComparison != 0) {
@@ -5736,6 +5914,16 @@ public class CustomerService_t {
       }
       if (isSetMerchantId()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.merchantId, typedOther.merchantId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetSearchOptions()).compareTo(typedOther.isSetSearchOptions());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSearchOptions()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.searchOptions, typedOther.searchOptions);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5757,11 +5945,23 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getDeals_args(");
+      StringBuilder sb = new StringBuilder("getDealAcquires_args(");
       boolean first = true;
 
       sb.append("merchantId:");
-      sb.append(this.merchantId);
+      if (this.merchantId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.merchantId);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("searchOptions:");
+      if (this.searchOptions == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.searchOptions);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -5770,6 +5970,9 @@ public class CustomerService_t {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
+      if (searchOptions != null) {
+        searchOptions.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -5782,23 +5985,21 @@ public class CustomerService_t {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te.getMessage());
       }
     }
 
-    private static class getDeals_argsStandardSchemeFactory implements SchemeFactory {
-      public getDeals_argsStandardScheme getScheme() {
-        return new getDeals_argsStandardScheme();
+    private static class getDealAcquires_argsStandardSchemeFactory implements SchemeFactory {
+      public getDealAcquires_argsStandardScheme getScheme() {
+        return new getDealAcquires_argsStandardScheme();
       }
     }
 
-    private static class getDeals_argsStandardScheme extends StandardScheme<getDeals_args> {
+    private static class getDealAcquires_argsStandardScheme extends StandardScheme<getDealAcquires_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getDeals_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getDealAcquires_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -5809,9 +6010,18 @@ public class CustomerService_t {
           }
           switch (schemeField.id) {
             case 1: // MERCHANT_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-                struct.merchantId = iprot.readI64();
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.merchantId = iprot.readString();
                 struct.setMerchantIdIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // SEARCH_OPTIONS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.searchOptions = new com.talool.api.thrift.SearchOptions_t();
+                struct.searchOptions.read(iprot);
+                struct.setSearchOptionsIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -5827,66 +6037,84 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getDeals_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getDealAcquires_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(MERCHANT_ID_FIELD_DESC);
-        oprot.writeI64(struct.merchantId);
-        oprot.writeFieldEnd();
+        if (struct.merchantId != null) {
+          oprot.writeFieldBegin(MERCHANT_ID_FIELD_DESC);
+          oprot.writeString(struct.merchantId);
+          oprot.writeFieldEnd();
+        }
+        if (struct.searchOptions != null) {
+          oprot.writeFieldBegin(SEARCH_OPTIONS_FIELD_DESC);
+          struct.searchOptions.write(oprot);
+          oprot.writeFieldEnd();
+        }
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
 
     }
 
-    private static class getDeals_argsTupleSchemeFactory implements SchemeFactory {
-      public getDeals_argsTupleScheme getScheme() {
-        return new getDeals_argsTupleScheme();
+    private static class getDealAcquires_argsTupleSchemeFactory implements SchemeFactory {
+      public getDealAcquires_argsTupleScheme getScheme() {
+        return new getDealAcquires_argsTupleScheme();
       }
     }
 
-    private static class getDeals_argsTupleScheme extends TupleScheme<getDeals_args> {
+    private static class getDealAcquires_argsTupleScheme extends TupleScheme<getDealAcquires_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getDeals_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getDealAcquires_args struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetMerchantId()) {
           optionals.set(0);
         }
-        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSearchOptions()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
         if (struct.isSetMerchantId()) {
-          oprot.writeI64(struct.merchantId);
+          oprot.writeString(struct.merchantId);
+        }
+        if (struct.isSetSearchOptions()) {
+          struct.searchOptions.write(oprot);
         }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getDeals_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getDealAcquires_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
+        BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
-          struct.merchantId = iprot.readI64();
+          struct.merchantId = iprot.readString();
           struct.setMerchantIdIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.searchOptions = new com.talool.api.thrift.SearchOptions_t();
+          struct.searchOptions.read(iprot);
+          struct.setSearchOptionsIsSet(true);
         }
       }
     }
 
   }
 
-  public static class getDeals_result implements org.apache.thrift.TBase<getDeals_result, getDeals_result._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getDeals_result");
+  public static class getDealAcquires_result implements org.apache.thrift.TBase<getDealAcquires_result, getDealAcquires_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getDealAcquires_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
     private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-      schemes.put(StandardScheme.class, new getDeals_resultStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new getDeals_resultTupleSchemeFactory());
+      schemes.put(StandardScheme.class, new getDealAcquires_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new getDealAcquires_resultTupleSchemeFactory());
     }
 
-    public List<com.talool.api.thrift.Deal_t> success; // required
+    public List<com.talool.api.thrift.DealAcquire_t> success; // required
     public com.talool.api.thrift.ServiceException_t error; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -5956,18 +6184,18 @@ public class CustomerService_t {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.Deal_t.class))));
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.DealAcquire_t.class))));
       tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getDeals_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getDealAcquires_result.class, metaDataMap);
     }
 
-    public getDeals_result() {
+    public getDealAcquires_result() {
     }
 
-    public getDeals_result(
-      List<com.talool.api.thrift.Deal_t> success,
+    public getDealAcquires_result(
+      List<com.talool.api.thrift.DealAcquire_t> success,
       com.talool.api.thrift.ServiceException_t error)
     {
       this();
@@ -5978,11 +6206,11 @@ public class CustomerService_t {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getDeals_result(getDeals_result other) {
+    public getDealAcquires_result(getDealAcquires_result other) {
       if (other.isSetSuccess()) {
-        List<com.talool.api.thrift.Deal_t> __this__success = new ArrayList<com.talool.api.thrift.Deal_t>();
-        for (com.talool.api.thrift.Deal_t other_element : other.success) {
-          __this__success.add(new com.talool.api.thrift.Deal_t(other_element));
+        List<com.talool.api.thrift.DealAcquire_t> __this__success = new ArrayList<com.talool.api.thrift.DealAcquire_t>();
+        for (com.talool.api.thrift.DealAcquire_t other_element : other.success) {
+          __this__success.add(new com.talool.api.thrift.DealAcquire_t(other_element));
         }
         this.success = __this__success;
       }
@@ -5991,8 +6219,8 @@ public class CustomerService_t {
       }
     }
 
-    public getDeals_result deepCopy() {
-      return new getDeals_result(this);
+    public getDealAcquires_result deepCopy() {
+      return new getDealAcquires_result(this);
     }
 
     public void clear() {
@@ -6004,22 +6232,22 @@ public class CustomerService_t {
       return (this.success == null) ? 0 : this.success.size();
     }
 
-    public java.util.Iterator<com.talool.api.thrift.Deal_t> getSuccessIterator() {
+    public java.util.Iterator<com.talool.api.thrift.DealAcquire_t> getSuccessIterator() {
       return (this.success == null) ? null : this.success.iterator();
     }
 
-    public void addToSuccess(com.talool.api.thrift.Deal_t elem) {
+    public void addToSuccess(com.talool.api.thrift.DealAcquire_t elem) {
       if (this.success == null) {
-        this.success = new ArrayList<com.talool.api.thrift.Deal_t>();
+        this.success = new ArrayList<com.talool.api.thrift.DealAcquire_t>();
       }
       this.success.add(elem);
     }
 
-    public List<com.talool.api.thrift.Deal_t> getSuccess() {
+    public List<com.talool.api.thrift.DealAcquire_t> getSuccess() {
       return this.success;
     }
 
-    public getDeals_result setSuccess(List<com.talool.api.thrift.Deal_t> success) {
+    public getDealAcquires_result setSuccess(List<com.talool.api.thrift.DealAcquire_t> success) {
       this.success = success;
       return this;
     }
@@ -6043,7 +6271,7 @@ public class CustomerService_t {
       return this.error;
     }
 
-    public getDeals_result setError(com.talool.api.thrift.ServiceException_t error) {
+    public getDealAcquires_result setError(com.talool.api.thrift.ServiceException_t error) {
       this.error = error;
       return this;
     }
@@ -6069,7 +6297,7 @@ public class CustomerService_t {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((List<com.talool.api.thrift.Deal_t>)value);
+          setSuccess((List<com.talool.api.thrift.DealAcquire_t>)value);
         }
         break;
 
@@ -6115,12 +6343,12 @@ public class CustomerService_t {
     public boolean equals(Object that) {
       if (that == null)
         return false;
-      if (that instanceof getDeals_result)
-        return this.equals((getDeals_result)that);
+      if (that instanceof getDealAcquires_result)
+        return this.equals((getDealAcquires_result)that);
       return false;
     }
 
-    public boolean equals(getDeals_result that) {
+    public boolean equals(getDealAcquires_result that) {
       if (that == null)
         return false;
 
@@ -6150,13 +6378,13 @@ public class CustomerService_t {
       return 0;
     }
 
-    public int compareTo(getDeals_result other) {
+    public int compareTo(getDealAcquires_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getDeals_result typedOther = (getDeals_result)other;
+      getDealAcquires_result typedOther = (getDealAcquires_result)other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -6195,7 +6423,7 @@ public class CustomerService_t {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder("getDeals_result(");
+      StringBuilder sb = new StringBuilder("getDealAcquires_result(");
       boolean first = true;
 
       sb.append("success:");
@@ -6238,15 +6466,15 @@ public class CustomerService_t {
       }
     }
 
-    private static class getDeals_resultStandardSchemeFactory implements SchemeFactory {
-      public getDeals_resultStandardScheme getScheme() {
-        return new getDeals_resultStandardScheme();
+    private static class getDealAcquires_resultStandardSchemeFactory implements SchemeFactory {
+      public getDealAcquires_resultStandardScheme getScheme() {
+        return new getDealAcquires_resultStandardScheme();
       }
     }
 
-    private static class getDeals_resultStandardScheme extends StandardScheme<getDeals_result> {
+    private static class getDealAcquires_resultStandardScheme extends StandardScheme<getDealAcquires_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getDeals_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getDealAcquires_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -6260,11 +6488,11 @@ public class CustomerService_t {
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
                   org.apache.thrift.protocol.TList _list8 = iprot.readListBegin();
-                  struct.success = new ArrayList<com.talool.api.thrift.Deal_t>(_list8.size);
+                  struct.success = new ArrayList<com.talool.api.thrift.DealAcquire_t>(_list8.size);
                   for (int _i9 = 0; _i9 < _list8.size; ++_i9)
                   {
-                    com.talool.api.thrift.Deal_t _elem10; // optional
-                    _elem10 = new com.talool.api.thrift.Deal_t();
+                    com.talool.api.thrift.DealAcquire_t _elem10; // optional
+                    _elem10 = new com.talool.api.thrift.DealAcquire_t();
                     _elem10.read(iprot);
                     struct.success.add(_elem10);
                   }
@@ -6295,7 +6523,7 @@ public class CustomerService_t {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getDeals_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getDealAcquires_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -6303,7 +6531,7 @@ public class CustomerService_t {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (com.talool.api.thrift.Deal_t _iter11 : struct.success)
+            for (com.talool.api.thrift.DealAcquire_t _iter11 : struct.success)
             {
               _iter11.write(oprot);
             }
@@ -6322,16 +6550,16 @@ public class CustomerService_t {
 
     }
 
-    private static class getDeals_resultTupleSchemeFactory implements SchemeFactory {
-      public getDeals_resultTupleScheme getScheme() {
-        return new getDeals_resultTupleScheme();
+    private static class getDealAcquires_resultTupleSchemeFactory implements SchemeFactory {
+      public getDealAcquires_resultTupleScheme getScheme() {
+        return new getDealAcquires_resultTupleScheme();
       }
     }
 
-    private static class getDeals_resultTupleScheme extends TupleScheme<getDeals_result> {
+    private static class getDealAcquires_resultTupleScheme extends TupleScheme<getDealAcquires_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getDeals_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getDealAcquires_result struct) throws org.apache.thrift.TException {
         TTupleProtocol oprot = (TTupleProtocol) prot;
         BitSet optionals = new BitSet();
         if (struct.isSetSuccess()) {
@@ -6344,7 +6572,7 @@ public class CustomerService_t {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (com.talool.api.thrift.Deal_t _iter12 : struct.success)
+            for (com.talool.api.thrift.DealAcquire_t _iter12 : struct.success)
             {
               _iter12.write(oprot);
             }
@@ -6356,17 +6584,17 @@ public class CustomerService_t {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getDeals_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getDealAcquires_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(2);
         if (incoming.get(0)) {
           {
             org.apache.thrift.protocol.TList _list13 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new ArrayList<com.talool.api.thrift.Deal_t>(_list13.size);
+            struct.success = new ArrayList<com.talool.api.thrift.DealAcquire_t>(_list13.size);
             for (int _i14 = 0; _i14 < _list13.size; ++_i14)
             {
-              com.talool.api.thrift.Deal_t _elem15; // optional
-              _elem15 = new com.talool.api.thrift.Deal_t();
+              com.talool.api.thrift.DealAcquire_t _elem15; // optional
+              _elem15 = new com.talool.api.thrift.DealAcquire_t();
               _elem15.read(iprot);
               struct.success.add(_elem15);
             }

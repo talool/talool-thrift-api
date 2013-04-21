@@ -33,15 +33,15 @@ import org.slf4j.LoggerFactory;
 public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_t._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Merchant_t");
 
-  private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.I64, (short)1);
+  private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField WEBSITE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("websiteUrl", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField LOGO_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("logoUrl", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField PHONE_FIELD_DESC = new org.apache.thrift.protocol.TField("phone", org.apache.thrift.protocol.TType.STRING, (short)6);
   private static final org.apache.thrift.protocol.TField ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("address", org.apache.thrift.protocol.TType.STRUCT, (short)7);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)21);
+  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)8);
+  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)9);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -49,7 +49,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     schemes.put(TupleScheme.class, new Merchant_tTupleSchemeFactory());
   }
 
-  public long merchantId; // optional
+  public String merchantId; // optional
   public String name; // required
   public String email; // optional
   public String websiteUrl; // optional
@@ -68,8 +68,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     LOGO_URL((short)5, "logoUrl"),
     PHONE((short)6, "phone"),
     ADDRESS((short)7, "address"),
-    CREATED((short)20, "created"),
-    UPDATED((short)21, "updated");
+    CREATED((short)8, "created"),
+    UPDATED((short)9, "updated");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -98,9 +98,9 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           return PHONE;
         case 7: // ADDRESS
           return ADDRESS;
-        case 20: // CREATED
+        case 8: // CREATED
           return CREATED;
-        case 21: // UPDATED
+        case 9: // UPDATED
           return UPDATED;
         default:
           return null;
@@ -142,16 +142,15 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   }
 
   // isset id assignments
-  private static final int __MERCHANTID_ISSET_ID = 0;
-  private static final int __CREATED_ISSET_ID = 1;
-  private static final int __UPDATED_ISSET_ID = 2;
+  private static final int __CREATED_ISSET_ID = 0;
+  private static final int __UPDATED_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
   private _Fields optionals[] = {_Fields.MERCHANT_ID,_Fields.EMAIL,_Fields.WEBSITE_URL,_Fields.LOGO_URL,_Fields.PHONE,_Fields.ADDRESS,_Fields.CREATED,_Fields.UPDATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.MERCHANT_ID, new org.apache.thrift.meta_data.FieldMetaData("merchantId", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.NAME, new org.apache.thrift.meta_data.FieldMetaData("name", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
@@ -187,7 +186,9 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
    */
   public Merchant_t(Merchant_t other) {
     __isset_bitfield = other.__isset_bitfield;
-    this.merchantId = other.merchantId;
+    if (other.isSetMerchantId()) {
+      this.merchantId = other.merchantId;
+    }
     if (other.isSetName()) {
       this.name = other.name;
     }
@@ -215,8 +216,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   }
 
   public void clear() {
-    setMerchantIdIsSet(false);
-    this.merchantId = 0;
+    this.merchantId = null;
     this.name = null;
     this.email = null;
     this.websiteUrl = null;
@@ -229,27 +229,28 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     this.updated = 0;
   }
 
-  public long getMerchantId() {
+  public String getMerchantId() {
     return this.merchantId;
   }
 
-  public Merchant_t setMerchantId(long merchantId) {
+  public Merchant_t setMerchantId(String merchantId) {
     this.merchantId = merchantId;
-    setMerchantIdIsSet(true);
     return this;
   }
 
   public void unsetMerchantId() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __MERCHANTID_ISSET_ID);
+    this.merchantId = null;
   }
 
   /** Returns true if field merchantId is set (has been assigned a value) and false otherwise */
   public boolean isSetMerchantId() {
-    return EncodingUtils.testBit(__isset_bitfield, __MERCHANTID_ISSET_ID);
+    return this.merchantId != null;
   }
 
   public void setMerchantIdIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __MERCHANTID_ISSET_ID, value);
+    if (!value) {
+      this.merchantId = null;
+    }
   }
 
   public String getName() {
@@ -448,7 +449,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       if (value == null) {
         unsetMerchantId();
       } else {
-        setMerchantId((Long)value);
+        setMerchantId((String)value);
       }
       break;
 
@@ -522,7 +523,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   public Object getFieldValue(_Fields field) {
     switch (field) {
     case MERCHANT_ID:
-      return Long.valueOf(getMerchantId());
+      return getMerchantId();
 
     case NAME:
       return getName();
@@ -599,7 +600,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     if (this_present_merchantId || that_present_merchantId) {
       if (!(this_present_merchantId && that_present_merchantId))
         return false;
-      if (this.merchantId != that.merchantId)
+      if (!this.merchantId.equals(that.merchantId))
         return false;
     }
 
@@ -803,7 +804,11 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
 
     if (isSetMerchantId()) {
       sb.append("merchantId:");
-      sb.append(this.merchantId);
+      if (this.merchantId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.merchantId);
+      }
       first = false;
     }
     if (!first) sb.append(", ");
@@ -928,8 +933,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
         }
         switch (schemeField.id) {
           case 1: // MERCHANT_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.merchantId = iprot.readI64();
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.merchantId = iprot.readString();
               struct.setMerchantIdIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -984,7 +989,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 20: // CREATED
+          case 8: // CREATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.created = iprot.readI64();
               struct.setCreatedIsSet(true);
@@ -992,7 +997,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 21: // UPDATED
+          case 9: // UPDATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.updated = iprot.readI64();
               struct.setUpdatedIsSet(true);
@@ -1015,10 +1020,12 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.isSetMerchantId()) {
-        oprot.writeFieldBegin(MERCHANT_ID_FIELD_DESC);
-        oprot.writeI64(struct.merchantId);
-        oprot.writeFieldEnd();
+      if (struct.merchantId != null) {
+        if (struct.isSetMerchantId()) {
+          oprot.writeFieldBegin(MERCHANT_ID_FIELD_DESC);
+          oprot.writeString(struct.merchantId);
+          oprot.writeFieldEnd();
+        }
       }
       if (struct.name != null) {
         oprot.writeFieldBegin(NAME_FIELD_DESC);
@@ -1115,7 +1122,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       }
       oprot.writeBitSet(optionals, 8);
       if (struct.isSetMerchantId()) {
-        oprot.writeI64(struct.merchantId);
+        oprot.writeString(struct.merchantId);
       }
       if (struct.isSetEmail()) {
         oprot.writeString(struct.email);
@@ -1147,7 +1154,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       struct.setNameIsSet(true);
       BitSet incoming = iprot.readBitSet(8);
       if (incoming.get(0)) {
-        struct.merchantId = iprot.readI64();
+        struct.merchantId = iprot.readString();
         struct.setMerchantIdIsSet(true);
       }
       if (incoming.get(1)) {

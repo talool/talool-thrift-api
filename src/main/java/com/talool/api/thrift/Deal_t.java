@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Deal_t");
 
-  private static final org.apache.thrift.protocol.TField DEAL_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("dealId", org.apache.thrift.protocol.TType.I64, (short)1);
+  private static final org.apache.thrift.protocol.TField DEAL_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("dealId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField MERCHANT_FIELD_DESC = new org.apache.thrift.protocol.TField("merchant", org.apache.thrift.protocol.TType.STRUCT, (short)2);
   private static final org.apache.thrift.protocol.TField TITLE_FIELD_DESC = new org.apache.thrift.protocol.TField("title", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField SUMMARY_FIELD_DESC = new org.apache.thrift.protocol.TField("summary", org.apache.thrift.protocol.TType.STRING, (short)4);
@@ -41,8 +41,8 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
   private static final org.apache.thrift.protocol.TField CODE_FIELD_DESC = new org.apache.thrift.protocol.TField("code", org.apache.thrift.protocol.TType.STRING, (short)6);
   private static final org.apache.thrift.protocol.TField IMAGE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("imageUrl", org.apache.thrift.protocol.TType.STRING, (short)7);
   private static final org.apache.thrift.protocol.TField EXPIRES_FIELD_DESC = new org.apache.thrift.protocol.TField("expires", org.apache.thrift.protocol.TType.I64, (short)8);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)21);
+  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)9);
+  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)10);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -50,7 +50,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
     schemes.put(TupleScheme.class, new Deal_tTupleSchemeFactory());
   }
 
-  public long dealId; // optional
+  public String dealId; // optional
   public Merchant_t merchant; // required
   public String title; // required
   public String summary; // optional
@@ -71,8 +71,8 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
     CODE((short)6, "code"),
     IMAGE_URL((short)7, "imageUrl"),
     EXPIRES((short)8, "expires"),
-    CREATED((short)20, "created"),
-    UPDATED((short)21, "updated");
+    CREATED((short)9, "created"),
+    UPDATED((short)10, "updated");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -103,9 +103,9 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
           return IMAGE_URL;
         case 8: // EXPIRES
           return EXPIRES;
-        case 20: // CREATED
+        case 9: // CREATED
           return CREATED;
-        case 21: // UPDATED
+        case 10: // UPDATED
           return UPDATED;
         default:
           return null;
@@ -147,17 +147,16 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
   }
 
   // isset id assignments
-  private static final int __DEALID_ISSET_ID = 0;
-  private static final int __EXPIRES_ISSET_ID = 1;
-  private static final int __CREATED_ISSET_ID = 2;
-  private static final int __UPDATED_ISSET_ID = 3;
+  private static final int __EXPIRES_ISSET_ID = 0;
+  private static final int __CREATED_ISSET_ID = 1;
+  private static final int __UPDATED_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
   private _Fields optionals[] = {_Fields.DEAL_ID,_Fields.SUMMARY,_Fields.DETAILS,_Fields.CODE,_Fields.IMAGE_URL,_Fields.EXPIRES,_Fields.CREATED,_Fields.UPDATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.DEAL_ID, new org.apache.thrift.meta_data.FieldMetaData("dealId", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.MERCHANT, new org.apache.thrift.meta_data.FieldMetaData("merchant", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Merchant_t.class)));
     tmpMap.put(_Fields.TITLE, new org.apache.thrift.meta_data.FieldMetaData("title", org.apache.thrift.TFieldRequirementType.REQUIRED, 
@@ -197,7 +196,9 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
    */
   public Deal_t(Deal_t other) {
     __isset_bitfield = other.__isset_bitfield;
-    this.dealId = other.dealId;
+    if (other.isSetDealId()) {
+      this.dealId = other.dealId;
+    }
     if (other.isSetMerchant()) {
       this.merchant = new Merchant_t(other.merchant);
     }
@@ -226,8 +227,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
   }
 
   public void clear() {
-    setDealIdIsSet(false);
-    this.dealId = 0;
+    this.dealId = null;
     this.merchant = null;
     this.title = null;
     this.summary = null;
@@ -242,27 +242,28 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
     this.updated = 0;
   }
 
-  public long getDealId() {
+  public String getDealId() {
     return this.dealId;
   }
 
-  public Deal_t setDealId(long dealId) {
+  public Deal_t setDealId(String dealId) {
     this.dealId = dealId;
-    setDealIdIsSet(true);
     return this;
   }
 
   public void unsetDealId() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __DEALID_ISSET_ID);
+    this.dealId = null;
   }
 
   /** Returns true if field dealId is set (has been assigned a value) and false otherwise */
   public boolean isSetDealId() {
-    return EncodingUtils.testBit(__isset_bitfield, __DEALID_ISSET_ID);
+    return this.dealId != null;
   }
 
   public void setDealIdIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __DEALID_ISSET_ID, value);
+    if (!value) {
+      this.dealId = null;
+    }
   }
 
   public Merchant_t getMerchant() {
@@ -484,7 +485,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
       if (value == null) {
         unsetDealId();
       } else {
-        setDealId((Long)value);
+        setDealId((String)value);
       }
       break;
 
@@ -566,7 +567,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
   public Object getFieldValue(_Fields field) {
     switch (field) {
     case DEAL_ID:
-      return Long.valueOf(getDealId());
+      return getDealId();
 
     case MERCHANT:
       return getMerchant();
@@ -648,7 +649,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
     if (this_present_dealId || that_present_dealId) {
       if (!(this_present_dealId && that_present_dealId))
         return false;
-      if (this.dealId != that.dealId)
+      if (!this.dealId.equals(that.dealId))
         return false;
     }
 
@@ -871,7 +872,11 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
 
     if (isSetDealId()) {
       sb.append("dealId:");
-      sb.append(this.dealId);
+      if (this.dealId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.dealId);
+      }
       first = false;
     }
     if (!first) sb.append(", ");
@@ -1003,8 +1008,8 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
         }
         switch (schemeField.id) {
           case 1: // DEAL_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.dealId = iprot.readI64();
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.dealId = iprot.readString();
               struct.setDealIdIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -1067,7 +1072,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 20: // CREATED
+          case 9: // CREATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.created = iprot.readI64();
               struct.setCreatedIsSet(true);
@@ -1075,7 +1080,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 21: // UPDATED
+          case 10: // UPDATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.updated = iprot.readI64();
               struct.setUpdatedIsSet(true);
@@ -1098,10 +1103,12 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.isSetDealId()) {
-        oprot.writeFieldBegin(DEAL_ID_FIELD_DESC);
-        oprot.writeI64(struct.dealId);
-        oprot.writeFieldEnd();
+      if (struct.dealId != null) {
+        if (struct.isSetDealId()) {
+          oprot.writeFieldBegin(DEAL_ID_FIELD_DESC);
+          oprot.writeString(struct.dealId);
+          oprot.writeFieldEnd();
+        }
       }
       if (struct.merchant != null) {
         oprot.writeFieldBegin(MERCHANT_FIELD_DESC);
@@ -1202,7 +1209,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
       }
       oprot.writeBitSet(optionals, 8);
       if (struct.isSetDealId()) {
-        oprot.writeI64(struct.dealId);
+        oprot.writeString(struct.dealId);
       }
       if (struct.isSetSummary()) {
         oprot.writeString(struct.summary);
@@ -1237,7 +1244,7 @@ public class Deal_t implements org.apache.thrift.TBase<Deal_t, Deal_t._Fields>, 
       struct.setTitleIsSet(true);
       BitSet incoming = iprot.readBitSet(8);
       if (incoming.get(0)) {
-        struct.dealId = iprot.readI64();
+        struct.dealId = iprot.readString();
         struct.setDealIdIsSet(true);
       }
       if (incoming.get(1)) {

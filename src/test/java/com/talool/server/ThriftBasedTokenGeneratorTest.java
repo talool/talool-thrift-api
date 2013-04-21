@@ -7,6 +7,8 @@
  */
 package com.talool.server;
 
+import java.util.UUID;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,9 +30,9 @@ public class ThriftBasedTokenGeneratorTest
 	@Test
 	public void testToken()
 	{
-		Long accountId = 988192001781l;
+		UUID accountId = UUID.randomUUID();
 		Customer_t cust1 = new Customer_t("Chris1", "Lintz1", "Christopher.justin@gmail.com");
-		cust1.setCustomerId(accountId);
+		cust1.setCustomerId(accountId.toString());
 
 		CTokenAccess_t cToken = TokenUtil.createTokenAccess(cust1);
 
@@ -48,8 +50,8 @@ public class ThriftBasedTokenGeneratorTest
 	{
 		Customer_t cust1 = new Customer_t("Chris1", "Lintz1", "Christopher.justin@gmail.com");
 
-		final ThriftBasedTokenProvider<Customer_t> tokenProvider = new ThriftBasedTokenProvider<Customer_t>(Customer_t.class,
-				"myKey".getBytes());
+		final ThriftBasedTokenProvider<Customer_t> tokenProvider = new ThriftBasedTokenProvider<Customer_t>(
+				Customer_t.class, "myKey".getBytes());
 
 		try
 		{
@@ -80,8 +82,8 @@ public class ThriftBasedTokenGeneratorTest
 		addr1.setCountry("US");
 		addr1.setZip("80218");
 
-		final ThriftBasedTokenProvider<Address_t> tokenProvider = new ThriftBasedTokenProvider<Address_t>(Address_t.class,
-				"myKey".getBytes());
+		final ThriftBasedTokenProvider<Address_t> tokenProvider = new ThriftBasedTokenProvider<Address_t>(
+				Address_t.class, "myKey".getBytes());
 
 		try
 		{

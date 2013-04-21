@@ -33,14 +33,14 @@ import org.slf4j.LoggerFactory;
 public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_t._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Customer_t");
 
-  private static final org.apache.thrift.protocol.TField CUSTOMER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("customerId", org.apache.thrift.protocol.TType.I64, (short)1);
+  private static final org.apache.thrift.protocol.TField CUSTOMER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("customerId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField FIRST_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("firstName", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField LAST_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("lastName", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField SEX_FIELD_DESC = new org.apache.thrift.protocol.TField("sex", org.apache.thrift.protocol.TType.I32, (short)6);
   private static final org.apache.thrift.protocol.TField SOCIAL_ACCOUNTS_FIELD_DESC = new org.apache.thrift.protocol.TField("socialAccounts", org.apache.thrift.protocol.TType.MAP, (short)7);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)21);
+  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)8);
+  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)9);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -48,7 +48,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
     schemes.put(TupleScheme.class, new Customer_tTupleSchemeFactory());
   }
 
-  public long customerId; // optional
+  public String customerId; // optional
   public String firstName; // required
   public String lastName; // required
   public String email; // required
@@ -73,8 +73,8 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
      */
     SEX((short)6, "sex"),
     SOCIAL_ACCOUNTS((short)7, "socialAccounts"),
-    CREATED((short)20, "created"),
-    UPDATED((short)21, "updated");
+    CREATED((short)8, "created"),
+    UPDATED((short)9, "updated");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -101,9 +101,9 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
           return SEX;
         case 7: // SOCIAL_ACCOUNTS
           return SOCIAL_ACCOUNTS;
-        case 20: // CREATED
+        case 8: // CREATED
           return CREATED;
-        case 21: // UPDATED
+        case 9: // UPDATED
           return UPDATED;
         default:
           return null;
@@ -145,16 +145,15 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
   }
 
   // isset id assignments
-  private static final int __CUSTOMERID_ISSET_ID = 0;
-  private static final int __CREATED_ISSET_ID = 1;
-  private static final int __UPDATED_ISSET_ID = 2;
+  private static final int __CREATED_ISSET_ID = 0;
+  private static final int __UPDATED_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
   private _Fields optionals[] = {_Fields.CUSTOMER_ID,_Fields.SEX,_Fields.SOCIAL_ACCOUNTS,_Fields.CREATED,_Fields.UPDATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.CUSTOMER_ID, new org.apache.thrift.meta_data.FieldMetaData("customerId", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.FIRST_NAME, new org.apache.thrift.meta_data.FieldMetaData("firstName", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.LAST_NAME, new org.apache.thrift.meta_data.FieldMetaData("lastName", org.apache.thrift.TFieldRequirementType.REQUIRED, 
@@ -194,7 +193,9 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
    */
   public Customer_t(Customer_t other) {
     __isset_bitfield = other.__isset_bitfield;
-    this.customerId = other.customerId;
+    if (other.isSetCustomerId()) {
+      this.customerId = other.customerId;
+    }
     if (other.isSetFirstName()) {
       this.firstName = other.firstName;
     }
@@ -231,8 +232,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
   }
 
   public void clear() {
-    setCustomerIdIsSet(false);
-    this.customerId = 0;
+    this.customerId = null;
     this.firstName = null;
     this.lastName = null;
     this.email = null;
@@ -244,27 +244,28 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
     this.updated = 0;
   }
 
-  public long getCustomerId() {
+  public String getCustomerId() {
     return this.customerId;
   }
 
-  public Customer_t setCustomerId(long customerId) {
+  public Customer_t setCustomerId(String customerId) {
     this.customerId = customerId;
-    setCustomerIdIsSet(true);
     return this;
   }
 
   public void unsetCustomerId() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __CUSTOMERID_ISSET_ID);
+    this.customerId = null;
   }
 
   /** Returns true if field customerId is set (has been assigned a value) and false otherwise */
   public boolean isSetCustomerId() {
-    return EncodingUtils.testBit(__isset_bitfield, __CUSTOMERID_ISSET_ID);
+    return this.customerId != null;
   }
 
   public void setCustomerIdIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CUSTOMERID_ISSET_ID, value);
+    if (!value) {
+      this.customerId = null;
+    }
   }
 
   public String getFirstName() {
@@ -458,7 +459,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
       if (value == null) {
         unsetCustomerId();
       } else {
-        setCustomerId((Long)value);
+        setCustomerId((String)value);
       }
       break;
 
@@ -524,7 +525,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
   public Object getFieldValue(_Fields field) {
     switch (field) {
     case CUSTOMER_ID:
-      return Long.valueOf(getCustomerId());
+      return getCustomerId();
 
     case FIRST_NAME:
       return getFirstName();
@@ -596,7 +597,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
     if (this_present_customerId || that_present_customerId) {
       if (!(this_present_customerId && that_present_customerId))
         return false;
-      if (this.customerId != that.customerId)
+      if (!this.customerId.equals(that.customerId))
         return false;
     }
 
@@ -781,7 +782,11 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
 
     if (isSetCustomerId()) {
       sb.append("customerId:");
-      sb.append(this.customerId);
+      if (this.customerId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.customerId);
+      }
       first = false;
     }
     if (!first) sb.append(", ");
@@ -895,8 +900,8 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
         }
         switch (schemeField.id) {
           case 1: // CUSTOMER_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.customerId = iprot.readI64();
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.customerId = iprot.readString();
               struct.setCustomerIdIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -955,7 +960,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 20: // CREATED
+          case 8: // CREATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.created = iprot.readI64();
               struct.setCreatedIsSet(true);
@@ -963,7 +968,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 21: // UPDATED
+          case 9: // UPDATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.updated = iprot.readI64();
               struct.setUpdatedIsSet(true);
@@ -986,10 +991,12 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.isSetCustomerId()) {
-        oprot.writeFieldBegin(CUSTOMER_ID_FIELD_DESC);
-        oprot.writeI64(struct.customerId);
-        oprot.writeFieldEnd();
+      if (struct.customerId != null) {
+        if (struct.isSetCustomerId()) {
+          oprot.writeFieldBegin(CUSTOMER_ID_FIELD_DESC);
+          oprot.writeString(struct.customerId);
+          oprot.writeFieldEnd();
+        }
       }
       if (struct.firstName != null) {
         oprot.writeFieldBegin(FIRST_NAME_FIELD_DESC);
@@ -1076,7 +1083,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
       }
       oprot.writeBitSet(optionals, 5);
       if (struct.isSetCustomerId()) {
-        oprot.writeI64(struct.customerId);
+        oprot.writeString(struct.customerId);
       }
       if (struct.isSetSex()) {
         oprot.writeI32(struct.sex.getValue());
@@ -1110,7 +1117,7 @@ public class Customer_t implements org.apache.thrift.TBase<Customer_t, Customer_
       struct.setEmailIsSet(true);
       BitSet incoming = iprot.readBitSet(5);
       if (incoming.get(0)) {
-        struct.customerId = iprot.readI64();
+        struct.customerId = iprot.readString();
         struct.setCustomerIdIsSet(true);
       }
       if (incoming.get(1)) {

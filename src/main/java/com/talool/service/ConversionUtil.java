@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Customer_t;
+import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.Sex_t;
@@ -27,9 +29,10 @@ import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.core.AccountType;
 import com.talool.core.Address;
 import com.talool.core.Customer;
+import com.talool.core.Deal;
+import com.talool.core.DealAcquire;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantDeal;
 import com.talool.core.Sex;
 import com.talool.core.SocialAccount;
 import com.talool.core.SocialNetwork;
@@ -110,17 +113,38 @@ public final class ConversionUtil
 	}
 
 	public static void copyFromThrift(final SocialAccount_t thriftSocialAccnt,
-			final SocialAccount socialAccnt, final Long userId) throws ServiceException
+			final SocialAccount socialAccnt, final UUID userId) throws ServiceException
 	{
 		socialAccnt.setLoginId(thriftSocialAccnt.getLoginId());
-		socialAccnt.setToken(thriftSocialAccnt.getToken());
-		socialAccnt.setUserId(userId);
+		socialAccnt.setUserId(userId.toString());
+	}
+
+	public static Deal_t convertToThrift(final Deal mDeal)
+	{
+
+		final Deal_t deal = new Deal_t();
+		deal.setCode(mDeal.getCode());
+		deal.setCreated(mDeal.getCreated().getTime());
+		deal.setDealId(mDeal.getId().toString());
+		deal.setDetails(mDeal.geDetails());
+		if (mDeal.getExpires() != null)
+		{
+			deal.setExpires(mDeal.getExpires().getTime());
+		}
+
+		deal.setImageUrl(mDeal.getImageUrl());
+		deal.setMerchant(convertToThrift(mDeal.getMerchant()));
+		deal.setSummary(mDeal.getSummary());
+		deal.setUpdated(mDeal.getUpdated().getTime());
+		deal.setTitle(mDeal.getTitle());
+
+		return deal;
 	}
 
 	public static Customer_t convertToThrift(Customer customer)
 	{
 		final Customer_t thriftCust = new Customer_t();
-		thriftCust.setCustomerId(customer.getId());
+		thriftCust.setCustomerId(customer.getId().toString());
 		thriftCust.setEmail(customer.getEmail());
 		thriftCust.setFirstName(customer.getFirstName());
 		thriftCust.setLastName(customer.getLastName());
@@ -141,7 +165,6 @@ public final class ConversionUtil
 			for (final Entry<SocialNetwork, SocialAccount> sac : socialAccounts.entrySet())
 			{
 				final SocialAccount_t sa_t = new SocialAccount_t();
-				sa_t.setToken(sac.getValue().getToken());
 				sa_t.setLoginId(sac.getValue().getLoginId());
 				sa_t.setCreated(sac.getValue().getCreated().getTime());
 				sa_t.setUpdated(sac.getValue().getUpdated().getTime());
@@ -176,41 +199,46 @@ public final class ConversionUtil
 		thriftMerch.setCreated(merchant.getCreated().getTime());
 		thriftMerch.setUpdated(merchant.getUpdated().getTime());
 
-		thriftMerch.setAddress(convertToThrift(merchant.getAddress()));
-		thriftMerch.setEmail(merchant.getEmail());
-		thriftMerch.setLogoUrl(merchant.getLogoUrl());
-		thriftMerch.setMerchantId(merchant.getId());
-		thriftMerch.setName(merchant.getName());
-		thriftMerch.setPhone(merchant.getPhone());
-		thriftMerch.setWebsiteUrl(merchant.getWebsiteUrl());
+		// thriftMerch.setAddress(convertToThrift(merchant.getAddress()));
+		// thriftMerch.setEmail(merchant.getEmail());
+		// thriftMerch.setLogoUrl(merchant.getLogoUrl());
+		// thriftMerch.setMerchantId(merchant.getId());
+		// thriftMerch.setName(merchant.getName());
+		// thriftMerch.setPhone(merchant.getPhone());
+		// thriftMerch.setWebsiteUrl(merchant.getWebsiteUrl());
 
 		return thriftMerch;
 
 	}
 
-	public static List<Deal_t> convertToThriftDeals(final List<MerchantDeal> listOfDeals)
+	public static List<DealAcquire_t> convertToThriftDealAcquires(final List<DealAcquire> dealAcquires)
 	{
-		final List<Deal_t> deals = new ArrayList<Deal_t>();
+		final List<DealAcquire_t> deals = new ArrayList<DealAcquire_t>();
 
-		for (final MerchantDeal mDeal : listOfDeals)
+		for (final DealAcquire _dac : dealAcquires)
 		{
-			final Deal_t deal = new Deal_t();
-			deal.setCode(mDeal.getCode());
-			deal.setCreated(mDeal.getCreated().getTime());
-			deal.setDealId(mDeal.getId());
-			deal.setDetails(mDeal.geDetails());
-			if (mDeal.getExpires() != null)
+			final DealAcquire_t dac = new DealAcquire_t();
+			dac.setCreated(_dac.getCreated().getTime());
+			dac.setUpdated(_dac.getUpdated().getTime());
+			dac.setDeal(convertToThrift(_dac.getDeal()));
+
+			if (_dac.getRedemptionDate() != null)
 			{
-				deal.setExpires(mDeal.getExpires().getTime());
+				dac.setRedeemed(_dac.getRedemptionDate().getTime());
 			}
 
-			deal.setImageUrl(mDeal.getImageUrl());
-			deal.setMerchant(convertToThrift(mDeal.getMerchant()));
-			deal.setSummary(mDeal.getSummary());
-			deal.setUpdated(mDeal.getUpdated().getTime());
-			deal.setTitle(mDeal.getTitle());
+			if (_dac.getSharedByCustomer() != null)
+			{
+				dac.setSharedByCustomer(convertToThrift(_dac.getSharedByCustomer()));
+			}
 
-			deals.add(deal);
+			if (_dac.getSharedByMerchant() != null)
+			{
+				dac.setSharedByMerchant(convertToThrift(_dac.getSharedByMerchant()));
+			}
+
+			dac.setShareCount(_dac.getShareCount());
+			dac.setStatus(_dac.getAcquireStatus().getStatus());
 
 		}
 

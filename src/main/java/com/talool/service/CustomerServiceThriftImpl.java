@@ -1,6 +1,7 @@
 package com.talool.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -10,16 +11,17 @@ import org.springframework.util.CollectionUtils;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
-import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
+import com.talool.core.DealAcquire;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantDeal;
 import com.talool.core.SocialAccount;
 import com.talool.core.service.TaloolService;
 import com.talool.service.util.TokenUtil;
@@ -51,7 +53,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer cust = taloolService.getCustomerById(Long.valueOf(token.getAccountId()));
+			final Customer cust = taloolService.getCustomerById(UUID.fromString(token.getAccountId()));
 			final SocialAccount sac = FactoryManager.get().getDomainFactory()
 					.newSocialAccount(socialAccount_t.getSocalNetwork().name(), AccountType.CUS);
 
@@ -166,7 +168,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<Merchant_t> getMerchants() throws ServiceException_t, TException
+	public List<Merchant_t> getMerchantAcquires(final SearchOptions_t searchOptions)
+			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
@@ -192,14 +195,16 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<Deal_t> getDeals(long merchantId) throws ServiceException_t, TException
+	public List<DealAcquire_t> getDealAcquires(final String merchantId,
+			final SearchOptions_t searchOptions) throws ServiceException_t, TException
 	{
-		TokenUtil.getTokenFromRequest(true);
-		List<MerchantDeal> deals = null;
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<DealAcquire> dealAcquires = null;
 
 		try
 		{
-			deals = taloolService.getDealsByMerchantId(Long.valueOf(merchantId));
+			dealAcquires = taloolService.getDealAcquires(UUID.fromString(token.getAccountId()),
+					UUID.fromString(merchantId), null);
 		}
 		catch (Exception ex)
 		{
@@ -207,13 +212,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throw new ServiceException_t(1087, "There was a problem retrieving deals for merchant");
 		}
 
-		if (CollectionUtils.isEmpty(deals))
+		if (CollectionUtils.isEmpty(dealAcquires))
 		{
 			LOG.error("No deals available for merchant: " + merchantId);
 			throw new ServiceException_t(1088, "No deals available for merchant");
 		}
 
-		return ConversionUtil.convertToThriftDeals(deals);
+		return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
 
 	}
 }
