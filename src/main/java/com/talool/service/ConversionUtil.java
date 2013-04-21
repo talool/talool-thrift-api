@@ -22,7 +22,9 @@ import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
@@ -33,6 +35,9 @@ import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
+import com.talool.core.MerchantLocation;
+import com.talool.core.SearchOptions;
+import com.talool.core.SearchOptions.SortType;
 import com.talool.core.Sex;
 import com.talool.core.SocialAccount;
 import com.talool.core.SocialNetwork;
@@ -67,6 +72,21 @@ public final class ConversionUtil
 		}
 
 		return cust;
+	}
+
+	public static SearchOptions copyFromThrift(final SearchOptions_t thriftSearchOptions)
+	{
+		SearchOptions searchOptions = null;
+
+		if (thriftSearchOptions != null)
+		{
+			searchOptions = new SearchOptions.Builder().maxResults(thriftSearchOptions.getMaxResults())
+					.page(thriftSearchOptions.getPage()).sortProperty(thriftSearchOptions.sortProperty)
+					.sortType(SortType.valueOf(thriftSearchOptions.getSortType().toString())).build();
+		}
+
+		return searchOptions;
+
 	}
 
 	public static void copyFromThrift(final Customer_t thriftCustomer, final Customer cust)
@@ -193,22 +213,33 @@ public final class ConversionUtil
 		return thriftAddr;
 	}
 
+	public static MerchantLocation_t convertToThrift(final MerchantLocation merchantLocation)
+	{
+		if (merchantLocation == null)
+		{
+			return null;
+		}
+
+		final MerchantLocation_t mLoc = new MerchantLocation_t();
+		mLoc.setAddress(convertToThrift(merchantLocation.getAddress()));
+		mLoc.setEmail(merchantLocation.getEmail());
+		mLoc.setName(merchantLocation.getLocationName());
+		mLoc.setLocationId(merchantLocation.getId());
+		mLoc.setPhone(merchantLocation.getPhone());
+		mLoc.setWebsiteUrl(merchantLocation.getWebsiteUrl());
+
+		return mLoc;
+	}
+
 	public static Merchant_t convertToThrift(final Merchant merchant)
 	{
 		final Merchant_t thriftMerch = new Merchant_t();
+		thriftMerch.setMerchantId(merchant.getId().toString());
 		thriftMerch.setCreated(merchant.getCreated().getTime());
 		thriftMerch.setUpdated(merchant.getUpdated().getTime());
-
-		// thriftMerch.setAddress(convertToThrift(merchant.getAddress()));
-		// thriftMerch.setEmail(merchant.getEmail());
-		// thriftMerch.setLogoUrl(merchant.getLogoUrl());
-		// thriftMerch.setMerchantId(merchant.getId());
-		// thriftMerch.setName(merchant.getName());
-		// thriftMerch.setPhone(merchant.getPhone());
-		// thriftMerch.setWebsiteUrl(merchant.getWebsiteUrl());
-
+		thriftMerch.setName(merchant.getName());
+		thriftMerch.setMerchantLocation(convertToThrift(merchant.getPrimaryLocation()));
 		return thriftMerch;
-
 	}
 
 	public static List<DealAcquire_t> convertToThriftDealAcquires(final List<DealAcquire> dealAcquires)
@@ -239,6 +270,8 @@ public final class ConversionUtil
 
 			dac.setShareCount(_dac.getShareCount());
 			dac.setStatus(_dac.getAcquireStatus().getStatus());
+
+			deals.add(dac);
 
 		}
 

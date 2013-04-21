@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
+import com.google.common.collect.ImmutableList;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
@@ -38,6 +39,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final transient TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
+
+	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 
 	@Override
 	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
@@ -173,10 +176,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
+		List<Merchant_t> resultMerchants = null;
 
 		try
 		{
-			merchants = taloolService.getMerchantsByCustomerId(Long.valueOf(token.getAccountId()));
+			merchants = taloolService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
+					ConversionUtil.copyFromThrift(searchOptions));
 		}
 		catch (Exception ex)
 		{
@@ -184,13 +189,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throw new ServiceException_t(1087, "Problem getting merchants");
 		}
 
-		if (CollectionUtils.isEmpty(merchants))
-		{
-			LOG.error("No merchants for customer : " + token.getEmail());
-			throw new ServiceException_t(1088, "No merchants available");
-		}
+		resultMerchants = ConversionUtil.convertToThriftMerchants(merchants);
 
-		return ConversionUtil.convertToThriftMerchants(merchants);
+		return CollectionUtils.isEmpty(resultMerchants) ? EMPTY_MERCHANTS : resultMerchants;
 
 	}
 

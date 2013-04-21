@@ -44,6 +44,16 @@ struct Address_t {
   7: optional string country;
 }
 
+struct MerchantLocation_t {
+  1: optional i64 locationId;
+  2: optional string name;
+  3: optional string email;
+  4: optional string websiteUrl;
+  5: optional string logUrl;
+  6: optional string phone;
+  7: required Address_t address;
+}
+
 struct Customer_t {
   1: optional string customerId;
   2: required string firstName;
@@ -64,13 +74,9 @@ struct Token_t {
 struct Merchant_t {
   1: optional string merchantId;
   2: required string name;
-  3: optional string email;
-  4: optional string websiteUrl;
-  5: optional string logoUrl;
-  6: optional string phone;
-  7: optional Address_t address;
-  8: optional Timestamp created;
-  9: optional Timestamp updated;
+  3: optional MerchantLocation_t merchantLocation;
+  4: optional Timestamp created;
+  5: optional Timestamp updated;
 }
 
 struct Deal_t {

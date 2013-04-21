@@ -22,22 +22,52 @@ import com.talool.api.thrift.SocialNetwork_t;
 public class ThriftServiceIntegrationTest
 {
 	// static String servletUrl = "http://www.talool.com/api";
-	static String servletUrl = "http://api.talool.com/1.1";
+	// static String servletUrl = "http://api.talool.com/1.1";
 
-	// static String servletUrl = "http://localhost:8080/1.1";
+	static String servletUrl = "http://localhost:8080/1.1";
+
+	public static CTokenAccess_t testRegisterCustomer(CustomerService_t.Client client)
+			throws ServiceException_t, TException
+	{
+		final long now = System.currentTimeMillis();
+		Customer_t customer = new Customer_t();
+		customer.setFirstName("Chris-" + now);
+		customer.setLastName("Lintz-" + now);
+		customer.setSex(Sex_t.M);
+		customer.setEmail("chris-" + System.currentTimeMillis() + "@talool.com");
+
+		CTokenAccess_t accessToken = client.createAccount(customer, "pass123");
+
+		return accessToken;
+
+	}
+
+	public static void testAddSocialAccounts(final CustomerService_t.Client client)
+			throws ServiceException_t, TException
+	{
+		// test adding social account
+		SocialAccount_t twitterAccount = new SocialAccount_t();
+		twitterAccount.setLoginId("twitter-login");
+		twitterAccount.setSocalNetwork(SocialNetwork_t.Twitter);
+
+		client.addSocialAccount(twitterAccount);
+	}
+
+	public static CTokenAccess_t testAuthenticate(final CustomerService_t.Client client,
+			final String email, String pass) throws ServiceException_t, TException
+	{
+		return client.authenticate(email, "pass123");
+	}
 
 	public static void main(String args[]) throws TTransportException, TException
 	{
 
-		Long now = System.currentTimeMillis();
-		// String email = "christopher" + now + "justin@gmail.com";
 		String email = "christopher.justin@gmail.com";
-
 		THttpClient thc = new THttpClient(servletUrl);
 		TProtocol loPFactory = new TBinaryProtocol(thc);
 		CustomerService_t.Client client = new CustomerService_t.Client(loPFactory);
 
-		CTokenAccess_t accessToken = client.authenticate(email, "pass123");
+		CTokenAccess_t accessToken = testAuthenticate(client, email, "pass123");
 
 		thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
 		List<Merchant_t> merchants = client.getMerchantAcquires(null);
@@ -54,34 +84,17 @@ public class ThriftServiceIntegrationTest
 			}
 		}
 
-		Customer_t customer = new Customer_t();
-		customer.setFirstName("Billy" + now);
-		customer.setLastName("Lintz" + now);
-		customer.setSex(Sex_t.F);
-		customer.setEmail(email);
-
 		try
 		{
-			accessToken = client.createAccount(customer, "pass123");
+			accessToken = testRegisterCustomer(client);
 
 			System.out.println("Email Exists: " + client.customerEmailExists(email));
-
-			accessToken = client.authenticate(email, "pass123");
+			accessToken = client.authenticate(accessToken.getCustomer().getEmail(), "pass123");
 
 			System.out.println("Customer: " + accessToken.getCustomer());
 			System.out.println("Token: " + accessToken.getToken());
 
 			Customer_t cust = accessToken.getCustomer();
-
-			// set header on all calls!
-			thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
-
-			// test adding social account
-			SocialAccount_t twitterAccount = new SocialAccount_t();
-			twitterAccount.setLoginId("twitter-login");
-			twitterAccount.setSocalNetwork(SocialNetwork_t.Twitter);
-
-			client.addSocialAccount(twitterAccount);
 
 		}
 		catch (ServiceException_t e)

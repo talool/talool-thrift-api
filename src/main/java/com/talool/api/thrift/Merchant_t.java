@@ -35,13 +35,9 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
 
   private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)2);
-  private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)3);
-  private static final org.apache.thrift.protocol.TField WEBSITE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("websiteUrl", org.apache.thrift.protocol.TType.STRING, (short)4);
-  private static final org.apache.thrift.protocol.TField LOGO_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("logoUrl", org.apache.thrift.protocol.TType.STRING, (short)5);
-  private static final org.apache.thrift.protocol.TField PHONE_FIELD_DESC = new org.apache.thrift.protocol.TField("phone", org.apache.thrift.protocol.TType.STRING, (short)6);
-  private static final org.apache.thrift.protocol.TField ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("address", org.apache.thrift.protocol.TType.STRUCT, (short)7);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)8);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)9);
+  private static final org.apache.thrift.protocol.TField MERCHANT_LOCATION_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantLocation", org.apache.thrift.protocol.TType.STRUCT, (short)3);
+  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)4);
+  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -51,11 +47,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
 
   public String merchantId; // optional
   public String name; // required
-  public String email; // optional
-  public String websiteUrl; // optional
-  public String logoUrl; // optional
-  public String phone; // optional
-  public Address_t address; // optional
+  public MerchantLocation_t merchantLocation; // optional
   public long created; // optional
   public long updated; // optional
 
@@ -63,13 +55,9 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     MERCHANT_ID((short)1, "merchantId"),
     NAME((short)2, "name"),
-    EMAIL((short)3, "email"),
-    WEBSITE_URL((short)4, "websiteUrl"),
-    LOGO_URL((short)5, "logoUrl"),
-    PHONE((short)6, "phone"),
-    ADDRESS((short)7, "address"),
-    CREATED((short)8, "created"),
-    UPDATED((short)9, "updated");
+    MERCHANT_LOCATION((short)3, "merchantLocation"),
+    CREATED((short)4, "created"),
+    UPDATED((short)5, "updated");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -88,19 +76,11 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           return MERCHANT_ID;
         case 2: // NAME
           return NAME;
-        case 3: // EMAIL
-          return EMAIL;
-        case 4: // WEBSITE_URL
-          return WEBSITE_URL;
-        case 5: // LOGO_URL
-          return LOGO_URL;
-        case 6: // PHONE
-          return PHONE;
-        case 7: // ADDRESS
-          return ADDRESS;
-        case 8: // CREATED
+        case 3: // MERCHANT_LOCATION
+          return MERCHANT_LOCATION;
+        case 4: // CREATED
           return CREATED;
-        case 9: // UPDATED
+        case 5: // UPDATED
           return UPDATED;
         default:
           return null;
@@ -145,7 +125,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   private static final int __CREATED_ISSET_ID = 0;
   private static final int __UPDATED_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.MERCHANT_ID,_Fields.EMAIL,_Fields.WEBSITE_URL,_Fields.LOGO_URL,_Fields.PHONE,_Fields.ADDRESS,_Fields.CREATED,_Fields.UPDATED};
+  private _Fields optionals[] = {_Fields.MERCHANT_ID,_Fields.MERCHANT_LOCATION,_Fields.CREATED,_Fields.UPDATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -153,16 +133,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.NAME, new org.apache.thrift.meta_data.FieldMetaData("name", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.EMAIL, new org.apache.thrift.meta_data.FieldMetaData("email", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.WEBSITE_URL, new org.apache.thrift.meta_data.FieldMetaData("websiteUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.LOGO_URL, new org.apache.thrift.meta_data.FieldMetaData("logoUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.PHONE, new org.apache.thrift.meta_data.FieldMetaData("phone", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.ADDRESS, new org.apache.thrift.meta_data.FieldMetaData("address", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Address_t.class)));
+    tmpMap.put(_Fields.MERCHANT_LOCATION, new org.apache.thrift.meta_data.FieldMetaData("merchantLocation", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, MerchantLocation_t.class)));
     tmpMap.put(_Fields.CREATED, new org.apache.thrift.meta_data.FieldMetaData("created", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
     tmpMap.put(_Fields.UPDATED, new org.apache.thrift.meta_data.FieldMetaData("updated", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
@@ -192,20 +164,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     if (other.isSetName()) {
       this.name = other.name;
     }
-    if (other.isSetEmail()) {
-      this.email = other.email;
-    }
-    if (other.isSetWebsiteUrl()) {
-      this.websiteUrl = other.websiteUrl;
-    }
-    if (other.isSetLogoUrl()) {
-      this.logoUrl = other.logoUrl;
-    }
-    if (other.isSetPhone()) {
-      this.phone = other.phone;
-    }
-    if (other.isSetAddress()) {
-      this.address = new Address_t(other.address);
+    if (other.isSetMerchantLocation()) {
+      this.merchantLocation = new MerchantLocation_t(other.merchantLocation);
     }
     this.created = other.created;
     this.updated = other.updated;
@@ -218,11 +178,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   public void clear() {
     this.merchantId = null;
     this.name = null;
-    this.email = null;
-    this.websiteUrl = null;
-    this.logoUrl = null;
-    this.phone = null;
-    this.address = null;
+    this.merchantLocation = null;
     setCreatedIsSet(false);
     this.created = 0;
     setUpdatedIsSet(false);
@@ -277,123 +233,27 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     }
   }
 
-  public String getEmail() {
-    return this.email;
+  public MerchantLocation_t getMerchantLocation() {
+    return this.merchantLocation;
   }
 
-  public Merchant_t setEmail(String email) {
-    this.email = email;
+  public Merchant_t setMerchantLocation(MerchantLocation_t merchantLocation) {
+    this.merchantLocation = merchantLocation;
     return this;
   }
 
-  public void unsetEmail() {
-    this.email = null;
+  public void unsetMerchantLocation() {
+    this.merchantLocation = null;
   }
 
-  /** Returns true if field email is set (has been assigned a value) and false otherwise */
-  public boolean isSetEmail() {
-    return this.email != null;
+  /** Returns true if field merchantLocation is set (has been assigned a value) and false otherwise */
+  public boolean isSetMerchantLocation() {
+    return this.merchantLocation != null;
   }
 
-  public void setEmailIsSet(boolean value) {
+  public void setMerchantLocationIsSet(boolean value) {
     if (!value) {
-      this.email = null;
-    }
-  }
-
-  public String getWebsiteUrl() {
-    return this.websiteUrl;
-  }
-
-  public Merchant_t setWebsiteUrl(String websiteUrl) {
-    this.websiteUrl = websiteUrl;
-    return this;
-  }
-
-  public void unsetWebsiteUrl() {
-    this.websiteUrl = null;
-  }
-
-  /** Returns true if field websiteUrl is set (has been assigned a value) and false otherwise */
-  public boolean isSetWebsiteUrl() {
-    return this.websiteUrl != null;
-  }
-
-  public void setWebsiteUrlIsSet(boolean value) {
-    if (!value) {
-      this.websiteUrl = null;
-    }
-  }
-
-  public String getLogoUrl() {
-    return this.logoUrl;
-  }
-
-  public Merchant_t setLogoUrl(String logoUrl) {
-    this.logoUrl = logoUrl;
-    return this;
-  }
-
-  public void unsetLogoUrl() {
-    this.logoUrl = null;
-  }
-
-  /** Returns true if field logoUrl is set (has been assigned a value) and false otherwise */
-  public boolean isSetLogoUrl() {
-    return this.logoUrl != null;
-  }
-
-  public void setLogoUrlIsSet(boolean value) {
-    if (!value) {
-      this.logoUrl = null;
-    }
-  }
-
-  public String getPhone() {
-    return this.phone;
-  }
-
-  public Merchant_t setPhone(String phone) {
-    this.phone = phone;
-    return this;
-  }
-
-  public void unsetPhone() {
-    this.phone = null;
-  }
-
-  /** Returns true if field phone is set (has been assigned a value) and false otherwise */
-  public boolean isSetPhone() {
-    return this.phone != null;
-  }
-
-  public void setPhoneIsSet(boolean value) {
-    if (!value) {
-      this.phone = null;
-    }
-  }
-
-  public Address_t getAddress() {
-    return this.address;
-  }
-
-  public Merchant_t setAddress(Address_t address) {
-    this.address = address;
-    return this;
-  }
-
-  public void unsetAddress() {
-    this.address = null;
-  }
-
-  /** Returns true if field address is set (has been assigned a value) and false otherwise */
-  public boolean isSetAddress() {
-    return this.address != null;
-  }
-
-  public void setAddressIsSet(boolean value) {
-    if (!value) {
-      this.address = null;
+      this.merchantLocation = null;
     }
   }
 
@@ -461,43 +321,11 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       }
       break;
 
-    case EMAIL:
+    case MERCHANT_LOCATION:
       if (value == null) {
-        unsetEmail();
+        unsetMerchantLocation();
       } else {
-        setEmail((String)value);
-      }
-      break;
-
-    case WEBSITE_URL:
-      if (value == null) {
-        unsetWebsiteUrl();
-      } else {
-        setWebsiteUrl((String)value);
-      }
-      break;
-
-    case LOGO_URL:
-      if (value == null) {
-        unsetLogoUrl();
-      } else {
-        setLogoUrl((String)value);
-      }
-      break;
-
-    case PHONE:
-      if (value == null) {
-        unsetPhone();
-      } else {
-        setPhone((String)value);
-      }
-      break;
-
-    case ADDRESS:
-      if (value == null) {
-        unsetAddress();
-      } else {
-        setAddress((Address_t)value);
+        setMerchantLocation((MerchantLocation_t)value);
       }
       break;
 
@@ -528,20 +356,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     case NAME:
       return getName();
 
-    case EMAIL:
-      return getEmail();
-
-    case WEBSITE_URL:
-      return getWebsiteUrl();
-
-    case LOGO_URL:
-      return getLogoUrl();
-
-    case PHONE:
-      return getPhone();
-
-    case ADDRESS:
-      return getAddress();
+    case MERCHANT_LOCATION:
+      return getMerchantLocation();
 
     case CREATED:
       return Long.valueOf(getCreated());
@@ -564,16 +380,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       return isSetMerchantId();
     case NAME:
       return isSetName();
-    case EMAIL:
-      return isSetEmail();
-    case WEBSITE_URL:
-      return isSetWebsiteUrl();
-    case LOGO_URL:
-      return isSetLogoUrl();
-    case PHONE:
-      return isSetPhone();
-    case ADDRESS:
-      return isSetAddress();
+    case MERCHANT_LOCATION:
+      return isSetMerchantLocation();
     case CREATED:
       return isSetCreated();
     case UPDATED:
@@ -613,48 +421,12 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
         return false;
     }
 
-    boolean this_present_email = true && this.isSetEmail();
-    boolean that_present_email = true && that.isSetEmail();
-    if (this_present_email || that_present_email) {
-      if (!(this_present_email && that_present_email))
+    boolean this_present_merchantLocation = true && this.isSetMerchantLocation();
+    boolean that_present_merchantLocation = true && that.isSetMerchantLocation();
+    if (this_present_merchantLocation || that_present_merchantLocation) {
+      if (!(this_present_merchantLocation && that_present_merchantLocation))
         return false;
-      if (!this.email.equals(that.email))
-        return false;
-    }
-
-    boolean this_present_websiteUrl = true && this.isSetWebsiteUrl();
-    boolean that_present_websiteUrl = true && that.isSetWebsiteUrl();
-    if (this_present_websiteUrl || that_present_websiteUrl) {
-      if (!(this_present_websiteUrl && that_present_websiteUrl))
-        return false;
-      if (!this.websiteUrl.equals(that.websiteUrl))
-        return false;
-    }
-
-    boolean this_present_logoUrl = true && this.isSetLogoUrl();
-    boolean that_present_logoUrl = true && that.isSetLogoUrl();
-    if (this_present_logoUrl || that_present_logoUrl) {
-      if (!(this_present_logoUrl && that_present_logoUrl))
-        return false;
-      if (!this.logoUrl.equals(that.logoUrl))
-        return false;
-    }
-
-    boolean this_present_phone = true && this.isSetPhone();
-    boolean that_present_phone = true && that.isSetPhone();
-    if (this_present_phone || that_present_phone) {
-      if (!(this_present_phone && that_present_phone))
-        return false;
-      if (!this.phone.equals(that.phone))
-        return false;
-    }
-
-    boolean this_present_address = true && this.isSetAddress();
-    boolean that_present_address = true && that.isSetAddress();
-    if (this_present_address || that_present_address) {
-      if (!(this_present_address && that_present_address))
-        return false;
-      if (!this.address.equals(that.address))
+      if (!this.merchantLocation.equals(that.merchantLocation))
         return false;
     }
 
@@ -712,52 +484,12 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetEmail()).compareTo(typedOther.isSetEmail());
+    lastComparison = Boolean.valueOf(isSetMerchantLocation()).compareTo(typedOther.isSetMerchantLocation());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetEmail()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.email, typedOther.email);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetWebsiteUrl()).compareTo(typedOther.isSetWebsiteUrl());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetWebsiteUrl()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.websiteUrl, typedOther.websiteUrl);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetLogoUrl()).compareTo(typedOther.isSetLogoUrl());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetLogoUrl()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.logoUrl, typedOther.logoUrl);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetPhone()).compareTo(typedOther.isSetPhone());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetPhone()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.phone, typedOther.phone);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetAddress()).compareTo(typedOther.isSetAddress());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetAddress()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.address, typedOther.address);
+    if (isSetMerchantLocation()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.merchantLocation, typedOther.merchantLocation);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -819,53 +551,13 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       sb.append(this.name);
     }
     first = false;
-    if (isSetEmail()) {
+    if (isSetMerchantLocation()) {
       if (!first) sb.append(", ");
-      sb.append("email:");
-      if (this.email == null) {
+      sb.append("merchantLocation:");
+      if (this.merchantLocation == null) {
         sb.append("null");
       } else {
-        sb.append(this.email);
-      }
-      first = false;
-    }
-    if (isSetWebsiteUrl()) {
-      if (!first) sb.append(", ");
-      sb.append("websiteUrl:");
-      if (this.websiteUrl == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.websiteUrl);
-      }
-      first = false;
-    }
-    if (isSetLogoUrl()) {
-      if (!first) sb.append(", ");
-      sb.append("logoUrl:");
-      if (this.logoUrl == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.logoUrl);
-      }
-      first = false;
-    }
-    if (isSetPhone()) {
-      if (!first) sb.append(", ");
-      sb.append("phone:");
-      if (this.phone == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.phone);
-      }
-      first = false;
-    }
-    if (isSetAddress()) {
-      if (!first) sb.append(", ");
-      sb.append("address:");
-      if (this.address == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.address);
+        sb.append(this.merchantLocation);
       }
       first = false;
     }
@@ -891,8 +583,8 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'name' was not present! Struct: " + toString());
     }
     // check for sub-struct validity
-    if (address != null) {
-      address.validate();
+    if (merchantLocation != null) {
+      merchantLocation.validate();
     }
   }
 
@@ -948,48 +640,16 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 3: // EMAIL
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.email = iprot.readString();
-              struct.setEmailIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 4: // WEBSITE_URL
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.websiteUrl = iprot.readString();
-              struct.setWebsiteUrlIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 5: // LOGO_URL
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.logoUrl = iprot.readString();
-              struct.setLogoUrlIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 6: // PHONE
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.phone = iprot.readString();
-              struct.setPhoneIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 7: // ADDRESS
+          case 3: // MERCHANT_LOCATION
             if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.address = new Address_t();
-              struct.address.read(iprot);
-              struct.setAddressIsSet(true);
+              struct.merchantLocation = new MerchantLocation_t();
+              struct.merchantLocation.read(iprot);
+              struct.setMerchantLocationIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // CREATED
+          case 4: // CREATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.created = iprot.readI64();
               struct.setCreatedIsSet(true);
@@ -997,7 +657,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // UPDATED
+          case 5: // UPDATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.updated = iprot.readI64();
               struct.setUpdatedIsSet(true);
@@ -1032,38 +692,10 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
         oprot.writeString(struct.name);
         oprot.writeFieldEnd();
       }
-      if (struct.email != null) {
-        if (struct.isSetEmail()) {
-          oprot.writeFieldBegin(EMAIL_FIELD_DESC);
-          oprot.writeString(struct.email);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.websiteUrl != null) {
-        if (struct.isSetWebsiteUrl()) {
-          oprot.writeFieldBegin(WEBSITE_URL_FIELD_DESC);
-          oprot.writeString(struct.websiteUrl);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.logoUrl != null) {
-        if (struct.isSetLogoUrl()) {
-          oprot.writeFieldBegin(LOGO_URL_FIELD_DESC);
-          oprot.writeString(struct.logoUrl);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.phone != null) {
-        if (struct.isSetPhone()) {
-          oprot.writeFieldBegin(PHONE_FIELD_DESC);
-          oprot.writeString(struct.phone);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.address != null) {
-        if (struct.isSetAddress()) {
-          oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
-          struct.address.write(oprot);
+      if (struct.merchantLocation != null) {
+        if (struct.isSetMerchantLocation()) {
+          oprot.writeFieldBegin(MERCHANT_LOCATION_FIELD_DESC);
+          struct.merchantLocation.write(oprot);
           oprot.writeFieldEnd();
         }
       }
@@ -1099,45 +731,21 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       if (struct.isSetMerchantId()) {
         optionals.set(0);
       }
-      if (struct.isSetEmail()) {
+      if (struct.isSetMerchantLocation()) {
         optionals.set(1);
       }
-      if (struct.isSetWebsiteUrl()) {
+      if (struct.isSetCreated()) {
         optionals.set(2);
       }
-      if (struct.isSetLogoUrl()) {
+      if (struct.isSetUpdated()) {
         optionals.set(3);
       }
-      if (struct.isSetPhone()) {
-        optionals.set(4);
-      }
-      if (struct.isSetAddress()) {
-        optionals.set(5);
-      }
-      if (struct.isSetCreated()) {
-        optionals.set(6);
-      }
-      if (struct.isSetUpdated()) {
-        optionals.set(7);
-      }
-      oprot.writeBitSet(optionals, 8);
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetMerchantId()) {
         oprot.writeString(struct.merchantId);
       }
-      if (struct.isSetEmail()) {
-        oprot.writeString(struct.email);
-      }
-      if (struct.isSetWebsiteUrl()) {
-        oprot.writeString(struct.websiteUrl);
-      }
-      if (struct.isSetLogoUrl()) {
-        oprot.writeString(struct.logoUrl);
-      }
-      if (struct.isSetPhone()) {
-        oprot.writeString(struct.phone);
-      }
-      if (struct.isSetAddress()) {
-        struct.address.write(oprot);
+      if (struct.isSetMerchantLocation()) {
+        struct.merchantLocation.write(oprot);
       }
       if (struct.isSetCreated()) {
         oprot.writeI64(struct.created);
@@ -1152,37 +760,21 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.name = iprot.readString();
       struct.setNameIsSet(true);
-      BitSet incoming = iprot.readBitSet(8);
+      BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.merchantId = iprot.readString();
         struct.setMerchantIdIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.email = iprot.readString();
-        struct.setEmailIsSet(true);
+        struct.merchantLocation = new MerchantLocation_t();
+        struct.merchantLocation.read(iprot);
+        struct.setMerchantLocationIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.websiteUrl = iprot.readString();
-        struct.setWebsiteUrlIsSet(true);
-      }
-      if (incoming.get(3)) {
-        struct.logoUrl = iprot.readString();
-        struct.setLogoUrlIsSet(true);
-      }
-      if (incoming.get(4)) {
-        struct.phone = iprot.readString();
-        struct.setPhoneIsSet(true);
-      }
-      if (incoming.get(5)) {
-        struct.address = new Address_t();
-        struct.address.read(iprot);
-        struct.setAddressIsSet(true);
-      }
-      if (incoming.get(6)) {
         struct.created = iprot.readI64();
         struct.setCreatedIsSet(true);
       }
-      if (incoming.get(7)) {
+      if (incoming.get(3)) {
         struct.updated = iprot.readI64();
         struct.setUpdatedIsSet(true);
       }
