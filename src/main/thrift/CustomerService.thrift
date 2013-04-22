@@ -33,4 +33,5 @@ service CustomerService_t {
    void redeem(1:string dealAcquireId,2:double latitude,3:double longitude) throws (1:Core.ServiceException_t error);
 
 
+
 }

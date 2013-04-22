@@ -238,7 +238,14 @@ public final class ConversionUtil
 		thriftMerch.setCreated(merchant.getCreated().getTime());
 		thriftMerch.setUpdated(merchant.getUpdated().getTime());
 		thriftMerch.setName(merchant.getName());
-		thriftMerch.setMerchantLocation(convertToThrift(merchant.getPrimaryLocation()));
+
+		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
+		for (MerchantLocation mLoc : merchant.getAllLocations())
+		{
+			locations.add(convertToThrift(mLoc));
+		}
+		thriftMerch.setLocations(locations);
+
 		return thriftMerch;
 	}
 

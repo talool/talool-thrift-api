@@ -21,7 +21,6 @@ import com.talool.api.thrift.SocialNetwork_t;
 
 public class ThriftServiceIntegrationTest
 {
-	// static String servletUrl = "http://www.talool.com/api";
 	// static String servletUrl = "http://api.talool.com/1.1";
 
 	static String servletUrl = "http://localhost:8080/1.1";

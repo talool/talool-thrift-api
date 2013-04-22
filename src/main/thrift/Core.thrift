@@ -74,22 +74,9 @@ struct Token_t {
 struct Merchant_t {
   1: optional string merchantId;
   2: required string name;
-  3: optional MerchantLocation_t merchantLocation;
+  3: optional list<MerchantLocation_t> locations;
   4: optional Timestamp created;
   5: optional Timestamp updated;
-}
-
-struct Deal_t {
-  1: optional string dealId;
-  2: required Merchant_t merchant;
-  3: required string title;
-  4: optional string summary;
-  5: optional string details;
-  6: optional string code;
-  7: optional string imageUrl;
-  8: optional Timestamp expires;
-  9: optional Timestamp created;
-  10: optional Timestamp updated;
 }
 
 struct Deal_t {
