@@ -2735,6 +2735,399 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 @end
 
+@interface redeem_args : NSObject <NSCoding> {
+  NSString * __dealAcquireId;
+  double __latitude;
+  double __longitude;
+
+  BOOL __dealAcquireId_isset;
+  BOOL __latitude_isset;
+  BOOL __longitude_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=dealAcquireId, setter=setDealAcquireId:) NSString * dealAcquireId;
+@property (nonatomic, getter=latitude, setter=setLatitude:) double latitude;
+@property (nonatomic, getter=longitude, setter=setLongitude:) double longitude;
+#endif
+
+- (id) init;
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId latitude: (double) latitude longitude: (double) longitude;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSString *) dealAcquireId;
+- (void) setDealAcquireId: (NSString *) dealAcquireId;
+#endif
+- (BOOL) dealAcquireIdIsSet;
+
+#if !__has_feature(objc_arc)
+- (double) latitude;
+- (void) setLatitude: (double) latitude;
+#endif
+- (BOOL) latitudeIsSet;
+
+#if !__has_feature(objc_arc)
+- (double) longitude;
+- (void) setLongitude: (double) longitude;
+#endif
+- (BOOL) longitudeIsSet;
+
+@end
+
+@implementation redeem_args
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId latitude: (double) latitude longitude: (double) longitude
+{
+  self = [super init];
+  __dealAcquireId = [dealAcquireId retain_stub];
+  __dealAcquireId_isset = YES;
+  __latitude = latitude;
+  __latitude_isset = YES;
+  __longitude = longitude;
+  __longitude_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"dealAcquireId"])
+  {
+    __dealAcquireId = [[decoder decodeObjectForKey: @"dealAcquireId"] retain_stub];
+    __dealAcquireId_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"latitude"])
+  {
+    __latitude = [decoder decodeDoubleForKey: @"latitude"];
+    __latitude_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"longitude"])
+  {
+    __longitude = [decoder decodeDoubleForKey: @"longitude"];
+    __longitude_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__dealAcquireId_isset)
+  {
+    [encoder encodeObject: __dealAcquireId forKey: @"dealAcquireId"];
+  }
+  if (__latitude_isset)
+  {
+    [encoder encodeDouble: __latitude forKey: @"latitude"];
+  }
+  if (__longitude_isset)
+  {
+    [encoder encodeDouble: __longitude forKey: @"longitude"];
+  }
+}
+
+- (void) dealloc
+{
+  [__dealAcquireId release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) dealAcquireId {
+  return [[__dealAcquireId retain_stub] autorelease_stub];
+}
+
+- (void) setDealAcquireId: (NSString *) dealAcquireId {
+  [dealAcquireId retain_stub];
+  [__dealAcquireId release_stub];
+  __dealAcquireId = dealAcquireId;
+  __dealAcquireId_isset = YES;
+}
+
+- (BOOL) dealAcquireIdIsSet {
+  return __dealAcquireId_isset;
+}
+
+- (void) unsetDealAcquireId {
+  [__dealAcquireId release_stub];
+  __dealAcquireId = nil;
+  __dealAcquireId_isset = NO;
+}
+
+- (double) latitude {
+  return __latitude;
+}
+
+- (void) setLatitude: (double) latitude {
+  __latitude = latitude;
+  __latitude_isset = YES;
+}
+
+- (BOOL) latitudeIsSet {
+  return __latitude_isset;
+}
+
+- (void) unsetLatitude {
+  __latitude_isset = NO;
+}
+
+- (double) longitude {
+  return __longitude;
+}
+
+- (void) setLongitude: (double) longitude {
+  __longitude = longitude;
+  __longitude_isset = YES;
+}
+
+- (BOOL) longitudeIsSet {
+  return __longitude_isset;
+}
+
+- (void) unsetLongitude {
+  __longitude_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setDealAcquireId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_DOUBLE) {
+          double fieldValue = [inProtocol readDouble];
+          [self setLatitude: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 3:
+        if (fieldType == TType_DOUBLE) {
+          double fieldValue = [inProtocol readDouble];
+          [self setLongitude: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"redeem_args"];
+  if (__dealAcquireId_isset) {
+    if (__dealAcquireId != nil) {
+      [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __dealAcquireId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__latitude_isset) {
+    [outProtocol writeFieldBeginWithName: @"latitude" type: TType_DOUBLE fieldID: 2];
+    [outProtocol writeDouble: __latitude];
+    [outProtocol writeFieldEnd];
+  }
+  if (__longitude_isset) {
+    [outProtocol writeFieldBeginWithName: @"longitude" type: TType_DOUBLE fieldID: 3];
+    [outProtocol writeDouble: __longitude];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"redeem_args("];
+  [ms appendString: @"dealAcquireId:"];
+  [ms appendFormat: @"\"%@\"", __dealAcquireId];
+  [ms appendString: @",latitude:"];
+  [ms appendFormat: @"%f", __latitude];
+  [ms appendString: @",longitude:"];
+  [ms appendFormat: @"%f", __longitude];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface Redeem_result : NSObject <NSCoding> {
+  ServiceException_t * __error;
+
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithError: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation Redeem_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithError: (ServiceException_t *) error
+{
+  self = [super init];
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"Redeem_result"];
+
+  if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"Redeem_result("];
+  [ms appendString: @"error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
 @implementation CustomerService_tClient
 - (id) initWithProtocol: (id <TProtocol>) protocol
 {
@@ -3064,6 +3457,51 @@ static NSString * CTOKEN_NAME = @"ctok";
   return [self recv_getDealAcquires];
 }
 
+- (void) send_redeem: (NSString *) dealAcquireId latitude: (double) latitude longitude: (double) longitude
+{
+  [outProtocol writeMessageBeginWithName: @"redeem" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"redeem_args"];
+  if (dealAcquireId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: dealAcquireId];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldBeginWithName: @"latitude" type: TType_DOUBLE fieldID: 2];
+  [outProtocol writeDouble: latitude];
+  [outProtocol writeFieldEnd];
+  [outProtocol writeFieldBeginWithName: @"longitude" type: TType_DOUBLE fieldID: 3];
+  [outProtocol writeDouble: longitude];
+  [outProtocol writeFieldEnd];
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (void) recv_redeem
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  Redeem_result * result = [[[Redeem_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  return;
+}
+
+- (void) redeem: (NSString *) dealAcquireId latitude: (double) latitude longitude: (double) longitude
+{
+  [self send_redeem : dealAcquireId latitude: latitude longitude: longitude];
+  [self recv_redeem];
+}
+
 @end
 
 @implementation CustomerService_tProcessor
@@ -3131,6 +3569,14 @@ static NSString * CTOKEN_NAME = @"ctok";
     [invocation setSelector: s];
     [invocation retainArguments];
     [mMethodMap setValue: invocation forKey: @"getDealAcquires"];
+  }
+  {
+    SEL s = @selector(process_redeem_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"redeem"];
   }
   return self;
 }
@@ -3283,6 +3729,23 @@ static NSString * CTOKEN_NAME = @"ctok";
   GetDealAcquires_result * result = [[GetDealAcquires_result alloc] init];
   [result setSuccess: [mService getDealAcquires: [args merchantId] searchOptions: [args searchOptions]]];
   [outProtocol writeMessageBeginWithName: @"getDealAcquires"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_redeem_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  redeem_args * args = [[redeem_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  Redeem_result * result = [[Redeem_result alloc] init];
+  [mService redeem: [args dealAcquireId] latitude: [args latitude] longitude: [args longitude]];
+  [outProtocol writeMessageBeginWithName: @"redeem"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];

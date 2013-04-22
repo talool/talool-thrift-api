@@ -30,6 +30,7 @@ service CustomerService_t {
       
    list<Core.DealAcquire_t> getDealAcquires(1:string merchantId,2:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
    
+   void redeem(1:string dealAcquireId,2:double latitude,3:double longitude) throws (1:Core.ServiceException_t error);
 
 
 }

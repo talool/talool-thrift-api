@@ -48,6 +48,8 @@ public class CustomerService_t {
 
     public List<com.talool.api.thrift.DealAcquire_t> getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
+    public void redeem(String dealAcquireId, double latitude, double longitude) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -65,6 +67,8 @@ public class CustomerService_t {
     public void getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getMerchantAcquires_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getDealAcquires(String merchantId, com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getDealAcquires_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void redeem(String dealAcquireId, double latitude, double longitude, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.redeem_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -265,6 +269,31 @@ public class CustomerService_t {
         throw result.error;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getDealAcquires failed: unknown result");
+    }
+
+    public void redeem(String dealAcquireId, double latitude, double longitude) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    {
+      send_redeem(dealAcquireId, latitude, longitude);
+      recv_redeem();
+    }
+
+    public void send_redeem(String dealAcquireId, double latitude, double longitude) throws org.apache.thrift.TException
+    {
+      redeem_args args = new redeem_args();
+      args.setDealAcquireId(dealAcquireId);
+      args.setLatitude(latitude);
+      args.setLongitude(longitude);
+      sendBase("redeem", args);
+    }
+
+    public void recv_redeem() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    {
+      redeem_result result = new redeem_result();
+      receiveBase(result, "redeem");
+      if (result.error != null) {
+        throw result.error;
+      }
+      return;
     }
 
   }
@@ -518,6 +547,44 @@ public class CustomerService_t {
       }
     }
 
+    public void redeem(String dealAcquireId, double latitude, double longitude, org.apache.thrift.async.AsyncMethodCallback<redeem_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      redeem_call method_call = new redeem_call(dealAcquireId, latitude, longitude, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class redeem_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String dealAcquireId;
+      private double latitude;
+      private double longitude;
+      public redeem_call(String dealAcquireId, double latitude, double longitude, org.apache.thrift.async.AsyncMethodCallback<redeem_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.dealAcquireId = dealAcquireId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("redeem", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        redeem_args args = new redeem_args();
+        args.setDealAcquireId(dealAcquireId);
+        args.setLatitude(latitude);
+        args.setLongitude(longitude);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        (new Client(prot)).recv_redeem();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
@@ -538,6 +605,7 @@ public class CustomerService_t {
       processMap.put("addSocialAccount", new addSocialAccount());
       processMap.put("getMerchantAcquires", new getMerchantAcquires());
       processMap.put("getDealAcquires", new getDealAcquires());
+      processMap.put("redeem", new redeem());
       return processMap;
     }
 
@@ -703,6 +771,30 @@ public class CustomerService_t {
         getDealAcquires_result result = new getDealAcquires_result();
         try {
           result.success = iface.getDealAcquires(args.merchantId, args.searchOptions);
+        } catch (com.talool.api.thrift.ServiceException_t error) {
+          result.error = error;
+        }
+        return result;
+      }
+    }
+
+    public static class redeem<I extends Iface> extends org.apache.thrift.ProcessFunction<I, redeem_args> {
+      public redeem() {
+        super("redeem");
+      }
+
+      public redeem_args getEmptyArgsInstance() {
+        return new redeem_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public redeem_result getResult(I iface, redeem_args args) throws org.apache.thrift.TException {
+        redeem_result result = new redeem_result();
+        try {
+          iface.redeem(args.dealAcquireId, args.latitude, args.longitude);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -6602,6 +6694,906 @@ public class CustomerService_t {
           struct.setSuccessIsSet(true);
         }
         if (incoming.get(1)) {
+          struct.error = new com.talool.api.thrift.ServiceException_t();
+          struct.error.read(iprot);
+          struct.setErrorIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class redeem_args implements org.apache.thrift.TBase<redeem_args, redeem_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("redeem_args");
+
+    private static final org.apache.thrift.protocol.TField DEAL_ACQUIRE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("dealAcquireId", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField LATITUDE_FIELD_DESC = new org.apache.thrift.protocol.TField("latitude", org.apache.thrift.protocol.TType.DOUBLE, (short)2);
+    private static final org.apache.thrift.protocol.TField LONGITUDE_FIELD_DESC = new org.apache.thrift.protocol.TField("longitude", org.apache.thrift.protocol.TType.DOUBLE, (short)3);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new redeem_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new redeem_argsTupleSchemeFactory());
+    }
+
+    public String dealAcquireId; // required
+    public double latitude; // required
+    public double longitude; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      DEAL_ACQUIRE_ID((short)1, "dealAcquireId"),
+      LATITUDE((short)2, "latitude"),
+      LONGITUDE((short)3, "longitude");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // DEAL_ACQUIRE_ID
+            return DEAL_ACQUIRE_ID;
+          case 2: // LATITUDE
+            return LATITUDE;
+          case 3: // LONGITUDE
+            return LONGITUDE;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    private static final int __LATITUDE_ISSET_ID = 0;
+    private static final int __LONGITUDE_ISSET_ID = 1;
+    private byte __isset_bitfield = 0;
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.DEAL_ACQUIRE_ID, new org.apache.thrift.meta_data.FieldMetaData("dealAcquireId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.LATITUDE, new org.apache.thrift.meta_data.FieldMetaData("latitude", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
+      tmpMap.put(_Fields.LONGITUDE, new org.apache.thrift.meta_data.FieldMetaData("longitude", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(redeem_args.class, metaDataMap);
+    }
+
+    public redeem_args() {
+    }
+
+    public redeem_args(
+      String dealAcquireId,
+      double latitude,
+      double longitude)
+    {
+      this();
+      this.dealAcquireId = dealAcquireId;
+      this.latitude = latitude;
+      setLatitudeIsSet(true);
+      this.longitude = longitude;
+      setLongitudeIsSet(true);
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public redeem_args(redeem_args other) {
+      __isset_bitfield = other.__isset_bitfield;
+      if (other.isSetDealAcquireId()) {
+        this.dealAcquireId = other.dealAcquireId;
+      }
+      this.latitude = other.latitude;
+      this.longitude = other.longitude;
+    }
+
+    public redeem_args deepCopy() {
+      return new redeem_args(this);
+    }
+
+    public void clear() {
+      this.dealAcquireId = null;
+      setLatitudeIsSet(false);
+      this.latitude = 0.0;
+      setLongitudeIsSet(false);
+      this.longitude = 0.0;
+    }
+
+    public String getDealAcquireId() {
+      return this.dealAcquireId;
+    }
+
+    public redeem_args setDealAcquireId(String dealAcquireId) {
+      this.dealAcquireId = dealAcquireId;
+      return this;
+    }
+
+    public void unsetDealAcquireId() {
+      this.dealAcquireId = null;
+    }
+
+    /** Returns true if field dealAcquireId is set (has been assigned a value) and false otherwise */
+    public boolean isSetDealAcquireId() {
+      return this.dealAcquireId != null;
+    }
+
+    public void setDealAcquireIdIsSet(boolean value) {
+      if (!value) {
+        this.dealAcquireId = null;
+      }
+    }
+
+    public double getLatitude() {
+      return this.latitude;
+    }
+
+    public redeem_args setLatitude(double latitude) {
+      this.latitude = latitude;
+      setLatitudeIsSet(true);
+      return this;
+    }
+
+    public void unsetLatitude() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LATITUDE_ISSET_ID);
+    }
+
+    /** Returns true if field latitude is set (has been assigned a value) and false otherwise */
+    public boolean isSetLatitude() {
+      return EncodingUtils.testBit(__isset_bitfield, __LATITUDE_ISSET_ID);
+    }
+
+    public void setLatitudeIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LATITUDE_ISSET_ID, value);
+    }
+
+    public double getLongitude() {
+      return this.longitude;
+    }
+
+    public redeem_args setLongitude(double longitude) {
+      this.longitude = longitude;
+      setLongitudeIsSet(true);
+      return this;
+    }
+
+    public void unsetLongitude() {
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LONGITUDE_ISSET_ID);
+    }
+
+    /** Returns true if field longitude is set (has been assigned a value) and false otherwise */
+    public boolean isSetLongitude() {
+      return EncodingUtils.testBit(__isset_bitfield, __LONGITUDE_ISSET_ID);
+    }
+
+    public void setLongitudeIsSet(boolean value) {
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LONGITUDE_ISSET_ID, value);
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case DEAL_ACQUIRE_ID:
+        if (value == null) {
+          unsetDealAcquireId();
+        } else {
+          setDealAcquireId((String)value);
+        }
+        break;
+
+      case LATITUDE:
+        if (value == null) {
+          unsetLatitude();
+        } else {
+          setLatitude((Double)value);
+        }
+        break;
+
+      case LONGITUDE:
+        if (value == null) {
+          unsetLongitude();
+        } else {
+          setLongitude((Double)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case DEAL_ACQUIRE_ID:
+        return getDealAcquireId();
+
+      case LATITUDE:
+        return Double.valueOf(getLatitude());
+
+      case LONGITUDE:
+        return Double.valueOf(getLongitude());
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case DEAL_ACQUIRE_ID:
+        return isSetDealAcquireId();
+      case LATITUDE:
+        return isSetLatitude();
+      case LONGITUDE:
+        return isSetLongitude();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof redeem_args)
+        return this.equals((redeem_args)that);
+      return false;
+    }
+
+    public boolean equals(redeem_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_dealAcquireId = true && this.isSetDealAcquireId();
+      boolean that_present_dealAcquireId = true && that.isSetDealAcquireId();
+      if (this_present_dealAcquireId || that_present_dealAcquireId) {
+        if (!(this_present_dealAcquireId && that_present_dealAcquireId))
+          return false;
+        if (!this.dealAcquireId.equals(that.dealAcquireId))
+          return false;
+      }
+
+      boolean this_present_latitude = true;
+      boolean that_present_latitude = true;
+      if (this_present_latitude || that_present_latitude) {
+        if (!(this_present_latitude && that_present_latitude))
+          return false;
+        if (this.latitude != that.latitude)
+          return false;
+      }
+
+      boolean this_present_longitude = true;
+      boolean that_present_longitude = true;
+      if (this_present_longitude || that_present_longitude) {
+        if (!(this_present_longitude && that_present_longitude))
+          return false;
+        if (this.longitude != that.longitude)
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(redeem_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      redeem_args typedOther = (redeem_args)other;
+
+      lastComparison = Boolean.valueOf(isSetDealAcquireId()).compareTo(typedOther.isSetDealAcquireId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetDealAcquireId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.dealAcquireId, typedOther.dealAcquireId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetLatitude()).compareTo(typedOther.isSetLatitude());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetLatitude()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.latitude, typedOther.latitude);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetLongitude()).compareTo(typedOther.isSetLongitude());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetLongitude()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.longitude, typedOther.longitude);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("redeem_args(");
+      boolean first = true;
+
+      sb.append("dealAcquireId:");
+      if (this.dealAcquireId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.dealAcquireId);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("latitude:");
+      sb.append(this.latitude);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("longitude:");
+      sb.append(this.longitude);
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private static class redeem_argsStandardSchemeFactory implements SchemeFactory {
+      public redeem_argsStandardScheme getScheme() {
+        return new redeem_argsStandardScheme();
+      }
+    }
+
+    private static class redeem_argsStandardScheme extends StandardScheme<redeem_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, redeem_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // DEAL_ACQUIRE_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.dealAcquireId = iprot.readString();
+                struct.setDealAcquireIdIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // LATITUDE
+              if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
+                struct.latitude = iprot.readDouble();
+                struct.setLatitudeIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // LONGITUDE
+              if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
+                struct.longitude = iprot.readDouble();
+                struct.setLongitudeIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, redeem_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.dealAcquireId != null) {
+          oprot.writeFieldBegin(DEAL_ACQUIRE_ID_FIELD_DESC);
+          oprot.writeString(struct.dealAcquireId);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldBegin(LATITUDE_FIELD_DESC);
+        oprot.writeDouble(struct.latitude);
+        oprot.writeFieldEnd();
+        oprot.writeFieldBegin(LONGITUDE_FIELD_DESC);
+        oprot.writeDouble(struct.longitude);
+        oprot.writeFieldEnd();
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class redeem_argsTupleSchemeFactory implements SchemeFactory {
+      public redeem_argsTupleScheme getScheme() {
+        return new redeem_argsTupleScheme();
+      }
+    }
+
+    private static class redeem_argsTupleScheme extends TupleScheme<redeem_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, redeem_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetDealAcquireId()) {
+          optionals.set(0);
+        }
+        if (struct.isSetLatitude()) {
+          optionals.set(1);
+        }
+        if (struct.isSetLongitude()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
+        if (struct.isSetDealAcquireId()) {
+          oprot.writeString(struct.dealAcquireId);
+        }
+        if (struct.isSetLatitude()) {
+          oprot.writeDouble(struct.latitude);
+        }
+        if (struct.isSetLongitude()) {
+          oprot.writeDouble(struct.longitude);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, redeem_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(3);
+        if (incoming.get(0)) {
+          struct.dealAcquireId = iprot.readString();
+          struct.setDealAcquireIdIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.latitude = iprot.readDouble();
+          struct.setLatitudeIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.longitude = iprot.readDouble();
+          struct.setLongitudeIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class redeem_result implements org.apache.thrift.TBase<redeem_result, redeem_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("redeem_result");
+
+    private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new redeem_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new redeem_resultTupleSchemeFactory());
+    }
+
+    public com.talool.api.thrift.ServiceException_t error; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      ERROR((short)1, "error");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // ERROR
+            return ERROR;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(redeem_result.class, metaDataMap);
+    }
+
+    public redeem_result() {
+    }
+
+    public redeem_result(
+      com.talool.api.thrift.ServiceException_t error)
+    {
+      this();
+      this.error = error;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public redeem_result(redeem_result other) {
+      if (other.isSetError()) {
+        this.error = new com.talool.api.thrift.ServiceException_t(other.error);
+      }
+    }
+
+    public redeem_result deepCopy() {
+      return new redeem_result(this);
+    }
+
+    public void clear() {
+      this.error = null;
+    }
+
+    public com.talool.api.thrift.ServiceException_t getError() {
+      return this.error;
+    }
+
+    public redeem_result setError(com.talool.api.thrift.ServiceException_t error) {
+      this.error = error;
+      return this;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case ERROR:
+        if (value == null) {
+          unsetError();
+        } else {
+          setError((com.talool.api.thrift.ServiceException_t)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case ERROR:
+        return getError();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case ERROR:
+        return isSetError();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof redeem_result)
+        return this.equals((redeem_result)that);
+      return false;
+    }
+
+    public boolean equals(redeem_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(redeem_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      redeem_result typedOther = (redeem_result)other;
+
+      lastComparison = Boolean.valueOf(isSetError()).compareTo(typedOther.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.error, typedOther.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("redeem_result(");
+      boolean first = true;
+
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private static class redeem_resultStandardSchemeFactory implements SchemeFactory {
+      public redeem_resultStandardScheme getScheme() {
+        return new redeem_resultStandardScheme();
+      }
+    }
+
+    private static class redeem_resultStandardScheme extends StandardScheme<redeem_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, redeem_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // ERROR
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.error = new com.talool.api.thrift.ServiceException_t();
+                struct.error.read(iprot);
+                struct.setErrorIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, redeem_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.error != null) {
+          oprot.writeFieldBegin(ERROR_FIELD_DESC);
+          struct.error.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class redeem_resultTupleSchemeFactory implements SchemeFactory {
+      public redeem_resultTupleScheme getScheme() {
+        return new redeem_resultTupleScheme();
+      }
+    }
+
+    private static class redeem_resultTupleScheme extends TupleScheme<redeem_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, redeem_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetError()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetError()) {
+          struct.error.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, redeem_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
           struct.error = new com.talool.api.thrift.ServiceException_t();
           struct.error.read(iprot);
           struct.setErrorIsSet(true);

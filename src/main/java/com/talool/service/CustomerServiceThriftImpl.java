@@ -24,6 +24,7 @@ import com.talool.core.DealAcquire;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.SocialAccount;
+import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.service.util.TokenUtil;
 
@@ -85,6 +86,23 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			// test of account exits
+			if (taloolService.emailExists(AccountType.CUS, customer.getEmail()))
+			{
+				LOG.error("Email already taken: " + customer.getEmail());
+				throw new ServiceException_t(ServiceException.Type.EMAIL_ALREADY_TAKEN.getCode(),
+						ServiceException.Type.EMAIL_ALREADY_TAKEN.getMessage());
+			}
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem registering customer: " + e, e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		try
+		{
+
 			final Customer taloolCustomer = ConversionUtil.convertFromThrift(customer);
 			taloolService.createAccount(taloolCustomer, password);
 
@@ -220,6 +238,27 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
+
+	}
+
+	@Override
+	public void redeem(final String dealAcquireId, final double latitude, final double longitude)
+			throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<DealAcquire> dealAcquires = null;
+
+		try
+		{
+			final DealAcquire dealAcquire = taloolService.getDealAcquire(UUID.fromString(dealAcquireId));
+
+			taloolService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
 
 	}
 }
