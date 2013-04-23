@@ -224,6 +224,7 @@ public final class ConversionUtil
 		mLoc.setEmail(merchantLocation.getEmail());
 		mLoc.setName(merchantLocation.getLocationName());
 		mLoc.setLocationId(merchantLocation.getId());
+		mLoc.setLogoUrl(merchantLocation.getLogoUrl());
 		mLoc.setPhone(merchantLocation.getPhone());
 		mLoc.setWebsiteUrl(merchantLocation.getWebsiteUrl());
 
@@ -255,6 +256,7 @@ public final class ConversionUtil
 		for (final DealAcquire _dac : dealAcquires)
 		{
 			final DealAcquire_t dac = new DealAcquire_t();
+			dac.setDealAcquireId(_dac.getId().toString());
 			dac.setCreated(_dac.getCreated().getTime());
 			dac.setUpdated(_dac.getUpdated().getTime());
 			dac.setDeal(convertToThrift(_dac.getDeal()));

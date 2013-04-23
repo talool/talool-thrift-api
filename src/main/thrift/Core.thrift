@@ -47,7 +47,7 @@ struct MerchantLocation_t {
   2: optional string name;
   3: optional string email;
   4: optional string websiteUrl;
-  5: optional string logUrl;
+  5: optional string logoUrl;
   6: optional string phone;
   7: required Address_t address;
 }
@@ -93,9 +93,8 @@ struct Deal_t {
 struct SearchOptions_t {
   1: required bool ascending;
   2: required string sortProperty;
-  3: required i32 firstResult;
-  4: required i32 maxResults;
-  5: required i32 page;
+  3: required i32 maxResults;
+  4: required i32 page;
 }
 
 struct DealAcquire_t {

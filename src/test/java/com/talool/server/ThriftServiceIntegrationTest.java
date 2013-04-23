@@ -22,9 +22,9 @@ import com.talool.api.thrift.SocialNetwork_t;
 
 public class ThriftServiceIntegrationTest
 {
-	static String servletUrl = "http://api.talool.com/1.1";
+	// static String servletUrl = "http://api.talool.com/1.1";
 
-	// static String servletUrl = "http://localhost:8080/1.1";
+	static String servletUrl = "http://localhost:8080/1.1";
 
 	public static CTokenAccess_t testRegisterCustomer(CustomerService_t.Client client)
 			throws ServiceException_t, TException
@@ -62,9 +62,12 @@ public class ThriftServiceIntegrationTest
 	public static void main(String args[]) throws TTransportException, TException
 	{
 
-		String email = "douglasmccuen@yahoo.com";
+		// String email = "douglasmccuen@yahoo.com";
+		// String pass = "talool4douglasmccuen@yahoo.com";
 
-		String pass = "talool4douglasmccuen@yahoo.com";
+		String email = "christopher.justin@gmail.com";
+		String pass = "pass123";
+
 		THttpClient thc = new THttpClient(servletUrl);
 		TProtocol loPFactory = new TBinaryProtocol(thc);
 		CustomerService_t.Client client = new CustomerService_t.Client(loPFactory);
@@ -85,12 +88,18 @@ public class ThriftServiceIntegrationTest
 
 			for (DealAcquire_t deal : deals)
 			{
+				if (deal.getDealAcquireId().equals("4677f9f3-27be-4101-85e1-efbe054cde4b"))
+				{
+					System.out.println("here");
+				}
 				System.out.println(deal);
 			}
 		}
 
 		try
 		{
+			client.redeem("4677f9f3-27be-4101-85e1-efbe054cde4b", 0.0, 0.0);
+
 			accessToken = testRegisterCustomer(client);
 
 			System.out.println("Email Exists: " + client.customerEmailExists(email));
