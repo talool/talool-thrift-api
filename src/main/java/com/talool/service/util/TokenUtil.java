@@ -81,13 +81,15 @@ public class TokenUtil
 	 * @return
 	 * @throws ServiceException_t
 	 */
-	public static Token_t getTokenFromRequest(final boolean throwExceptionOnExpired) throws ServiceException_t
+	public static Token_t getTokenFromRequest(final boolean throwExceptionOnExpired)
+			throws ServiceException_t
 	{
 		final HttpServletRequest request = RequestUtils.getRequest();
 		final String tokenStr = request.getHeader(CustomerServiceConstants.CTOKEN_NAME);
 
 		if (tokenStr == null)
 		{
+			LOG.error("Missing token");
 			throw new ServiceException_t(101, "Missing token");
 		}
 
@@ -95,6 +97,7 @@ public class TokenUtil
 
 		if (token == null)
 		{
+			LOG.error("Invalid token token");
 			throw new ServiceException_t(101, "Invalid token token");
 		}
 
@@ -102,6 +105,7 @@ public class TokenUtil
 		{
 			if (System.currentTimeMillis() > token.getExpires())
 			{
+				LOG.error("Token has expired");
 				throw new ServiceException_t(1005, "Token has expired. Invalid request");
 			}
 		}

@@ -192,14 +192,25 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	public List<Merchant_t> getMerchantAcquires(final SearchOptions_t searchOptions)
 			throws ServiceException_t, TException
 	{
+
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
 		List<Merchant_t> resultMerchants = null;
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s getting acquired merchants with searchOptions %s",
-					token.getAccountId(), searchOptions.toString()));
+			if (searchOptions != null)
+			{
+				LOG.debug(String.format("CustomerId %s getting acquired merchants with searchOptions %s",
+						token.getAccountId(), searchOptions.toString()));
+			}
+			else
+			{
+				LOG.debug(String.format(
+						"CustomerId %s getting acquired merchants with no searchOptions %s",
+						token.getAccountId()));
+			}
+
 		}
 
 		try
@@ -228,9 +239,19 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format(
-					"CustomerId %s getting deal acquires for merchantId %s and searchOptions %s",
-					token.getAccountId(), merchantId, searchOptions));
+			if (searchOptions != null)
+			{
+				LOG.debug(String.format(
+						"CustomerId %s getting deal acquires for merchantId %s and searchOptions %s",
+						token.getAccountId(), merchantId, searchOptions));
+			}
+			else
+			{
+				LOG.debug(String.format(
+						"CustomerId %s getting deal acquires for merchantId %s and no searchOptions",
+						token.getAccountId(), merchantId));
+			}
+
 		}
 
 		try

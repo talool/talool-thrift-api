@@ -56,23 +56,25 @@ public class ThriftServiceIntegrationTest
 	public static CTokenAccess_t testAuthenticate(final CustomerService_t.Client client,
 			final String email, String pass) throws ServiceException_t, TException
 	{
-		return client.authenticate(email, "pass123");
+		return client.authenticate(email, pass);
 	}
 
 	public static void main(String args[]) throws TTransportException, TException
 	{
 
-		String email = "christopher.justin@gmail.com";
+		String email = "douglasmccuen@yahoo.com";
+
+		String pass = "talool4douglasmccuen@yahoo.com";
 		THttpClient thc = new THttpClient(servletUrl);
 		TProtocol loPFactory = new TBinaryProtocol(thc);
 		CustomerService_t.Client client = new CustomerService_t.Client(loPFactory);
 
-		CTokenAccess_t accessToken = testAuthenticate(client, email, "pass123");
+		CTokenAccess_t accessToken = testAuthenticate(client, email, pass);
 
 		thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
 
 		SearchOptions_t searchOptions = new SearchOptions_t();
-		searchOptions.setMaxResults(1).setPage(0).setSortProperty("name").setAscending(true);
+		searchOptions.setMaxResults(1000).setPage(0).setSortProperty("name").setAscending(true);
 		List<Merchant_t> merchants = client.getMerchantAcquires(searchOptions);
 
 		for (Merchant_t merc : merchants)
