@@ -19,13 +19,12 @@ import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.api.thrift.SortType_t;
 
 public class ThriftServiceIntegrationTest
 {
-	// static String servletUrl = "http://api.talool.com/1.1";
+	static String servletUrl = "http://api.talool.com/1.1";
 
-	static String servletUrl = "http://localhost:8080/1.1";
+	// static String servletUrl = "http://localhost:8080/1.1";
 
 	public static CTokenAccess_t testRegisterCustomer(CustomerService_t.Client client)
 			throws ServiceException_t, TException
@@ -73,7 +72,7 @@ public class ThriftServiceIntegrationTest
 		thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
 
 		SearchOptions_t searchOptions = new SearchOptions_t();
-		searchOptions.setMaxResults(1).setPage(0).setSortProperty("name").setSortType(SortType_t.Asc);
+		searchOptions.setMaxResults(1).setPage(0).setSortProperty("name").setAscending(true);
 		List<Merchant_t> merchants = client.getMerchantAcquires(searchOptions);
 
 		for (Merchant_t merc : merchants)

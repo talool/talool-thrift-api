@@ -37,7 +37,6 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
-import com.talool.core.SearchOptions.SortType;
 import com.talool.core.Sex;
 import com.talool.core.SocialAccount;
 import com.talool.core.SocialNetwork;
@@ -82,7 +81,7 @@ public final class ConversionUtil
 		{
 			searchOptions = new SearchOptions.Builder().maxResults(thriftSearchOptions.getMaxResults())
 					.page(thriftSearchOptions.getPage()).sortProperty(thriftSearchOptions.sortProperty)
-					.sortType(SortType.valueOf(thriftSearchOptions.getSortType().toString())).build();
+					.ascending(thriftSearchOptions.ascending).build();
 		}
 
 		return searchOptions;

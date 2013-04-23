@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t, SearchOptions_t._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("SearchOptions_t");
 
-  private static final org.apache.thrift.protocol.TField SORT_TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("sortType", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField ASCENDING_FIELD_DESC = new org.apache.thrift.protocol.TField("ascending", org.apache.thrift.protocol.TType.BOOL, (short)1);
   private static final org.apache.thrift.protocol.TField SORT_PROPERTY_FIELD_DESC = new org.apache.thrift.protocol.TField("sortProperty", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField FIRST_RESULT_FIELD_DESC = new org.apache.thrift.protocol.TField("firstResult", org.apache.thrift.protocol.TType.I32, (short)3);
   private static final org.apache.thrift.protocol.TField MAX_RESULTS_FIELD_DESC = new org.apache.thrift.protocol.TField("maxResults", org.apache.thrift.protocol.TType.I32, (short)4);
@@ -45,11 +45,7 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     schemes.put(TupleScheme.class, new SearchOptions_tTupleSchemeFactory());
   }
 
-  /**
-   * 
-   * @see SortType_t
-   */
-  public SortType_t sortType; // required
+  public boolean ascending; // required
   public String sortProperty; // required
   public int firstResult; // required
   public int maxResults; // required
@@ -57,11 +53,7 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    /**
-     * 
-     * @see SortType_t
-     */
-    SORT_TYPE((short)1, "sortType"),
+    ASCENDING((short)1, "ascending"),
     SORT_PROPERTY((short)2, "sortProperty"),
     FIRST_RESULT((short)3, "firstResult"),
     MAX_RESULTS((short)4, "maxResults"),
@@ -80,8 +72,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // SORT_TYPE
-          return SORT_TYPE;
+        case 1: // ASCENDING
+          return ASCENDING;
         case 2: // SORT_PROPERTY
           return SORT_PROPERTY;
         case 3: // FIRST_RESULT
@@ -130,15 +122,16 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
   }
 
   // isset id assignments
-  private static final int __FIRSTRESULT_ISSET_ID = 0;
-  private static final int __MAXRESULTS_ISSET_ID = 1;
-  private static final int __PAGE_ISSET_ID = 2;
+  private static final int __ASCENDING_ISSET_ID = 0;
+  private static final int __FIRSTRESULT_ISSET_ID = 1;
+  private static final int __MAXRESULTS_ISSET_ID = 2;
+  private static final int __PAGE_ISSET_ID = 3;
   private byte __isset_bitfield = 0;
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SORT_TYPE, new org.apache.thrift.meta_data.FieldMetaData("sortType", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-        new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, SortType_t.class)));
+    tmpMap.put(_Fields.ASCENDING, new org.apache.thrift.meta_data.FieldMetaData("ascending", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     tmpMap.put(_Fields.SORT_PROPERTY, new org.apache.thrift.meta_data.FieldMetaData("sortProperty", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.FIRST_RESULT, new org.apache.thrift.meta_data.FieldMetaData("firstResult", org.apache.thrift.TFieldRequirementType.REQUIRED, 
@@ -155,14 +148,15 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
   }
 
   public SearchOptions_t(
-    SortType_t sortType,
+    boolean ascending,
     String sortProperty,
     int firstResult,
     int maxResults,
     int page)
   {
     this();
-    this.sortType = sortType;
+    this.ascending = ascending;
+    setAscendingIsSet(true);
     this.sortProperty = sortProperty;
     this.firstResult = firstResult;
     setFirstResultIsSet(true);
@@ -177,9 +171,7 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
    */
   public SearchOptions_t(SearchOptions_t other) {
     __isset_bitfield = other.__isset_bitfield;
-    if (other.isSetSortType()) {
-      this.sortType = other.sortType;
-    }
+    this.ascending = other.ascending;
     if (other.isSetSortProperty()) {
       this.sortProperty = other.sortProperty;
     }
@@ -193,7 +185,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
   }
 
   public void clear() {
-    this.sortType = null;
+    setAscendingIsSet(false);
+    this.ascending = false;
     this.sortProperty = null;
     setFirstResultIsSet(false);
     this.firstResult = 0;
@@ -203,36 +196,27 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     this.page = 0;
   }
 
-  /**
-   * 
-   * @see SortType_t
-   */
-  public SortType_t getSortType() {
-    return this.sortType;
+  public boolean isAscending() {
+    return this.ascending;
   }
 
-  /**
-   * 
-   * @see SortType_t
-   */
-  public SearchOptions_t setSortType(SortType_t sortType) {
-    this.sortType = sortType;
+  public SearchOptions_t setAscending(boolean ascending) {
+    this.ascending = ascending;
+    setAscendingIsSet(true);
     return this;
   }
 
-  public void unsetSortType() {
-    this.sortType = null;
+  public void unsetAscending() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __ASCENDING_ISSET_ID);
   }
 
-  /** Returns true if field sortType is set (has been assigned a value) and false otherwise */
-  public boolean isSetSortType() {
-    return this.sortType != null;
+  /** Returns true if field ascending is set (has been assigned a value) and false otherwise */
+  public boolean isSetAscending() {
+    return EncodingUtils.testBit(__isset_bitfield, __ASCENDING_ISSET_ID);
   }
 
-  public void setSortTypeIsSet(boolean value) {
-    if (!value) {
-      this.sortType = null;
-    }
+  public void setAscendingIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ASCENDING_ISSET_ID, value);
   }
 
   public String getSortProperty() {
@@ -330,11 +314,11 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
 
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case SORT_TYPE:
+    case ASCENDING:
       if (value == null) {
-        unsetSortType();
+        unsetAscending();
       } else {
-        setSortType((SortType_t)value);
+        setAscending((Boolean)value);
       }
       break;
 
@@ -375,8 +359,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case SORT_TYPE:
-      return getSortType();
+    case ASCENDING:
+      return Boolean.valueOf(isAscending());
 
     case SORT_PROPERTY:
       return getSortProperty();
@@ -401,8 +385,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     }
 
     switch (field) {
-    case SORT_TYPE:
-      return isSetSortType();
+    case ASCENDING:
+      return isSetAscending();
     case SORT_PROPERTY:
       return isSetSortProperty();
     case FIRST_RESULT:
@@ -428,12 +412,12 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     if (that == null)
       return false;
 
-    boolean this_present_sortType = true && this.isSetSortType();
-    boolean that_present_sortType = true && that.isSetSortType();
-    if (this_present_sortType || that_present_sortType) {
-      if (!(this_present_sortType && that_present_sortType))
+    boolean this_present_ascending = true;
+    boolean that_present_ascending = true;
+    if (this_present_ascending || that_present_ascending) {
+      if (!(this_present_ascending && that_present_ascending))
         return false;
-      if (!this.sortType.equals(that.sortType))
+      if (this.ascending != that.ascending)
         return false;
     }
 
@@ -489,12 +473,12 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     int lastComparison = 0;
     SearchOptions_t typedOther = (SearchOptions_t)other;
 
-    lastComparison = Boolean.valueOf(isSetSortType()).compareTo(typedOther.isSetSortType());
+    lastComparison = Boolean.valueOf(isSetAscending()).compareTo(typedOther.isSetAscending());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSortType()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sortType, typedOther.sortType);
+    if (isSetAscending()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ascending, typedOther.ascending);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -559,12 +543,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     StringBuilder sb = new StringBuilder("SearchOptions_t(");
     boolean first = true;
 
-    sb.append("sortType:");
-    if (this.sortType == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.sortType);
-    }
+    sb.append("ascending:");
+    sb.append(this.ascending);
     first = false;
     if (!first) sb.append(", ");
     sb.append("sortProperty:");
@@ -592,9 +572,7 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
 
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
-    if (sortType == null) {
-      throw new org.apache.thrift.protocol.TProtocolException("Required field 'sortType' was not present! Struct: " + toString());
-    }
+    // alas, we cannot check 'ascending' because it's a primitive and you chose the non-beans generator.
     if (sortProperty == null) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'sortProperty' was not present! Struct: " + toString());
     }
@@ -640,10 +618,10 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
           break;
         }
         switch (schemeField.id) {
-          case 1: // SORT_TYPE
-            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.sortType = SortType_t.findByValue(iprot.readI32());
-              struct.setSortTypeIsSet(true);
+          case 1: // ASCENDING
+            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+              struct.ascending = iprot.readBool();
+              struct.setAscendingIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -688,6 +666,9 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
       iprot.readStructEnd();
 
       // check for required fields of primitive type, which can't be checked in the validate method
+      if (!struct.isSetAscending()) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'ascending' was not found in serialized data! Struct: " + toString());
+      }
       if (!struct.isSetFirstResult()) {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'firstResult' was not found in serialized data! Struct: " + toString());
       }
@@ -704,11 +685,9 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.sortType != null) {
-        oprot.writeFieldBegin(SORT_TYPE_FIELD_DESC);
-        oprot.writeI32(struct.sortType.getValue());
-        oprot.writeFieldEnd();
-      }
+      oprot.writeFieldBegin(ASCENDING_FIELD_DESC);
+      oprot.writeBool(struct.ascending);
+      oprot.writeFieldEnd();
       if (struct.sortProperty != null) {
         oprot.writeFieldBegin(SORT_PROPERTY_FIELD_DESC);
         oprot.writeString(struct.sortProperty);
@@ -740,7 +719,7 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, SearchOptions_t struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
-      oprot.writeI32(struct.sortType.getValue());
+      oprot.writeBool(struct.ascending);
       oprot.writeString(struct.sortProperty);
       oprot.writeI32(struct.firstResult);
       oprot.writeI32(struct.maxResults);
@@ -750,8 +729,8 @@ public class SearchOptions_t implements org.apache.thrift.TBase<SearchOptions_t,
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, SearchOptions_t struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      struct.sortType = SortType_t.findByValue(iprot.readI32());
-      struct.setSortTypeIsSet(true);
+      struct.ascending = iprot.readBool();
+      struct.setAscendingIsSet(true);
       struct.sortProperty = iprot.readString();
       struct.setSortPropertyIsSet(true);
       struct.firstResult = iprot.readI32();

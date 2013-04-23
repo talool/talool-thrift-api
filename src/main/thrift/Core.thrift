@@ -10,8 +10,6 @@ typedef i64 Timestamp
 
 enum Sex_t { M,F,U }
 
-enum SortType_t { Asc, Desc }
-
 enum SocialNetwork_t { Facebook, Twitter, Pinterest }
 
 exception ServiceException_t {
@@ -93,7 +91,7 @@ struct Deal_t {
 }
 
 struct SearchOptions_t {
-  1: required SortType_t sortType;
+  1: required bool ascending;
   2: required string sortProperty;
   3: required i32 firstResult;
   4: required i32 maxResults;
