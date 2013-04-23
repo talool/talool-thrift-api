@@ -240,7 +240,7 @@ public final class ConversionUtil
 		thriftMerch.setName(merchant.getName());
 
 		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
-		for (MerchantLocation mLoc : merchant.getAllLocations())
+		for (MerchantLocation mLoc : merchant.getLocations())
 		{
 			locations.add(convertToThrift(mLoc));
 		}

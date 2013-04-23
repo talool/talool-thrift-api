@@ -51,7 +51,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("addSocialAccount request from %s with social %s", token.getEmail(),
+			LOG.debug(String.format("CustomerId %s adding social account %s", token.getAccountId(),
 					socialAccount_t.toString()));
 		}
 
@@ -151,7 +151,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("save received for customer: " + cust_t.toString());
+			LOG.debug(String.format("Saving customer %s", cust_t.toString()));
 		}
 
 		try
@@ -196,6 +196,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		List<Merchant> merchants = null;
 		List<Merchant_t> resultMerchants = null;
 
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s getting acquired merchants with searchOptions %s",
+					token.getAccountId(), searchOptions.toString()));
+		}
+
 		try
 		{
 			merchants = taloolService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
@@ -219,6 +225,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<DealAcquire> dealAcquires = null;
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format(
+					"CustomerId %s getting deal acquires for merchantId %s and searchOptions %s",
+					token.getAccountId(), merchantId, searchOptions));
+		}
 
 		try
 		{
@@ -246,7 +259,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
-		List<DealAcquire> dealAcquires = null;
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s redeeming dealAcquireId %s", token.getAccountId(),
+					dealAcquireId));
+		}
 
 		try
 		{

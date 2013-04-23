@@ -14,10 +14,12 @@ import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
+import com.talool.api.thrift.SortType_t;
 
 public class ThriftServiceIntegrationTest
 {
@@ -69,7 +71,10 @@ public class ThriftServiceIntegrationTest
 		CTokenAccess_t accessToken = testAuthenticate(client, email, "pass123");
 
 		thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
-		List<Merchant_t> merchants = client.getMerchantAcquires(null);
+
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setMaxResults(1).setPage(0).setSortProperty("name").setSortType(SortType_t.Asc);
+		List<Merchant_t> merchants = client.getMerchantAcquires(searchOptions);
 
 		for (Merchant_t merc : merchants)
 		{
