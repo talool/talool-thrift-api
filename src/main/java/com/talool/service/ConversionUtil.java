@@ -151,7 +151,11 @@ public final class ConversionUtil
 			deal.setExpires(mDeal.getExpires().getTime());
 		}
 
-		deal.setImageUrl(mDeal.getImageUrl());
+		if (mDeal.getImage() != null)
+		{
+			deal.setImageUrl(mDeal.getImage().getMediaUrl());
+		}
+
 		deal.setMerchant(convertToThrift(mDeal.getMerchant()));
 		deal.setSummary(mDeal.getSummary());
 		deal.setUpdated(mDeal.getUpdated().getTime());
@@ -224,7 +228,12 @@ public final class ConversionUtil
 		mLoc.setEmail(merchantLocation.getEmail());
 		mLoc.setName(merchantLocation.getLocationName());
 		mLoc.setLocationId(merchantLocation.getId());
-		mLoc.setLogoUrl(merchantLocation.getLogoUrl());
+
+		if (merchantLocation.getLogo() != null)
+		{
+			mLoc.setLogoUrl(merchantLocation.getLogo().getMediaUrl());
+		}
+
 		mLoc.setPhone(merchantLocation.getPhone());
 		mLoc.setWebsiteUrl(merchantLocation.getWebsiteUrl());
 

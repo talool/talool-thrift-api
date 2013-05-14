@@ -24,6 +24,7 @@ import com.talool.core.DealAcquire;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.SocialAccount;
+import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.service.util.TokenUtil;
@@ -41,6 +42,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final transient TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
+	private static final transient CustomerService customerService = FactoryManager.get()
+			.getServiceFactory().getCustomerService();
+
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 
 	@Override
@@ -57,13 +61,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer cust = taloolService.getCustomerById(UUID.fromString(token.getAccountId()));
+			final Customer cust = customerService.getCustomerById(UUID.fromString(token.getAccountId()));
 			final SocialAccount sac = FactoryManager.get().getDomainFactory()
 					.newSocialAccount(socialAccount_t.getSocalNetwork().name(), AccountType.CUS);
 
 			ConversionUtil.copyFromThrift(socialAccount_t, sac, cust.getId());
 			cust.addSocialAccount(sac);
-			taloolService.save(cust);
+			customerService.save(cust);
 		}
 		catch (Exception e)
 		{
@@ -104,7 +108,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 
 			final Customer taloolCustomer = ConversionUtil.convertFromThrift(customer);
-			taloolService.createAccount(taloolCustomer, password);
+			customerService.createAccount(taloolCustomer, password);
 
 			final Customer_t updatedCustomer = ConversionUtil.convertToThrift(taloolCustomer);
 
@@ -132,7 +136,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer customer = taloolService.authenticateCustomer(email, password);
+			final Customer customer = customerService.authenticateCustomer(email, password);
 			final Customer_t thriftCust = ConversionUtil.convertToThrift(customer);
 			token = TokenUtil.createTokenAccess(thriftCust);
 			return token;
@@ -156,9 +160,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer customer = taloolService.getCustomerByEmail(token.getEmail());
+			final Customer customer = customerService.getCustomerByEmail(token.getEmail());
 			ConversionUtil.copyFromThrift(cust_t, customer);
-			taloolService.save(customer);
+			customerService.save(customer);
 
 		}
 		catch (Exception ex)
@@ -215,7 +219,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			merchants = taloolService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
+			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
 					ConversionUtil.copyFromThrift(searchOptions));
 		}
 		catch (Exception ex)
@@ -256,7 +260,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			dealAcquires = taloolService.getDealAcquires(UUID.fromString(token.getAccountId()),
+			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()),
 					UUID.fromString(merchantId), null);
 		}
 		catch (Exception ex)
@@ -289,7 +293,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final DealAcquire dealAcquire = taloolService.getDealAcquire(UUID.fromString(dealAcquireId));
+			final DealAcquire dealAcquire = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
 
 			taloolService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
 		}

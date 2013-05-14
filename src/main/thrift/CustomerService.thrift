@@ -8,6 +8,8 @@ namespace java com.talool.api.thrift
 include "Core.thrift"
 
 const string CTOKEN_NAME = 'ctok'
+const string LAT_HEADER_NAME = 'lat'
+const string LNG_HEADER_NAME = 'lng'
 
 struct CTokenAccess_t {
   1: required Core.Customer_t customer,

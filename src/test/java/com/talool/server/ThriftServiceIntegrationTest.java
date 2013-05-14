@@ -24,7 +24,7 @@ public class ThriftServiceIntegrationTest
 {
 	// static String servletUrl = "http://api.talool.com/1.1";
 
-	static String servletUrl = "http://localhost:8080/1.1";
+	static String servletUrl = "http://localhost:8082/1.1";
 
 	public static CTokenAccess_t testRegisterCustomer(CustomerService_t.Client client)
 			throws ServiceException_t, TException
@@ -77,7 +77,7 @@ public class ThriftServiceIntegrationTest
 		thc.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
 
 		SearchOptions_t searchOptions = new SearchOptions_t();
-		searchOptions.setMaxResults(1000).setPage(0).setSortProperty("name").setAscending(true);
+		searchOptions.setMaxResults(1000).setPage(0).setSortProperty("merchant.name").setAscending(true);
 		List<Merchant_t> merchants = client.getMerchantAcquires(searchOptions);
 
 		for (Merchant_t merc : merchants)
@@ -88,17 +88,14 @@ public class ThriftServiceIntegrationTest
 
 			for (DealAcquire_t deal : deals)
 			{
-				if (deal.getDealAcquireId().equals("4677f9f3-27be-4101-85e1-efbe054cde4b"))
-				{
-					System.out.println("here");
-				}
+
 				System.out.println(deal);
 			}
 		}
 
 		try
 		{
-			client.redeem("4677f9f3-27be-4101-85e1-efbe054cde4b", 0.0, 0.0);
+			// client.redeem("20cfcac2-c1f3-4ae4-8209-23ece3c82748", 0.0, 0.0);
 
 			accessToken = testRegisterCustomer(client);
 
