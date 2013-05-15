@@ -36,8 +36,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   private static final org.apache.thrift.protocol.TField MERCHANT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField LOCATIONS_FIELD_DESC = new org.apache.thrift.protocol.TField("locations", org.apache.thrift.protocol.TType.LIST, (short)3);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)4);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -48,16 +46,12 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   public String merchantId; // optional
   public String name; // required
   public List<MerchantLocation_t> locations; // optional
-  public long created; // optional
-  public long updated; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     MERCHANT_ID((short)1, "merchantId"),
     NAME((short)2, "name"),
-    LOCATIONS((short)3, "locations"),
-    CREATED((short)4, "created"),
-    UPDATED((short)5, "updated");
+    LOCATIONS((short)3, "locations");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -78,10 +72,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           return NAME;
         case 3: // LOCATIONS
           return LOCATIONS;
-        case 4: // CREATED
-          return CREATED;
-        case 5: // UPDATED
-          return UPDATED;
         default:
           return null;
       }
@@ -122,10 +112,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
   }
 
   // isset id assignments
-  private static final int __CREATED_ISSET_ID = 0;
-  private static final int __UPDATED_ISSET_ID = 1;
-  private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.MERCHANT_ID,_Fields.LOCATIONS,_Fields.CREATED,_Fields.UPDATED};
+  private _Fields optionals[] = {_Fields.MERCHANT_ID,_Fields.LOCATIONS};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -136,10 +123,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     tmpMap.put(_Fields.LOCATIONS, new org.apache.thrift.meta_data.FieldMetaData("locations", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
             new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, MerchantLocation_t.class))));
-    tmpMap.put(_Fields.CREATED, new org.apache.thrift.meta_data.FieldMetaData("created", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
-    tmpMap.put(_Fields.UPDATED, new org.apache.thrift.meta_data.FieldMetaData("updated", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Merchant_t.class, metaDataMap);
   }
@@ -158,7 +141,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
    * Performs a deep copy on <i>other</i>.
    */
   public Merchant_t(Merchant_t other) {
-    __isset_bitfield = other.__isset_bitfield;
     if (other.isSetMerchantId()) {
       this.merchantId = other.merchantId;
     }
@@ -172,8 +154,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       }
       this.locations = __this__locations;
     }
-    this.created = other.created;
-    this.updated = other.updated;
   }
 
   public Merchant_t deepCopy() {
@@ -184,10 +164,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     this.merchantId = null;
     this.name = null;
     this.locations = null;
-    setCreatedIsSet(false);
-    this.created = 0;
-    setUpdatedIsSet(false);
-    this.updated = 0;
   }
 
   public String getMerchantId() {
@@ -277,52 +253,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     }
   }
 
-  public long getCreated() {
-    return this.created;
-  }
-
-  public Merchant_t setCreated(long created) {
-    this.created = created;
-    setCreatedIsSet(true);
-    return this;
-  }
-
-  public void unsetCreated() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __CREATED_ISSET_ID);
-  }
-
-  /** Returns true if field created is set (has been assigned a value) and false otherwise */
-  public boolean isSetCreated() {
-    return EncodingUtils.testBit(__isset_bitfield, __CREATED_ISSET_ID);
-  }
-
-  public void setCreatedIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CREATED_ISSET_ID, value);
-  }
-
-  public long getUpdated() {
-    return this.updated;
-  }
-
-  public Merchant_t setUpdated(long updated) {
-    this.updated = updated;
-    setUpdatedIsSet(true);
-    return this;
-  }
-
-  public void unsetUpdated() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  /** Returns true if field updated is set (has been assigned a value) and false otherwise */
-  public boolean isSetUpdated() {
-    return EncodingUtils.testBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  public void setUpdatedIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __UPDATED_ISSET_ID, value);
-  }
-
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case MERCHANT_ID:
@@ -349,22 +279,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       }
       break;
 
-    case CREATED:
-      if (value == null) {
-        unsetCreated();
-      } else {
-        setCreated((Long)value);
-      }
-      break;
-
-    case UPDATED:
-      if (value == null) {
-        unsetUpdated();
-      } else {
-        setUpdated((Long)value);
-      }
-      break;
-
     }
   }
 
@@ -378,12 +292,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
 
     case LOCATIONS:
       return getLocations();
-
-    case CREATED:
-      return Long.valueOf(getCreated());
-
-    case UPDATED:
-      return Long.valueOf(getUpdated());
 
     }
     throw new IllegalStateException();
@@ -402,10 +310,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       return isSetName();
     case LOCATIONS:
       return isSetLocations();
-    case CREATED:
-      return isSetCreated();
-    case UPDATED:
-      return isSetUpdated();
     }
     throw new IllegalStateException();
   }
@@ -447,24 +351,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       if (!(this_present_locations && that_present_locations))
         return false;
       if (!this.locations.equals(that.locations))
-        return false;
-    }
-
-    boolean this_present_created = true && this.isSetCreated();
-    boolean that_present_created = true && that.isSetCreated();
-    if (this_present_created || that_present_created) {
-      if (!(this_present_created && that_present_created))
-        return false;
-      if (this.created != that.created)
-        return false;
-    }
-
-    boolean this_present_updated = true && this.isSetUpdated();
-    boolean that_present_updated = true && that.isSetUpdated();
-    if (this_present_updated || that_present_updated) {
-      if (!(this_present_updated && that_present_updated))
-        return false;
-      if (this.updated != that.updated)
         return false;
     }
 
@@ -510,26 +396,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
     }
     if (isSetLocations()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.locations, typedOther.locations);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetCreated()).compareTo(typedOther.isSetCreated());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetCreated()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.created, typedOther.created);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetUpdated()).compareTo(typedOther.isSetUpdated());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetUpdated()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.updated, typedOther.updated);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -581,18 +447,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       }
       first = false;
     }
-    if (isSetCreated()) {
-      if (!first) sb.append(", ");
-      sb.append("created:");
-      sb.append(this.created);
-      first = false;
-    }
-    if (isSetUpdated()) {
-      if (!first) sb.append(", ");
-      sb.append("updated:");
-      sb.append(this.updated);
-      first = false;
-    }
     sb.append(")");
     return sb.toString();
   }
@@ -615,8 +469,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
-      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-      __isset_bitfield = 0;
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te.getMessage());
@@ -664,7 +516,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
                 struct.locations = new ArrayList<MerchantLocation_t>(_list10.size);
                 for (int _i11 = 0; _i11 < _list10.size; ++_i11)
                 {
-                  MerchantLocation_t _elem12; // optional
+                  MerchantLocation_t _elem12; // required
                   _elem12 = new MerchantLocation_t();
                   _elem12.read(iprot);
                   struct.locations.add(_elem12);
@@ -672,22 +524,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
                 iprot.readListEnd();
               }
               struct.setLocationsIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 4: // CREATED
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.created = iprot.readI64();
-              struct.setCreatedIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 5: // UPDATED
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.updated = iprot.readI64();
-              struct.setUpdatedIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -733,16 +569,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           oprot.writeFieldEnd();
         }
       }
-      if (struct.isSetCreated()) {
-        oprot.writeFieldBegin(CREATED_FIELD_DESC);
-        oprot.writeI64(struct.created);
-        oprot.writeFieldEnd();
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeFieldBegin(UPDATED_FIELD_DESC);
-        oprot.writeI64(struct.updated);
-        oprot.writeFieldEnd();
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -768,13 +594,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       if (struct.isSetLocations()) {
         optionals.set(1);
       }
-      if (struct.isSetCreated()) {
-        optionals.set(2);
-      }
-      if (struct.isSetUpdated()) {
-        optionals.set(3);
-      }
-      oprot.writeBitSet(optionals, 4);
+      oprot.writeBitSet(optionals, 2);
       if (struct.isSetMerchantId()) {
         oprot.writeString(struct.merchantId);
       }
@@ -787,12 +607,6 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           }
         }
       }
-      if (struct.isSetCreated()) {
-        oprot.writeI64(struct.created);
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeI64(struct.updated);
-      }
     }
 
     @Override
@@ -800,7 +614,7 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
       TTupleProtocol iprot = (TTupleProtocol) prot;
       struct.name = iprot.readString();
       struct.setNameIsSet(true);
-      BitSet incoming = iprot.readBitSet(4);
+      BitSet incoming = iprot.readBitSet(2);
       if (incoming.get(0)) {
         struct.merchantId = iprot.readString();
         struct.setMerchantIdIsSet(true);
@@ -811,21 +625,13 @@ public class Merchant_t implements org.apache.thrift.TBase<Merchant_t, Merchant_
           struct.locations = new ArrayList<MerchantLocation_t>(_list15.size);
           for (int _i16 = 0; _i16 < _list15.size; ++_i16)
           {
-            MerchantLocation_t _elem17; // optional
+            MerchantLocation_t _elem17; // required
             _elem17 = new MerchantLocation_t();
             _elem17.read(iprot);
             struct.locations.add(_elem17);
           }
         }
         struct.setLocationsIsSet(true);
-      }
-      if (incoming.get(2)) {
-        struct.created = iprot.readI64();
-        struct.setCreatedIsSet(true);
-      }
-      if (incoming.get(3)) {
-        struct.updated = iprot.readI64();
-        struct.setUpdatedIsSet(true);
       }
     }
   }

@@ -56,7 +56,13 @@
 - (void) addSocialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getMerchantAcquires: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealAcquires: (NSString *) merchantId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
-- (void) redeem: (NSString *) dealAcquireId latitude: (double) latitude longitude: (double) longitude;  // throws ServiceException_t *, TException
+- (void) redeem: (NSString *) dealAcquireId location: (Location_t *) location;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getDealOffers;  // throws ServiceException_t *, TException
+- (void) purchaseDealOffer: (NSString *) dealOfferId;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getMerchantsWithin: (Location_t *) location maxMiles: (int32_t) maxMiles searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
+- (void) addFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
+- (void) removeFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getFavoriteMerchants: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 @end
 
 @interface CustomerService_tClient : NSObject <CustomerService_t> {

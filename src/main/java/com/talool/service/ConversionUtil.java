@@ -21,7 +21,10 @@ import org.springframework.util.CollectionUtils;
 import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
+import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.SearchOptions_t;
@@ -33,7 +36,9 @@ import com.talool.core.Address;
 import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
+import com.talool.core.DealOffer;
 import com.talool.core.FactoryManager;
+import com.talool.core.Location;
 import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
@@ -73,7 +78,7 @@ public final class ConversionUtil
 		return cust;
 	}
 
-	public static SearchOptions copyFromThrift(final SearchOptions_t thriftSearchOptions)
+	public static SearchOptions convertFromThrift(final SearchOptions_t thriftSearchOptions)
 	{
 		SearchOptions searchOptions = null;
 
@@ -138,6 +143,24 @@ public final class ConversionUtil
 		socialAccnt.setUserId(userId.toString());
 	}
 
+	public static List<DealOffer_t> convertToThrift(final List<DealOffer> dealOffers)
+	{
+		if (!CollectionUtils.isEmpty(dealOffers))
+		{
+			List<DealOffer_t> dealOffers_t = new ArrayList<DealOffer_t>();
+
+			for (final DealOffer dealOffer : dealOffers)
+			{
+				dealOffers_t.add(convertToThrift(dealOffer));
+			}
+
+			return dealOffers_t;
+		}
+
+		return null;
+
+	}
+
 	public static Deal_t convertToThrift(final Deal mDeal)
 	{
 
@@ -162,6 +185,39 @@ public final class ConversionUtil
 		deal.setTitle(mDeal.getTitle());
 
 		return deal;
+	}
+
+	public static Location convertFromThrift(final Location_t location_t)
+	{
+		Location location = FactoryManager.get().getDomainFactory().newLocation(location_t.getLongitude(),
+				location_t.getLatitude());
+
+		return location;
+	}
+
+	public static DealOffer_t convertToThrift(final DealOffer dealOffer)
+	{
+		final DealOffer_t dealOffer_t = new DealOffer_t();
+		dealOffer_t.setCode(dealOffer.getCode());
+		dealOffer_t.setDealOfferId(dealOffer.getId().toString());
+		dealOffer_t.setDealType(DealType_t.valueOf(dealOffer.getType().toString()));
+
+		if (dealOffer.getExpires() != null)
+		{
+			dealOffer_t.setExpires(dealOffer.getExpires().getTime());
+		}
+
+		if (dealOffer.getImage() != null)
+		{
+			dealOffer_t.setImageUrl(dealOffer.getImage().getMediaUrl());
+		}
+
+		dealOffer_t.setMerchant(convertToThrift(dealOffer.getMerchant()));
+		dealOffer_t.setPrice(dealOffer.getPrice());
+		dealOffer_t.setSummary(dealOffer.getSummary());
+		dealOffer_t.setTitle(dealOffer.getTitle());
+
+		return dealOffer_t;
 	}
 
 	public static Customer_t convertToThrift(Customer customer)
@@ -244,8 +300,6 @@ public final class ConversionUtil
 	{
 		final Merchant_t thriftMerch = new Merchant_t();
 		thriftMerch.setMerchantId(merchant.getId().toString());
-		thriftMerch.setCreated(merchant.getCreated().getTime());
-		thriftMerch.setUpdated(merchant.getUpdated().getTime());
 		thriftMerch.setName(merchant.getName());
 
 		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();

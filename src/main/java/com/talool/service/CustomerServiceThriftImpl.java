@@ -13,6 +13,8 @@ import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
+import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
@@ -21,6 +23,8 @@ import com.talool.api.thrift.Token_t;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
 import com.talool.core.DealAcquire;
+import com.talool.core.DealOffer;
+import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.SocialAccount;
@@ -44,6 +48,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final transient CustomerService customerService = FactoryManager.get()
 			.getServiceFactory().getCustomerService();
+
+	private static final transient DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 
@@ -211,7 +217,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			else
 			{
 				LOG.debug(String.format(
-						"CustomerId %s getting acquired merchants with no searchOptions %s",
+						"CustomerId %s getting acquired merchants with no searchOptions",
 						token.getAccountId()));
 			}
 
@@ -220,7 +226,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
-					ConversionUtil.copyFromThrift(searchOptions));
+					ConversionUtil.convertFromThrift(searchOptions));
 		}
 		catch (Exception ex)
 		{
@@ -280,7 +286,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void redeem(final String dealAcquireId, final double latitude, final double longitude)
+	public void redeem(final String dealAcquireId, final Location_t location)
 			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
@@ -295,7 +301,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			final DealAcquire dealAcquire = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
 
-			taloolService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
+			customerService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
 		}
 		catch (ServiceException e)
 		{
@@ -303,5 +309,109 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 
+	}
+
+	@Override
+	// TODO Change this method to getDealOffers based on some business criteria
+	public List<DealOffer_t> getDealOffers() throws ServiceException_t, TException
+	{
+		List<DealOffer> dealOffers = null;
+
+		try
+		{
+			dealOffers = taloolService.getDealOffers();
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		return ConversionUtil.convertToThrift(dealOffers);
+	}
+
+	@Override
+	public void purchaseDealOffer(final String dealOfferId) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		try
+		{
+			customerService.createDealOfferPurchase(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+	}
+
+	@Override
+	public List<Merchant_t> getMerchantsWithin(final Location_t location, final int maxMiles, final SearchOptions_t searchOptions)
+			throws ServiceException_t, TException
+	{
+		List<Merchant> merchants = null;
+
+		try
+		{
+			merchants = taloolService.getMerchantsWithin(ConversionUtil.convertFromThrift(location), maxMiles,
+					ConversionUtil.convertFromThrift(searchOptions));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		return ConversionUtil.convertToThriftMerchants(merchants);
+	}
+
+	@Override
+	public void addFavoriteMerchant(final String merchantId) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		try
+		{
+			customerService.addFavoriteMerchant(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void removeFavoriteMerchant(final String merchantId) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		try
+		{
+			customerService.removeFavoriteMerchant(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+	}
+
+	@Override
+	public List<Merchant_t> getFavoriteMerchants(final SearchOptions_t searchOptions) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<Merchant> merchants = null;
+
+		try
+		{
+			merchants = customerService
+					.getFavoriteMerchants(UUID.fromString(token.getAccountId()), ConversionUtil.convertFromThrift(searchOptions));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		return ConversionUtil.convertToThriftMerchants(merchants);
 	}
 }

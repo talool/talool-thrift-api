@@ -8,8 +8,6 @@ namespace java com.talool.api.thrift
 include "Core.thrift"
 
 const string CTOKEN_NAME = 'ctok'
-const string LAT_HEADER_NAME = 'lat'
-const string LNG_HEADER_NAME = 'lng'
 
 struct CTokenAccess_t {
   1: required Core.Customer_t customer,
@@ -32,8 +30,20 @@ service CustomerService_t {
       
    list<Core.DealAcquire_t> getDealAcquires(1:string merchantId,2:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
    
-   void redeem(1:string dealAcquireId,2:double latitude,3:double longitude) throws (1:Core.ServiceException_t error);
+   void redeem(1:string dealAcquireId,2:Core.Location_t location) throws (1:Core.ServiceException_t error);
+   
+   list<Core.DealOffer_t> getDealOffers() throws (1:Core.ServiceException_t error);
+   
+   void purchaseDealOffer(1:string dealOfferId) throws (1:Core.ServiceException_t error);
+   
+   list<Core.Merchant_t> getMerchantsWithin(1:Core.Location_t location, 2:i32 maxMiles, 
+   											3:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
 
+   void addFavoriteMerchant(1:string merchantId) throws (1:Core.ServiceException_t error);
+   
+   void removeFavoriteMerchant(1:string merchantId) throws (1:Core.ServiceException_t error);
+   
+   list<Core.Merchant_t> getFavoriteMerchants(1:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
 
 
 }

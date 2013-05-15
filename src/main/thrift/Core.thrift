@@ -12,9 +12,16 @@ enum Sex_t { M,F,U }
 
 enum SocialNetwork_t { Facebook, Twitter, Pinterest }
 
+enum DealType_t { PAID_BOOK, FREE_BOOK, PAID_DEAL, FREE_DEAL }
+
 exception ServiceException_t {
   1: required i32 errorCode,
   2: required string errorDesc
+}
+
+struct Location_t {
+  1: required double longitude;
+  2: required double latitude;
 }
 
 struct SocialNetworkDetail_t {
@@ -73,8 +80,6 @@ struct Merchant_t {
   1: optional string merchantId;
   2: required string name;
   3: optional list<MerchantLocation_t> locations;
-  4: optional Timestamp created;
-  5: optional Timestamp updated;
 }
 
 struct Deal_t {
@@ -88,6 +93,18 @@ struct Deal_t {
   8: optional Timestamp expires;
   9: optional Timestamp created;
   10: optional Timestamp updated;
+}
+
+struct DealOffer_t {
+  1: required string dealOfferId;
+  2: required Merchant_t merchant;
+  3: required DealType_t dealType;
+  4: required string title;
+  5: optional string summary;
+  6: optional string code;
+  7: optional string imageUrl;
+  8: optional double price;
+  9: optional Timestamp expires;
 }
 
 struct SearchOptions_t {
