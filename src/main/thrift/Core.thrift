@@ -55,8 +55,9 @@ struct MerchantLocation_t {
   3: optional string email;
   4: optional string websiteUrl;
   5: optional string logoUrl;
-  6: optional string phone;
-  7: required Address_t address;
+  6: optional string merchantImageUrl;
+  7: optional string phone;
+  8: required Address_t address;
 }
 
 struct Customer_t {

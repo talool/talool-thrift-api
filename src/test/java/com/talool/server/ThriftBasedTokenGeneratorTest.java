@@ -12,7 +12,6 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.Token_t;
@@ -70,35 +69,4 @@ public class ThriftBasedTokenGeneratorTest
 
 	}
 
-	@Test
-	public void testAddressToken()
-	{
-		Address_t addr1 = new Address_t();
-		addr1.setAddress1("12661 Hunter lane");
-		addr1.setAddress2("Apt 504");
-
-		addr1.setCity("Denver");
-		addr1.setStateProvinceCounty("CO");
-		addr1.setCountry("US");
-		addr1.setZip("80218");
-
-		final ThriftBasedTokenProvider<Address_t> tokenProvider = new ThriftBasedTokenProvider<Address_t>(
-				Address_t.class, "myKey".getBytes());
-
-		try
-		{
-			String token = tokenProvider.marshall(addr1);
-
-			System.out.println(token);
-
-			Address_t addr2 = tokenProvider.unmarshall(token);
-
-			Assert.assertEquals(addr1, addr2);
-		}
-		catch (TokenProviderException e)
-		{
-			e.printStackTrace();
-		}
-
-	}
 }

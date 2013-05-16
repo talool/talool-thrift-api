@@ -38,8 +38,9 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
   private static final org.apache.thrift.protocol.TField EMAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("email", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField WEBSITE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("websiteUrl", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField LOGO_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("logoUrl", org.apache.thrift.protocol.TType.STRING, (short)5);
-  private static final org.apache.thrift.protocol.TField PHONE_FIELD_DESC = new org.apache.thrift.protocol.TField("phone", org.apache.thrift.protocol.TType.STRING, (short)6);
-  private static final org.apache.thrift.protocol.TField ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("address", org.apache.thrift.protocol.TType.STRUCT, (short)7);
+  private static final org.apache.thrift.protocol.TField MERCHANT_IMAGE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("merchantImageUrl", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField PHONE_FIELD_DESC = new org.apache.thrift.protocol.TField("phone", org.apache.thrift.protocol.TType.STRING, (short)7);
+  private static final org.apache.thrift.protocol.TField ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("address", org.apache.thrift.protocol.TType.STRUCT, (short)8);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -52,6 +53,7 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
   public String email; // optional
   public String websiteUrl; // optional
   public String logoUrl; // optional
+  public String merchantImageUrl; // optional
   public String phone; // optional
   public Address_t address; // required
 
@@ -62,8 +64,9 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     EMAIL((short)3, "email"),
     WEBSITE_URL((short)4, "websiteUrl"),
     LOGO_URL((short)5, "logoUrl"),
-    PHONE((short)6, "phone"),
-    ADDRESS((short)7, "address");
+    MERCHANT_IMAGE_URL((short)6, "merchantImageUrl"),
+    PHONE((short)7, "phone"),
+    ADDRESS((short)8, "address");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -88,9 +91,11 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
           return WEBSITE_URL;
         case 5: // LOGO_URL
           return LOGO_URL;
-        case 6: // PHONE
+        case 6: // MERCHANT_IMAGE_URL
+          return MERCHANT_IMAGE_URL;
+        case 7: // PHONE
           return PHONE;
-        case 7: // ADDRESS
+        case 8: // ADDRESS
           return ADDRESS;
         default:
           return null;
@@ -134,7 +139,7 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
   // isset id assignments
   private static final int __LOCATIONID_ISSET_ID = 0;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.LOCATION_ID,_Fields.NAME,_Fields.EMAIL,_Fields.WEBSITE_URL,_Fields.LOGO_URL,_Fields.PHONE};
+  private _Fields optionals[] = {_Fields.LOCATION_ID,_Fields.NAME,_Fields.EMAIL,_Fields.WEBSITE_URL,_Fields.LOGO_URL,_Fields.MERCHANT_IMAGE_URL,_Fields.PHONE};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -147,6 +152,8 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     tmpMap.put(_Fields.WEBSITE_URL, new org.apache.thrift.meta_data.FieldMetaData("websiteUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.LOGO_URL, new org.apache.thrift.meta_data.FieldMetaData("logoUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.MERCHANT_IMAGE_URL, new org.apache.thrift.meta_data.FieldMetaData("merchantImageUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PHONE, new org.apache.thrift.meta_data.FieldMetaData("phone", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
@@ -184,6 +191,9 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     if (other.isSetLogoUrl()) {
       this.logoUrl = other.logoUrl;
     }
+    if (other.isSetMerchantImageUrl()) {
+      this.merchantImageUrl = other.merchantImageUrl;
+    }
     if (other.isSetPhone()) {
       this.phone = other.phone;
     }
@@ -203,6 +213,7 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     this.email = null;
     this.websiteUrl = null;
     this.logoUrl = null;
+    this.merchantImageUrl = null;
     this.phone = null;
     this.address = null;
   }
@@ -326,6 +337,30 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     }
   }
 
+  public String getMerchantImageUrl() {
+    return this.merchantImageUrl;
+  }
+
+  public MerchantLocation_t setMerchantImageUrl(String merchantImageUrl) {
+    this.merchantImageUrl = merchantImageUrl;
+    return this;
+  }
+
+  public void unsetMerchantImageUrl() {
+    this.merchantImageUrl = null;
+  }
+
+  /** Returns true if field merchantImageUrl is set (has been assigned a value) and false otherwise */
+  public boolean isSetMerchantImageUrl() {
+    return this.merchantImageUrl != null;
+  }
+
+  public void setMerchantImageUrlIsSet(boolean value) {
+    if (!value) {
+      this.merchantImageUrl = null;
+    }
+  }
+
   public String getPhone() {
     return this.phone;
   }
@@ -416,6 +451,14 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       }
       break;
 
+    case MERCHANT_IMAGE_URL:
+      if (value == null) {
+        unsetMerchantImageUrl();
+      } else {
+        setMerchantImageUrl((String)value);
+      }
+      break;
+
     case PHONE:
       if (value == null) {
         unsetPhone();
@@ -452,6 +495,9 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
     case LOGO_URL:
       return getLogoUrl();
 
+    case MERCHANT_IMAGE_URL:
+      return getMerchantImageUrl();
+
     case PHONE:
       return getPhone();
 
@@ -479,6 +525,8 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       return isSetWebsiteUrl();
     case LOGO_URL:
       return isSetLogoUrl();
+    case MERCHANT_IMAGE_URL:
+      return isSetMerchantImageUrl();
     case PHONE:
       return isSetPhone();
     case ADDRESS:
@@ -542,6 +590,15 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       if (!(this_present_logoUrl && that_present_logoUrl))
         return false;
       if (!this.logoUrl.equals(that.logoUrl))
+        return false;
+    }
+
+    boolean this_present_merchantImageUrl = true && this.isSetMerchantImageUrl();
+    boolean that_present_merchantImageUrl = true && that.isSetMerchantImageUrl();
+    if (this_present_merchantImageUrl || that_present_merchantImageUrl) {
+      if (!(this_present_merchantImageUrl && that_present_merchantImageUrl))
+        return false;
+      if (!this.merchantImageUrl.equals(that.merchantImageUrl))
         return false;
     }
 
@@ -629,6 +686,16 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetMerchantImageUrl()).compareTo(typedOther.isSetMerchantImageUrl());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetMerchantImageUrl()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.merchantImageUrl, typedOther.merchantImageUrl);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetPhone()).compareTo(typedOther.isSetPhone());
     if (lastComparison != 0) {
       return lastComparison;
@@ -711,6 +778,16 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
         sb.append("null");
       } else {
         sb.append(this.logoUrl);
+      }
+      first = false;
+    }
+    if (isSetMerchantImageUrl()) {
+      if (!first) sb.append(", ");
+      sb.append("merchantImageUrl:");
+      if (this.merchantImageUrl == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.merchantImageUrl);
       }
       first = false;
     }
@@ -823,7 +900,15 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 6: // PHONE
+          case 6: // MERCHANT_IMAGE_URL
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.merchantImageUrl = iprot.readString();
+              struct.setMerchantImageUrlIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 7: // PHONE
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.phone = iprot.readString();
               struct.setPhoneIsSet(true);
@@ -831,7 +916,7 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 7: // ADDRESS
+          case 8: // ADDRESS
             if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
               struct.address = new Address_t();
               struct.address.read(iprot);
@@ -888,6 +973,13 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
           oprot.writeFieldEnd();
         }
       }
+      if (struct.merchantImageUrl != null) {
+        if (struct.isSetMerchantImageUrl()) {
+          oprot.writeFieldBegin(MERCHANT_IMAGE_URL_FIELD_DESC);
+          oprot.writeString(struct.merchantImageUrl);
+          oprot.writeFieldEnd();
+        }
+      }
       if (struct.phone != null) {
         if (struct.isSetPhone()) {
           oprot.writeFieldBegin(PHONE_FIELD_DESC);
@@ -934,10 +1026,13 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       if (struct.isSetLogoUrl()) {
         optionals.set(4);
       }
-      if (struct.isSetPhone()) {
+      if (struct.isSetMerchantImageUrl()) {
         optionals.set(5);
       }
-      oprot.writeBitSet(optionals, 6);
+      if (struct.isSetPhone()) {
+        optionals.set(6);
+      }
+      oprot.writeBitSet(optionals, 7);
       if (struct.isSetLocationId()) {
         oprot.writeI64(struct.locationId);
       }
@@ -953,6 +1048,9 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       if (struct.isSetLogoUrl()) {
         oprot.writeString(struct.logoUrl);
       }
+      if (struct.isSetMerchantImageUrl()) {
+        oprot.writeString(struct.merchantImageUrl);
+      }
       if (struct.isSetPhone()) {
         oprot.writeString(struct.phone);
       }
@@ -964,7 +1062,7 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
       struct.address = new Address_t();
       struct.address.read(iprot);
       struct.setAddressIsSet(true);
-      BitSet incoming = iprot.readBitSet(6);
+      BitSet incoming = iprot.readBitSet(7);
       if (incoming.get(0)) {
         struct.locationId = iprot.readI64();
         struct.setLocationIdIsSet(true);
@@ -986,6 +1084,10 @@ public class MerchantLocation_t implements org.apache.thrift.TBase<MerchantLocat
         struct.setLogoUrlIsSet(true);
       }
       if (incoming.get(5)) {
+        struct.merchantImageUrl = iprot.readString();
+        struct.setMerchantImageUrlIsSet(true);
+      }
+      if (incoming.get(6)) {
         struct.phone = iprot.readString();
         struct.setPhoneIsSet(true);
       }

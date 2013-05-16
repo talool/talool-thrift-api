@@ -290,6 +290,11 @@ public final class ConversionUtil
 			mLoc.setLogoUrl(merchantLocation.getLogo().getMediaUrl());
 		}
 
+		if (merchantLocation.getMerchantImage() != null)
+		{
+			mLoc.setMerchantImageUrl(merchantLocation.getMerchantImage().getMediaUrl());
+		}
+
 		mLoc.setPhone(merchantLocation.getPhone());
 		mLoc.setWebsiteUrl(merchantLocation.getWebsiteUrl());
 
