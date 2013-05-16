@@ -40,11 +40,10 @@ struct SocialAccount_t {
 
 
 struct Address_t {
-  1: optional i64 addressId;
-  2: required string address1;
-  3: optional string address2;
-  4: optional string city;
-  5: optional string stateProvinceCounty;
+  1: required string address1;
+  2: optional string address2;
+  3: required string city;
+  4: required string stateProvinceCounty;
   6: optional string zip;
   7: optional string country;
 }
@@ -57,7 +56,8 @@ struct MerchantLocation_t {
   5: optional string logoUrl;
   6: optional string merchantImageUrl;
   7: optional string phone;
-  8: required Address_t address;
+  8: optional Location_t location;
+  9: required Address_t address;
 }
 
 struct Customer_t {

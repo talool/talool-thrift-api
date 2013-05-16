@@ -285,6 +285,12 @@ public final class ConversionUtil
 		mLoc.setName(merchantLocation.getLocationName());
 		mLoc.setLocationId(merchantLocation.getId());
 
+		if (merchantLocation.getGeometry() != null)
+		{
+			mLoc.setLocation(new Location_t(merchantLocation.getGeometry().getCoordinate().x, merchantLocation.getGeometry()
+					.getCoordinate().y));
+		}
+
 		if (merchantLocation.getLogo() != null)
 		{
 			mLoc.setLogoUrl(merchantLocation.getLogo().getMediaUrl());

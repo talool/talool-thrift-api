@@ -317,7 +317,16 @@ public class ServiceIntegrationTest
 
 		// sorting with SearchOptions ensures these arrive in this order
 		Assert.assertEquals("Centro Latin Kitchen", merchants.get(0).getName());
+		Assert.assertEquals(-105.2841748,
+				merchants.get(0).getLocations().get(0).getLocation().getLongitude(), 0);
+		Assert.assertEquals(40.0169992,
+				merchants.get(0).getLocations().get(0).getLocation().getLatitude(), 0);
+
 		Assert.assertEquals("The Kitchen", merchants.get(1).getName());
+		Assert.assertEquals(-105.281686,
+				merchants.get(1).getLocations().get(0).getLocation().getLongitude(), 0);
+		Assert.assertEquals(40.017663,
+				merchants.get(1).getLocations().get(0).getLocation().getLatitude(), 0);
 
 		// ensure no merchants are here
 		merchants = client.getMerchantsWithin(DENVER_LOCATION, 10, searchOptions);
