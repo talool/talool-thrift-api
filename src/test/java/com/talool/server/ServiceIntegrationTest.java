@@ -1,6 +1,9 @@
 package com.talool.server;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -16,12 +19,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.talool.api.thrift.CTokenAccess_t;
+import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerServiceConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Location_t;
+import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
@@ -78,6 +83,29 @@ public class ServiceIntegrationTest
 		// ensures headers are cleared, so client calls are forced to set the header
 		// when appropriate
 		tHttpClient.setCustomHeaders(null);
+	}
+
+	@Test
+	public void testCategories() throws ServiceException_t, TException
+	{
+		List<Category_t> categories = client.getCategories();
+		Map<String, Boolean> expectedCategores = new HashMap<String, Boolean>();
+		expectedCategores.put("Food", false);
+		expectedCategores.put("Shopping Services", false);
+		expectedCategores.put("Fun", false);
+		expectedCategores.put("Nightlife", false);
+
+		for (Category_t cat : categories)
+		{
+			expectedCategores.put(cat.name, true);
+		}
+
+		for (Entry<String, Boolean> entry : expectedCategores.entrySet())
+		{
+			Assert.assertEquals("Category " + entry.getKey() + " not found", true, entry.getValue());
+
+		}
+
 	}
 
 	@Test
@@ -316,17 +344,30 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(2, merchants.size());
 
 		// sorting with SearchOptions ensures these arrive in this order
-		Assert.assertEquals("Centro Latin Kitchen", merchants.get(0).getName());
-		Assert.assertEquals(-105.2841748,
-				merchants.get(0).getLocations().get(0).getLocation().getLongitude(), 0);
-		Assert.assertEquals(40.0169992,
-				merchants.get(0).getLocations().get(0).getLocation().getLatitude(), 0);
+		Merchant_t merchant = merchants.get(0);
 
-		Assert.assertEquals("The Kitchen", merchants.get(1).getName());
+		Assert.assertEquals("Centro Latin Kitchen", merchant.getName());
+		Assert.assertEquals(-105.2841748, merchant.getLocations().get(0).getLocation().getLongitude(), 0);
+		Assert.assertEquals(40.0169992,
+				merchant.getLocations().get(0).getLocation().getLatitude(), 0);
+
+		for (MerchantLocation_t mloc : merchant.getLocations())
+		{
+			Assert.assertNotEquals(0.0, mloc.getDistanceInMeters());
+		}
+
+		merchant = merchants.get(1);
+
+		Assert.assertEquals("The Kitchen", merchant.getName());
 		Assert.assertEquals(-105.281686,
-				merchants.get(1).getLocations().get(0).getLocation().getLongitude(), 0);
+				merchant.getLocations().get(0).getLocation().getLongitude(), 0);
 		Assert.assertEquals(40.017663,
-				merchants.get(1).getLocations().get(0).getLocation().getLatitude(), 0);
+				merchant.getLocations().get(0).getLocation().getLatitude(), 0);
+
+		for (MerchantLocation_t mloc : merchant.getLocations())
+		{
+			Assert.assertNotEquals(0.0, mloc.getDistanceInMeters());
+		}
 
 		// ensure no merchants are here
 		merchants = client.getMerchantsWithin(DENVER_LOCATION, 10, searchOptions);

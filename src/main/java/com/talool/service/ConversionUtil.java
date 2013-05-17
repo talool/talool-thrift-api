@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.talool.api.thrift.Address_t;
+import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
@@ -33,6 +34,7 @@ import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.core.AccountType;
 import com.talool.core.Address;
+import com.talool.core.Category;
 import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
@@ -285,6 +287,11 @@ public final class ConversionUtil
 		mLoc.setName(merchantLocation.getLocationName());
 		mLoc.setLocationId(merchantLocation.getId());
 
+		if (merchantLocation.getDistanceInMeters() != null)
+		{
+			mLoc.setDistanceInMeters(merchantLocation.getDistanceInMeters());
+		}
+
 		if (merchantLocation.getGeometry() != null)
 		{
 			mLoc.setLocation(new Location_t(merchantLocation.getGeometry().getCoordinate().x, merchantLocation.getGeometry()
@@ -371,5 +378,22 @@ public final class ConversionUtil
 		}
 
 		return merchants;
+	}
+
+	public static List<Category_t> convertToThriftCategories(final List<Category> categories)
+	{
+		if (CollectionUtils.isEmpty(categories))
+		{
+			return null;
+		}
+
+		final List<Category_t> categories_t = new ArrayList<Category_t>();
+
+		for (final Category cat : categories)
+		{
+			categories_t.add(new Category_t(cat.getId(), cat.getName()));
+		}
+
+		return categories_t;
 	}
 }

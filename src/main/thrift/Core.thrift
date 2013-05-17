@@ -58,6 +58,7 @@ struct MerchantLocation_t {
   7: optional string phone;
   8: optional Location_t location;
   9: required Address_t address;
+  10: optional double distanceInMeters;
 }
 
 struct Customer_t {
@@ -126,5 +127,11 @@ struct DealAcquire_t {
   8: optional Timestamp created;
   9: optional Timestamp updated;
 }
+
+struct Category_t {
+  1: required i32 categoryId;
+  2: required string name;
+}
+
 
 

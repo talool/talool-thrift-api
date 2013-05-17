@@ -45,5 +45,6 @@ service CustomerService_t {
    
    list<Core.Merchant_t> getFavoriteMerchants(1:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
 
+   list<Core.Category_t> getCategories() throws (1:Core.ServiceException_t error);
 
 }

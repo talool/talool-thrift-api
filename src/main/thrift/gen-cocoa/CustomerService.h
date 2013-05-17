@@ -63,6 +63,7 @@
 - (void) addFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
 - (void) removeFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getFavoriteMerchants: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getCategories;  // throws ServiceException_t *, TException
 @end
 
 @interface CustomerService_tClient : NSObject <CustomerService_t> {

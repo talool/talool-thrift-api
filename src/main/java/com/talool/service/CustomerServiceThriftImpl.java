@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.talool.api.thrift.CTokenAccess_t;
+import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
@@ -20,6 +21,7 @@ import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.Token_t;
+import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
 import com.talool.core.DealAcquire;
@@ -52,6 +54,48 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final transient DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
+	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
+
+	private volatile List<Category_t> categories;
+
+	private CategoryThread categoryThread;
+
+	private class CategoryThread extends Thread
+	{
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				categories = ConversionUtil.convertToThriftCategories(TagCache.get().getCategories());
+				if (CollectionUtils.isEmpty(categories))
+				{
+					categories = EMPTY_CATEGORIES;
+					sleep(1000);
+				}
+				else
+				{
+					sleep(60000);
+				}
+
+			}
+			catch (Exception e)
+			{
+				LOG.error(e.getLocalizedMessage(), e);
+			}
+		}
+
+	}
+
+	public CustomerServiceThriftImpl()
+	{
+		super();
+		categoryThread = new CategoryThread();
+		categoryThread.setName("ThriftCategoryThread");
+		categoryThread.setDaemon(true);
+		categoryThread.start();
+	}
 
 	@Override
 	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
@@ -413,5 +457,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return ConversionUtil.convertToThriftMerchants(merchants);
+	}
+
+	@Override
+	public List<Category_t> getCategories() throws ServiceException_t, TException
+	{
+		return categories;
 	}
 }
