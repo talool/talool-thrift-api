@@ -36,6 +36,7 @@
 		<display-name>TServletExample</display-name>
 		<servlet-name>TServletExample</servlet-name>
 		<servlet-class>com.talool.service.TServletTaloolService</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TServletExample</servlet-name>
