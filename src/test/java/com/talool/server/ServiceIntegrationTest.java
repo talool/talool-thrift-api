@@ -179,6 +179,7 @@ public class ServiceIntegrationTest
 		{
 			List<DealAcquire_t> deals = client.getDealAcquires(merc.getMerchantId(), null);
 
+			Assert.assertNotNull(merc.getCategory());
 			if (merc.getName().equals(MERCHANT_CENTRO))
 			{
 				Assert.assertEquals(2, deals.size());
