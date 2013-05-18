@@ -464,4 +464,25 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		return categories;
 	}
+
+	@Override
+	public List<Merchant_t> getMerchantAcquiresByCategory(final int categoryId, final SearchOptions_t searchOptions)
+			throws ServiceException_t,
+			TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<Merchant> merchants = null;
+
+		try
+		{
+			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()), categoryId,
+					ConversionUtil.convertFromThrift(searchOptions));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		return ConversionUtil.convertToThriftMerchants(merchants);
+	}
 }

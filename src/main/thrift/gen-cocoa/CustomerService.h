@@ -55,6 +55,7 @@
 - (void) save: (Customer_t *) customer;  // throws ServiceException_t *, TException
 - (void) addSocialAccount: (SocialAccount_t *) socialAccount;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getMerchantAcquires: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
+- (NSMutableArray *) getMerchantAcquiresByCategory: (int32_t) categoryId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealAcquires: (NSString *) merchantId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (void) redeem: (NSString *) dealAcquireId location: (Location_t *) location;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealOffers;  // throws ServiceException_t *, TException

@@ -48,9 +48,11 @@ public class ServiceIntegrationTest
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 	private static final String TEST_URL = "http://localhost:8082/1.1";
 
-	private static final String MERCHANT_NAME = "The Kitchen";
+	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
 	private static final int MERCHANT_ACQUIRE_CNT = 2;
+
+	private static final String MERCHANT_CENTRO = "Centro Latin Kitchen";
 
 	private static final String DEAL_OFFER_TITLE = "Payback Book Test Book #1";
 
@@ -177,11 +179,11 @@ public class ServiceIntegrationTest
 		{
 			List<DealAcquire_t> deals = client.getDealAcquires(merc.getMerchantId(), null);
 
-			if (merc.getName().equals("Centro Latin Kitchen"))
+			if (merc.getName().equals(MERCHANT_CENTRO))
 			{
 				Assert.assertEquals(2, deals.size());
 			}
-			else if (merc.getName().equals(MERCHANT_NAME))
+			else if (merc.getName().equals(MERCHANT_KITCHEN))
 			{
 				Assert.assertEquals(MERCHANT_DEAL_CNT, deals.size());
 			}
@@ -293,7 +295,7 @@ public class ServiceIntegrationTest
 		List<Merchant_t> merchantAcquires = client.getMerchantAcquires(null);
 		for (Merchant_t merc : merchantAcquires)
 		{
-			if (merc.getName().equals(MERCHANT_NAME))
+			if (merc.getName().equals(MERCHANT_KITCHEN))
 			{
 				selectedMerchant = merc;
 			}
@@ -331,6 +333,36 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
+	public void testGetAcquiredMerchants() throws ServiceException_t, TException
+	{
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setSortProperty("merchant.name");
+		searchOptions.setPage(0);
+		searchOptions.setAscending(true);
+		searchOptions.setMaxResults(10);
+
+		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Category_t> cats = client.getCategories();
+		Category_t foodCat = null;
+		for (Category_t catT : cats)
+		{
+			if (catT.getName().equals("Food"))
+			{
+				foodCat = catT;
+				break;
+			}
+		}
+
+		List<Merchant_t> merchants = client.getMerchantAcquiresByCategory(foodCat.getCategoryId(), null);
+		Assert.assertEquals(2, merchants.size());
+
+		Assert.assertEquals(MERCHANT_CENTRO, merchants.get(0).getName());
+		Assert.assertEquals(MERCHANT_KITCHEN, merchants.get(1).getName());
+	}
+
+	@Test
 	public void testGetMerchantsWithin() throws ServiceException_t, TException
 	{
 		SearchOptions_t searchOptions = new SearchOptions_t();
@@ -346,7 +378,7 @@ public class ServiceIntegrationTest
 		// sorting with SearchOptions ensures these arrive in this order
 		Merchant_t merchant = merchants.get(0);
 
-		Assert.assertEquals("Centro Latin Kitchen", merchant.getName());
+		Assert.assertEquals(MERCHANT_CENTRO, merchant.getName());
 		Assert.assertEquals(-105.2841748, merchant.getLocations().get(0).getLocation().getLongitude(), 0);
 		Assert.assertEquals(40.0169992,
 				merchant.getLocations().get(0).getLocation().getLatitude(), 0);
@@ -358,7 +390,7 @@ public class ServiceIntegrationTest
 
 		merchant = merchants.get(1);
 
-		Assert.assertEquals("The Kitchen", merchant.getName());
+		Assert.assertEquals(MERCHANT_KITCHEN, merchant.getName());
 		Assert.assertEquals(-105.281686,
 				merchant.getLocations().get(0).getLocation().getLongitude(), 0);
 		Assert.assertEquals(40.017663,
