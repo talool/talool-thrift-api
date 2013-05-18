@@ -19,6 +19,11 @@ exception ServiceException_t {
   2: required string errorDesc
 }
 
+struct Category_t {
+  1: required i32 categoryId;
+  2: required string name;
+}
+
 struct Location_t {
   1: required double longitude;
   2: required double latitude;
@@ -81,7 +86,8 @@ struct Token_t {
 struct Merchant_t {
   1: optional string merchantId;
   2: required string name;
-  3: optional list<MerchantLocation_t> locations;
+  3: optional Category_t category;
+  4: optional list<MerchantLocation_t> locations;
 }
 
 struct Deal_t {
@@ -126,11 +132,6 @@ struct DealAcquire_t {
   7: optional Timestamp redeemed;
   8: optional Timestamp created;
   9: optional Timestamp updated;
-}
-
-struct Category_t {
-  1: required i32 categoryId;
-  2: required string name;
 }
 
 

@@ -320,6 +320,11 @@ public final class ConversionUtil
 		thriftMerch.setMerchantId(merchant.getId().toString());
 		thriftMerch.setName(merchant.getName());
 
+		if (merchant.getCategory() != null)
+		{
+			thriftMerch.setCategory(convertToThriftCategory(merchant.getCategory()));
+		}
+
 		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
 		for (MerchantLocation mLoc : merchant.getLocations())
 		{
@@ -380,6 +385,11 @@ public final class ConversionUtil
 		return merchants;
 	}
 
+	public static Category_t convertToThriftCategory(final Category categeory)
+	{
+		return new Category_t(categeory.getId(), categeory.getName());
+	}
+
 	public static List<Category_t> convertToThriftCategories(final List<Category> categories)
 	{
 		if (CollectionUtils.isEmpty(categories))
@@ -391,7 +401,7 @@ public final class ConversionUtil
 
 		for (final Category cat : categories)
 		{
-			categories_t.add(new Category_t(cat.getId(), cat.getName()));
+			categories_t.add(convertToThriftCategory(cat));
 		}
 
 		return categories_t;

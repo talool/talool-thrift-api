@@ -359,7 +359,10 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(2, merchants.size());
 
 		Assert.assertEquals(MERCHANT_CENTRO, merchants.get(0).getName());
+		Assert.assertNotNull(merchants.get(0).getCategory());
+
 		Assert.assertEquals(MERCHANT_KITCHEN, merchants.get(1).getName());
+		Assert.assertNotNull(merchants.get(1).getCategory());
 	}
 
 	@Test
