@@ -45,8 +45,8 @@ import com.talool.core.service.ServiceException;
  */
 public class ServiceIntegrationTest
 {
-	// private static final String TEST_URL = "http://66.171.251.77/1.1";
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://66.171.251.77/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
