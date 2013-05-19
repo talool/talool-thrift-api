@@ -56,7 +56,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
 
-	private volatile List<Category_t> categories;
+	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
 	private CategoryThread categoryThread;
 
@@ -66,24 +66,29 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		@Override
 		public void run()
 		{
-			try
+			while (true)
 			{
-				categories = ConversionUtil.convertToThriftCategories(TagCache.get().getCategories());
-				if (CollectionUtils.isEmpty(categories))
+				try
 				{
-					categories = EMPTY_CATEGORIES;
-					sleep(1000);
+					categories = ConversionUtil.convertToThriftCategories(TagCache.get().getCategories());
+					if (CollectionUtils.isEmpty(categories))
+					{
+						LOG.info("Loaded empty categories, sleeping for 1 secs then retry");
+						sleep(1000);
+					}
+					else
+					{
+						LOG.info("Loaded " + categories.size() + " total categories");
+						sleep(60000);
+					}
 				}
-				else
+				catch (Exception e)
 				{
-					sleep(60000);
+					LOG.error(e.getLocalizedMessage(), e);
 				}
 
 			}
-			catch (Exception e)
-			{
-				LOG.error(e.getLocalizedMessage(), e);
-			}
+
 		}
 
 	}
@@ -95,6 +100,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		categoryThread.setName("ThriftCategoryThread");
 		categoryThread.setDaemon(true);
 		categoryThread.start();
+		LOG.info("Started CategoryThread");
 	}
 
 	@Override

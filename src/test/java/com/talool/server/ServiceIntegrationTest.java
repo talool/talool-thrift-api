@@ -45,7 +45,7 @@ import com.talool.core.service.ServiceException;
  */
 public class ServiceIntegrationTest
 {
-	// private static final String TEST_URL = "http://api.talool.com/1.1";
+	// private static final String TEST_URL = "http://66.171.251.77/1.1";
 	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
@@ -356,7 +356,7 @@ public class ServiceIntegrationTest
 			}
 		}
 
-		List<Merchant_t> merchants = client.getMerchantAcquiresByCategory(foodCat.getCategoryId(), null);
+		List<Merchant_t> merchants = client.getMerchantAcquiresByCategory(foodCat.getCategoryId(), searchOptions);
 		Assert.assertEquals(2, merchants.size());
 
 		Assert.assertEquals(MERCHANT_CENTRO, merchants.get(0).getName());
