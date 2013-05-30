@@ -45,8 +45,9 @@ import com.talool.core.service.ServiceException;
  */
 public class ServiceIntegrationTest
 {
-	private static final String TEST_URL = "http://66.171.251.77/1.1";
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://devapi.talool.com/1.1";
+	// private static final String TEST_URL = "http://66.171.251.77/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -111,7 +112,7 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
-	public void testRegisterCustomer()
+	public void testRegisterCustomerByEmail()
 			throws ServiceException_t, TException
 	{
 		final long now = System.currentTimeMillis();
@@ -119,7 +120,7 @@ public class ServiceIntegrationTest
 		customer.setFirstName("Chris-" + now);
 		customer.setLastName("Lintz-" + now);
 		customer.setSex(Sex_t.M);
-		customer.setEmail("chris-" + System.currentTimeMillis() + "@talool.com");
+		customer.setEmail("chris-" + now + "@talool.com");
 
 		CTokenAccess_t accessToken = client.createAccount(customer, "pass123");
 
@@ -128,6 +129,60 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(customer.getLastName(), accessToken.getCustomer().getLastName());
 		Assert.assertNotNull(accessToken.getCustomer().getCustomerId());
 		Assert.assertEquals(customer.getSex(), accessToken.getCustomer().getSex());
+
+	}
+
+	@Test
+	public void testSocialAccounts()
+			throws ServiceException_t, TException
+	{
+		long now = System.currentTimeMillis();
+		String email = "chris-" + now + "@talool.com";
+		String facebookId = "fbloginid-" + now;
+		String firstName = "Chris-" + now;
+		String lastName = "Lintz-" + now;
+		String password = "pass123";
+
+		Customer_t customer = new Customer_t();
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
+		customer.setSex(Sex_t.M);
+		customer.setEmail(email);
+
+		Map<SocialNetwork_t, SocialAccount_t> socialAccounts = new HashMap<SocialNetwork_t, SocialAccount_t>();
+		socialAccounts.put(SocialNetwork_t.Facebook, new SocialAccount_t(SocialNetwork_t.Facebook, facebookId));
+		customer.setSocialAccounts(socialAccounts);
+
+		// create account
+		CTokenAccess_t accessToken = client.createAccount(customer, password);
+
+		customer = accessToken.getCustomer();
+
+		Assert.assertNotNull(accessToken.getToken());
+		Assert.assertEquals(customer.getEmail(), accessToken.getCustomer().getEmail());
+		Assert.assertEquals(customer.getLastName(), accessToken.getCustomer().getLastName());
+		Assert.assertNotNull(accessToken.getCustomer().getCustomerId());
+		Assert.assertEquals(customer.getSex(), accessToken.getCustomer().getSex());
+
+		// test social accounts
+		Assert.assertEquals(1, customer.getSocialAccountsSize());
+		Assert.assertEquals(facebookId, customer.getSocialAccounts().get(SocialNetwork_t.Facebook).getLoginId());
+		Assert.assertNotNull(facebookId, customer.getSocialAccounts().get(SocialNetwork_t.Facebook).getCreated());
+
+		// test removing social account
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
+
+		client.removeSocialAccount(SocialNetwork_t.Facebook);
+
+		accessToken = client.authenticate(email, password);
+		Assert.assertEquals(0, accessToken.getCustomer().getSocialAccountsSize());
+
+		// add another one
+		client.addSocialAccount(new SocialAccount_t(SocialNetwork_t.Facebook, facebookId));
+		accessToken = client.authenticate(email, password);
+		Assert.assertEquals(1, accessToken.getCustomer().getSocialAccountsSize());
+		Assert.assertEquals(facebookId, customer.getSocialAccounts().get(SocialNetwork_t.Facebook).getLoginId());
+		Assert.assertNotNull(facebookId, customer.getSocialAccounts().get(SocialNetwork_t.Facebook).getCreated());
 
 	}
 
@@ -210,7 +265,7 @@ public class ServiceIntegrationTest
 		// test adding social account
 		SocialAccount_t twitterAccount = new SocialAccount_t();
 		twitterAccount.setLoginId("twitter-login");
-		twitterAccount.setSocalNetwork(SocialNetwork_t.Twitter);
+		twitterAccount.setSocialNetwork(SocialNetwork_t.Twitter);
 
 		client.addSocialAccount(twitterAccount);
 	}

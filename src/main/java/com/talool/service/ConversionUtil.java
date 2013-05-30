@@ -8,11 +8,11 @@
 package com.talool.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,6 @@ import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.core.AccountType;
 import com.talool.core.Address;
 import com.talool.core.Category;
 import com.talool.core.Customer;
@@ -45,9 +44,8 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
 import com.talool.core.Sex;
-import com.talool.core.SocialAccount;
-import com.talool.core.SocialNetwork;
 import com.talool.core.service.ServiceException;
+import com.talool.core.social.CustomerSocialAccount;
 
 /**
  * @author clintz
@@ -71,10 +69,24 @@ public final class ConversionUtil
 		cust.setEmail(thriftCustomer.getEmail());
 		cust.setFirstName(thriftCustomer.getFirstName());
 		cust.setLastName(thriftCustomer.getLastName());
+		cust.setBirthDate(new Date(thriftCustomer.getBirthDate()));
 
 		if (thriftCustomer.getSex() != null)
 		{
 			cust.setSex(Sex.valueByLetter(thriftCustomer.getSex().name()));
+		}
+
+		if (thriftCustomer.getSocialAccounts() != null)
+		{
+			for (Entry<SocialNetwork_t, SocialAccount_t> entry : thriftCustomer.getSocialAccounts().entrySet())
+			{
+				final CustomerSocialAccount csa = FactoryManager.get().getDomainFactory().
+						newCustomerSocialAccount(entry.getKey().toString());
+
+				copyFromThrift(entry.getValue(), csa, cust);
+
+			}
+
 		}
 
 		return cust;
@@ -107,42 +119,24 @@ public final class ConversionUtil
 			cust.setSex(Sex.valueByLetter(thriftCustomer.getSex().name()));
 		}
 
-		final Map<SocialNetwork, SocialAccount> socialAccounts = cust.getSocialAccounts();
-
-		if (thriftCustomer.getSocialAccounts() != null)
-		{
-			for (final Entry<SocialNetwork_t, SocialAccount_t> sac : thriftCustomer.getSocialAccounts()
-					.entrySet())
-			{
-				final SocialAccount_t sAcnt_t = sac.getValue();
-				final String socialNetworkName = sAcnt_t.getSocalNetwork().name();
-
-				final SocialNetwork socialNetwork = FactoryManager.get().getServiceFactory()
-						.getTaloolService().getSocialNetwork(socialNetworkName);
-
-				SocialAccount sAccnt = socialAccounts.get(socialNetwork);
-
-				// create new account or update exisitng
-				if (sAccnt == null)
-				{
-					LOG.info("No social account for: " + sAcnt_t.getSocalNetwork().name());
-					sAccnt = FactoryManager.get().getDomainFactory()
-							.newSocialAccount(socialNetworkName, AccountType.CUS);
-				}
-
-				copyFromThrift(sAcnt_t, sAccnt, cust.getId());
-
-			}
-
-		}
-
 	}
 
 	public static void copyFromThrift(final SocialAccount_t thriftSocialAccnt,
-			final SocialAccount socialAccnt, final UUID userId) throws ServiceException
+			final CustomerSocialAccount socialAccnt, final Customer customer)
 	{
 		socialAccnt.setLoginId(thriftSocialAccnt.getLoginId());
-		socialAccnt.setUserId(userId.toString());
+		socialAccnt.setCustomer(customer);
+		customer.addSocialAccount(socialAccnt);
+	}
+
+	public static SocialAccount_t copyToThrift(final CustomerSocialAccount csa)
+	{
+		final SocialAccount_t socialAccnt = new SocialAccount_t();
+		socialAccnt.setCreated(csa.getCreated().getTime());
+		socialAccnt.setLoginId(csa.getLoginId());
+		socialAccnt.setSocialNetwork(SocialNetwork_t.valueOf(csa.getSocialNetwork().getName()));
+
+		return socialAccnt;
 	}
 
 	public static List<DealOffer_t> convertToThrift(final List<DealOffer> dealOffers)
@@ -197,6 +191,27 @@ public final class ConversionUtil
 		return location;
 	}
 
+	public static CustomerSocialAccount convertFromThrift(final SocialAccount_t socialAccount_t, final Customer customer)
+	{
+		final CustomerSocialAccount sac = FactoryManager.get().getDomainFactory()
+				.newCustomerSocialAccount(socialAccount_t.getSocialNetwork().name());
+
+		sac.setLoginId(socialAccount_t.getLoginId());
+		try
+		{
+			sac.setSocialNetwork(FactoryManager.get().getServiceFactory()
+					.getTaloolService().getSocialNetwork(socialAccount_t.getSocialNetwork().name()));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getting socialNetwork " + socialAccount_t.getSocialNetwork().name());
+		}
+
+		sac.setCustomer(customer);
+
+		return sac;
+	}
+
 	public static DealOffer_t convertToThrift(final DealOffer dealOffer)
 	{
 		final DealOffer_t dealOffer_t = new DealOffer_t();
@@ -222,7 +237,7 @@ public final class ConversionUtil
 		return dealOffer_t;
 	}
 
-	public static Customer_t convertToThrift(Customer customer)
+	public static Customer_t convertToThrift(final Customer customer)
 	{
 		final Customer_t thriftCust = new Customer_t();
 		thriftCust.setCustomerId(customer.getId().toString());
@@ -237,25 +252,15 @@ public final class ConversionUtil
 			thriftCust.setSex(Sex_t.valueOf(customer.getSex().getLetter()));
 		}
 
-		final Map<SocialNetwork, SocialAccount> socialAccounts = customer.getSocialAccounts();
-
-		if (!CollectionUtils.isEmpty(socialAccounts))
+		if (customer.getSocialAccounts() != null)
 		{
-			final Map<SocialNetwork_t, SocialAccount_t> accnts = new HashMap<SocialNetwork_t, SocialAccount_t>();
-
-			for (final Entry<SocialNetwork, SocialAccount> sac : socialAccounts.entrySet())
+			Map<SocialNetwork_t, SocialAccount_t> socialAccnts = new HashMap<SocialNetwork_t, SocialAccount_t>();
+			thriftCust.setSocialAccounts(socialAccnts);
+			for (final CustomerSocialAccount csa : customer.getSocialAccounts().values())
 			{
-				final SocialAccount_t sa_t = new SocialAccount_t();
-				sa_t.setLoginId(sac.getValue().getLoginId());
-				sa_t.setCreated(sac.getValue().getCreated().getTime());
-				sa_t.setUpdated(sac.getValue().getUpdated().getTime());
-				final SocialNetwork_t snt = SocialNetwork_t.valueOf(sac.getKey().getName());
-				sa_t.setSocalNetwork(snt);
-				accnts.put(snt, sa_t);
+				SocialAccount_t sac = copyToThrift(csa);
+				socialAccnts.put(sac.getSocialNetwork(), sac);
 			}
-
-			thriftCust.setSocialAccounts(accnts);
-
 		}
 
 		return thriftCust;

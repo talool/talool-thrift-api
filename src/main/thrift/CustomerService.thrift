@@ -21,10 +21,10 @@ service CustomerService_t {
    CTokenAccess_t authenticate(1:string email,2:string password) throws (1:Core.ServiceException_t error);
    
    bool customerEmailExists(1:string email) throws (1:Core.ServiceException_t error);
-   
-   void save(1:Core.Customer_t customer) throws (1:Core.ServiceException_t error);
      
    void addSocialAccount(1:Core.SocialAccount_t socialAccount) throws (1:Core.ServiceException_t error);
+   
+   void removeSocialAccount(1:Core.SocialNetwork_t socialNetwork) throws (1:Core.ServiceException_t error);
    
    list<Core.Merchant_t> getMerchantAcquires(1:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
    

@@ -40,9 +40,9 @@ public class CustomerService_t {
 
     public boolean customerEmailExists(String email) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
-    public void save(com.talool.api.thrift.Customer_t customer) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
-
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
+
+    public void removeSocialAccount(com.talool.api.thrift.SocialNetwork_t socialNetwork) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
     public List<com.talool.api.thrift.Merchant_t> getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException;
 
@@ -76,9 +76,9 @@ public class CustomerService_t {
 
     public void customerEmailExists(String email, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.customerEmailExists_call> resultHandler) throws org.apache.thrift.TException;
 
-    public void save(com.talool.api.thrift.Customer_t customer, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.save_call> resultHandler) throws org.apache.thrift.TException;
-
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.addSocialAccount_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void removeSocialAccount(com.talool.api.thrift.SocialNetwork_t socialNetwork, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.removeSocialAccount_call> resultHandler) throws org.apache.thrift.TException;
 
     public void getMerchantAcquires(com.talool.api.thrift.SearchOptions_t searchOptions, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.getMerchantAcquires_call> resultHandler) throws org.apache.thrift.TException;
 
@@ -204,29 +204,6 @@ public class CustomerService_t {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "customerEmailExists failed: unknown result");
     }
 
-    public void save(com.talool.api.thrift.Customer_t customer) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
-    {
-      send_save(customer);
-      recv_save();
-    }
-
-    public void send_save(com.talool.api.thrift.Customer_t customer) throws org.apache.thrift.TException
-    {
-      save_args args = new save_args();
-      args.setCustomer(customer);
-      sendBase("save", args);
-    }
-
-    public void recv_save() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
-    {
-      save_result result = new save_result();
-      receiveBase(result, "save");
-      if (result.error != null) {
-        throw result.error;
-      }
-      return;
-    }
-
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
     {
       send_addSocialAccount(socialAccount);
@@ -244,6 +221,29 @@ public class CustomerService_t {
     {
       addSocialAccount_result result = new addSocialAccount_result();
       receiveBase(result, "addSocialAccount");
+      if (result.error != null) {
+        throw result.error;
+      }
+      return;
+    }
+
+    public void removeSocialAccount(com.talool.api.thrift.SocialNetwork_t socialNetwork) throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    {
+      send_removeSocialAccount(socialNetwork);
+      recv_removeSocialAccount();
+    }
+
+    public void send_removeSocialAccount(com.talool.api.thrift.SocialNetwork_t socialNetwork) throws org.apache.thrift.TException
+    {
+      removeSocialAccount_args args = new removeSocialAccount_args();
+      args.setSocialNetwork(socialNetwork);
+      sendBase("removeSocialAccount", args);
+    }
+
+    public void recv_removeSocialAccount() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException
+    {
+      removeSocialAccount_result result = new removeSocialAccount_result();
+      receiveBase(result, "removeSocialAccount");
       if (result.error != null) {
         throw result.error;
       }
@@ -647,38 +647,6 @@ public class CustomerService_t {
       }
     }
 
-    public void save(com.talool.api.thrift.Customer_t customer, org.apache.thrift.async.AsyncMethodCallback<save_call> resultHandler) throws org.apache.thrift.TException {
-      checkReady();
-      save_call method_call = new save_call(customer, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class save_call extends org.apache.thrift.async.TAsyncMethodCall {
-      private com.talool.api.thrift.Customer_t customer;
-      public save_call(com.talool.api.thrift.Customer_t customer, org.apache.thrift.async.AsyncMethodCallback<save_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.customer = customer;
-      }
-
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("save", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        save_args args = new save_args();
-        args.setCustomer(customer);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public void getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new IllegalStateException("Method call not finished!");
-        }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        (new Client(prot)).recv_save();
-      }
-    }
-
     public void addSocialAccount(com.talool.api.thrift.SocialAccount_t socialAccount, org.apache.thrift.async.AsyncMethodCallback<addSocialAccount_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       addSocialAccount_call method_call = new addSocialAccount_call(socialAccount, resultHandler, this, ___protocolFactory, ___transport);
@@ -708,6 +676,38 @@ public class CustomerService_t {
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         (new Client(prot)).recv_addSocialAccount();
+      }
+    }
+
+    public void removeSocialAccount(com.talool.api.thrift.SocialNetwork_t socialNetwork, org.apache.thrift.async.AsyncMethodCallback<removeSocialAccount_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      removeSocialAccount_call method_call = new removeSocialAccount_call(socialNetwork, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class removeSocialAccount_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private com.talool.api.thrift.SocialNetwork_t socialNetwork;
+      public removeSocialAccount_call(com.talool.api.thrift.SocialNetwork_t socialNetwork, org.apache.thrift.async.AsyncMethodCallback<removeSocialAccount_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.socialNetwork = socialNetwork;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("removeSocialAccount", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        removeSocialAccount_args args = new removeSocialAccount_args();
+        args.setSocialNetwork(socialNetwork);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws com.talool.api.thrift.ServiceException_t, org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        (new Client(prot)).recv_removeSocialAccount();
       }
     }
 
@@ -1088,8 +1088,8 @@ public class CustomerService_t {
       processMap.put("createAccount", new createAccount());
       processMap.put("authenticate", new authenticate());
       processMap.put("customerEmailExists", new customerEmailExists());
-      processMap.put("save", new save());
       processMap.put("addSocialAccount", new addSocialAccount());
+      processMap.put("removeSocialAccount", new removeSocialAccount());
       processMap.put("getMerchantAcquires", new getMerchantAcquires());
       processMap.put("getMerchantAcquiresByCategory", new getMerchantAcquiresByCategory());
       processMap.put("getDealAcquires", new getDealAcquires());
@@ -1177,30 +1177,6 @@ public class CustomerService_t {
       }
     }
 
-    public static class save<I extends Iface> extends org.apache.thrift.ProcessFunction<I, save_args> {
-      public save() {
-        super("save");
-      }
-
-      public save_args getEmptyArgsInstance() {
-        return new save_args();
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      public save_result getResult(I iface, save_args args) throws org.apache.thrift.TException {
-        save_result result = new save_result();
-        try {
-          iface.save(args.customer);
-        } catch (com.talool.api.thrift.ServiceException_t error) {
-          result.error = error;
-        }
-        return result;
-      }
-    }
-
     public static class addSocialAccount<I extends Iface> extends org.apache.thrift.ProcessFunction<I, addSocialAccount_args> {
       public addSocialAccount() {
         super("addSocialAccount");
@@ -1218,6 +1194,30 @@ public class CustomerService_t {
         addSocialAccount_result result = new addSocialAccount_result();
         try {
           iface.addSocialAccount(args.socialAccount);
+        } catch (com.talool.api.thrift.ServiceException_t error) {
+          result.error = error;
+        }
+        return result;
+      }
+    }
+
+    public static class removeSocialAccount<I extends Iface> extends org.apache.thrift.ProcessFunction<I, removeSocialAccount_args> {
+      public removeSocialAccount() {
+        super("removeSocialAccount");
+      }
+
+      public removeSocialAccount_args getEmptyArgsInstance() {
+        return new removeSocialAccount_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public removeSocialAccount_result getResult(I iface, removeSocialAccount_args args) throws org.apache.thrift.TException {
+        removeSocialAccount_result result = new removeSocialAccount_result();
+        try {
+          iface.removeSocialAccount(args.socialNetwork);
         } catch (com.talool.api.thrift.ServiceException_t error) {
           result.error = error;
         }
@@ -4130,719 +4130,6 @@ public class CustomerService_t {
 
   }
 
-  public static class save_args implements org.apache.thrift.TBase<save_args, save_args._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("save_args");
-
-    private static final org.apache.thrift.protocol.TField CUSTOMER_FIELD_DESC = new org.apache.thrift.protocol.TField("customer", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-
-    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
-    static {
-      schemes.put(StandardScheme.class, new save_argsStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new save_argsTupleSchemeFactory());
-    }
-
-    public com.talool.api.thrift.Customer_t customer; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      CUSTOMER((short)1, "customer");
-
-      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-
-      static {
-        for (_Fields field : EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // CUSTOMER
-            return CUSTOMER;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      public static _Fields findByName(String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final String _fieldName;
-
-      _Fields(short thriftId, String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.CUSTOMER, new org.apache.thrift.meta_data.FieldMetaData("customer", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, com.talool.api.thrift.Customer_t.class)));
-      metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(save_args.class, metaDataMap);
-    }
-
-    public save_args() {
-    }
-
-    public save_args(
-      com.talool.api.thrift.Customer_t customer)
-    {
-      this();
-      this.customer = customer;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public save_args(save_args other) {
-      if (other.isSetCustomer()) {
-        this.customer = new com.talool.api.thrift.Customer_t(other.customer);
-      }
-    }
-
-    public save_args deepCopy() {
-      return new save_args(this);
-    }
-
-    public void clear() {
-      this.customer = null;
-    }
-
-    public com.talool.api.thrift.Customer_t getCustomer() {
-      return this.customer;
-    }
-
-    public save_args setCustomer(com.talool.api.thrift.Customer_t customer) {
-      this.customer = customer;
-      return this;
-    }
-
-    public void unsetCustomer() {
-      this.customer = null;
-    }
-
-    /** Returns true if field customer is set (has been assigned a value) and false otherwise */
-    public boolean isSetCustomer() {
-      return this.customer != null;
-    }
-
-    public void setCustomerIsSet(boolean value) {
-      if (!value) {
-        this.customer = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, Object value) {
-      switch (field) {
-      case CUSTOMER:
-        if (value == null) {
-          unsetCustomer();
-        } else {
-          setCustomer((com.talool.api.thrift.Customer_t)value);
-        }
-        break;
-
-      }
-    }
-
-    public Object getFieldValue(_Fields field) {
-      switch (field) {
-      case CUSTOMER:
-        return getCustomer();
-
-      }
-      throw new IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new IllegalArgumentException();
-      }
-
-      switch (field) {
-      case CUSTOMER:
-        return isSetCustomer();
-      }
-      throw new IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(Object that) {
-      if (that == null)
-        return false;
-      if (that instanceof save_args)
-        return this.equals((save_args)that);
-      return false;
-    }
-
-    public boolean equals(save_args that) {
-      if (that == null)
-        return false;
-
-      boolean this_present_customer = true && this.isSetCustomer();
-      boolean that_present_customer = true && that.isSetCustomer();
-      if (this_present_customer || that_present_customer) {
-        if (!(this_present_customer && that_present_customer))
-          return false;
-        if (!this.customer.equals(that.customer))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-
-    public int compareTo(save_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-      save_args typedOther = (save_args)other;
-
-      lastComparison = Boolean.valueOf(isSetCustomer()).compareTo(typedOther.isSetCustomer());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetCustomer()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.customer, typedOther.customer);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder sb = new StringBuilder("save_args(");
-      boolean first = true;
-
-      sb.append("customer:");
-      if (this.customer == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.customer);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-      if (customer != null) {
-        customer.validate();
-      }
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te.getMessage());
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te.getMessage());
-      }
-    }
-
-    private static class save_argsStandardSchemeFactory implements SchemeFactory {
-      public save_argsStandardScheme getScheme() {
-        return new save_argsStandardScheme();
-      }
-    }
-
-    private static class save_argsStandardScheme extends StandardScheme<save_args> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, save_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // CUSTOMER
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.customer = new com.talool.api.thrift.Customer_t();
-                struct.customer.read(iprot);
-                struct.setCustomerIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, save_args struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.customer != null) {
-          oprot.writeFieldBegin(CUSTOMER_FIELD_DESC);
-          struct.customer.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class save_argsTupleSchemeFactory implements SchemeFactory {
-      public save_argsTupleScheme getScheme() {
-        return new save_argsTupleScheme();
-      }
-    }
-
-    private static class save_argsTupleScheme extends TupleScheme<save_args> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, save_args struct) throws org.apache.thrift.TException {
-        TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetCustomer()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetCustomer()) {
-          struct.customer.write(oprot);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, save_args struct) throws org.apache.thrift.TException {
-        TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.customer = new com.talool.api.thrift.Customer_t();
-          struct.customer.read(iprot);
-          struct.setCustomerIsSet(true);
-        }
-      }
-    }
-
-  }
-
-  public static class save_result implements org.apache.thrift.TBase<save_result, save_result._Fields>, java.io.Serializable, Cloneable   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("save_result");
-
-    private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-
-    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
-    static {
-      schemes.put(StandardScheme.class, new save_resultStandardSchemeFactory());
-      schemes.put(TupleScheme.class, new save_resultTupleSchemeFactory());
-    }
-
-    public com.talool.api.thrift.ServiceException_t error; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      ERROR((short)1, "error");
-
-      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-
-      static {
-        for (_Fields field : EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // ERROR
-            return ERROR;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      public static _Fields findByName(String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final String _fieldName;
-
-      _Fields(short thriftId, String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
-      metaDataMap = Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(save_result.class, metaDataMap);
-    }
-
-    public save_result() {
-    }
-
-    public save_result(
-      com.talool.api.thrift.ServiceException_t error)
-    {
-      this();
-      this.error = error;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public save_result(save_result other) {
-      if (other.isSetError()) {
-        this.error = new com.talool.api.thrift.ServiceException_t(other.error);
-      }
-    }
-
-    public save_result deepCopy() {
-      return new save_result(this);
-    }
-
-    public void clear() {
-      this.error = null;
-    }
-
-    public com.talool.api.thrift.ServiceException_t getError() {
-      return this.error;
-    }
-
-    public save_result setError(com.talool.api.thrift.ServiceException_t error) {
-      this.error = error;
-      return this;
-    }
-
-    public void unsetError() {
-      this.error = null;
-    }
-
-    /** Returns true if field error is set (has been assigned a value) and false otherwise */
-    public boolean isSetError() {
-      return this.error != null;
-    }
-
-    public void setErrorIsSet(boolean value) {
-      if (!value) {
-        this.error = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, Object value) {
-      switch (field) {
-      case ERROR:
-        if (value == null) {
-          unsetError();
-        } else {
-          setError((com.talool.api.thrift.ServiceException_t)value);
-        }
-        break;
-
-      }
-    }
-
-    public Object getFieldValue(_Fields field) {
-      switch (field) {
-      case ERROR:
-        return getError();
-
-      }
-      throw new IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new IllegalArgumentException();
-      }
-
-      switch (field) {
-      case ERROR:
-        return isSetError();
-      }
-      throw new IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(Object that) {
-      if (that == null)
-        return false;
-      if (that instanceof save_result)
-        return this.equals((save_result)that);
-      return false;
-    }
-
-    public boolean equals(save_result that) {
-      if (that == null)
-        return false;
-
-      boolean this_present_error = true && this.isSetError();
-      boolean that_present_error = true && that.isSetError();
-      if (this_present_error || that_present_error) {
-        if (!(this_present_error && that_present_error))
-          return false;
-        if (!this.error.equals(that.error))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-
-    public int compareTo(save_result other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-      save_result typedOther = (save_result)other;
-
-      lastComparison = Boolean.valueOf(isSetError()).compareTo(typedOther.isSetError());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetError()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.error, typedOther.error);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-      }
-
-    @Override
-    public String toString() {
-      StringBuilder sb = new StringBuilder("save_result(");
-      boolean first = true;
-
-      sb.append("error:");
-      if (this.error == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.error);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te.getMessage());
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te.getMessage());
-      }
-    }
-
-    private static class save_resultStandardSchemeFactory implements SchemeFactory {
-      public save_resultStandardScheme getScheme() {
-        return new save_resultStandardScheme();
-      }
-    }
-
-    private static class save_resultStandardScheme extends StandardScheme<save_result> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, save_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // ERROR
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.error = new com.talool.api.thrift.ServiceException_t();
-                struct.error.read(iprot);
-                struct.setErrorIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, save_result struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.error != null) {
-          oprot.writeFieldBegin(ERROR_FIELD_DESC);
-          struct.error.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class save_resultTupleSchemeFactory implements SchemeFactory {
-      public save_resultTupleScheme getScheme() {
-        return new save_resultTupleScheme();
-      }
-    }
-
-    private static class save_resultTupleScheme extends TupleScheme<save_result> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, save_result struct) throws org.apache.thrift.TException {
-        TTupleProtocol oprot = (TTupleProtocol) prot;
-        BitSet optionals = new BitSet();
-        if (struct.isSetError()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetError()) {
-          struct.error.write(oprot);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, save_result struct) throws org.apache.thrift.TException {
-        TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.error = new com.talool.api.thrift.ServiceException_t();
-          struct.error.read(iprot);
-          struct.setErrorIsSet(true);
-        }
-      }
-    }
-
-  }
-
   public static class addSocialAccount_args implements org.apache.thrift.TBase<addSocialAccount_args, addSocialAccount_args._Fields>, java.io.Serializable, Cloneable   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("addSocialAccount_args");
 
@@ -5544,6 +4831,730 @@ public class CustomerService_t {
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, addSocialAccount_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.error = new com.talool.api.thrift.ServiceException_t();
+          struct.error.read(iprot);
+          struct.setErrorIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class removeSocialAccount_args implements org.apache.thrift.TBase<removeSocialAccount_args, removeSocialAccount_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("removeSocialAccount_args");
+
+    private static final org.apache.thrift.protocol.TField SOCIAL_NETWORK_FIELD_DESC = new org.apache.thrift.protocol.TField("socialNetwork", org.apache.thrift.protocol.TType.I32, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new removeSocialAccount_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new removeSocialAccount_argsTupleSchemeFactory());
+    }
+
+    /**
+     * 
+     * @see com.talool.api.thrift.SocialNetwork_t
+     */
+    public com.talool.api.thrift.SocialNetwork_t socialNetwork; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      /**
+       * 
+       * @see com.talool.api.thrift.SocialNetwork_t
+       */
+      SOCIAL_NETWORK((short)1, "socialNetwork");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // SOCIAL_NETWORK
+            return SOCIAL_NETWORK;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SOCIAL_NETWORK, new org.apache.thrift.meta_data.FieldMetaData("socialNetwork", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, com.talool.api.thrift.SocialNetwork_t.class)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(removeSocialAccount_args.class, metaDataMap);
+    }
+
+    public removeSocialAccount_args() {
+    }
+
+    public removeSocialAccount_args(
+      com.talool.api.thrift.SocialNetwork_t socialNetwork)
+    {
+      this();
+      this.socialNetwork = socialNetwork;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public removeSocialAccount_args(removeSocialAccount_args other) {
+      if (other.isSetSocialNetwork()) {
+        this.socialNetwork = other.socialNetwork;
+      }
+    }
+
+    public removeSocialAccount_args deepCopy() {
+      return new removeSocialAccount_args(this);
+    }
+
+    public void clear() {
+      this.socialNetwork = null;
+    }
+
+    /**
+     * 
+     * @see com.talool.api.thrift.SocialNetwork_t
+     */
+    public com.talool.api.thrift.SocialNetwork_t getSocialNetwork() {
+      return this.socialNetwork;
+    }
+
+    /**
+     * 
+     * @see com.talool.api.thrift.SocialNetwork_t
+     */
+    public removeSocialAccount_args setSocialNetwork(com.talool.api.thrift.SocialNetwork_t socialNetwork) {
+      this.socialNetwork = socialNetwork;
+      return this;
+    }
+
+    public void unsetSocialNetwork() {
+      this.socialNetwork = null;
+    }
+
+    /** Returns true if field socialNetwork is set (has been assigned a value) and false otherwise */
+    public boolean isSetSocialNetwork() {
+      return this.socialNetwork != null;
+    }
+
+    public void setSocialNetworkIsSet(boolean value) {
+      if (!value) {
+        this.socialNetwork = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SOCIAL_NETWORK:
+        if (value == null) {
+          unsetSocialNetwork();
+        } else {
+          setSocialNetwork((com.talool.api.thrift.SocialNetwork_t)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SOCIAL_NETWORK:
+        return getSocialNetwork();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SOCIAL_NETWORK:
+        return isSetSocialNetwork();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof removeSocialAccount_args)
+        return this.equals((removeSocialAccount_args)that);
+      return false;
+    }
+
+    public boolean equals(removeSocialAccount_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_socialNetwork = true && this.isSetSocialNetwork();
+      boolean that_present_socialNetwork = true && that.isSetSocialNetwork();
+      if (this_present_socialNetwork || that_present_socialNetwork) {
+        if (!(this_present_socialNetwork && that_present_socialNetwork))
+          return false;
+        if (!this.socialNetwork.equals(that.socialNetwork))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(removeSocialAccount_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      removeSocialAccount_args typedOther = (removeSocialAccount_args)other;
+
+      lastComparison = Boolean.valueOf(isSetSocialNetwork()).compareTo(typedOther.isSetSocialNetwork());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSocialNetwork()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.socialNetwork, typedOther.socialNetwork);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("removeSocialAccount_args(");
+      boolean first = true;
+
+      sb.append("socialNetwork:");
+      if (this.socialNetwork == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.socialNetwork);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private static class removeSocialAccount_argsStandardSchemeFactory implements SchemeFactory {
+      public removeSocialAccount_argsStandardScheme getScheme() {
+        return new removeSocialAccount_argsStandardScheme();
+      }
+    }
+
+    private static class removeSocialAccount_argsStandardScheme extends StandardScheme<removeSocialAccount_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, removeSocialAccount_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // SOCIAL_NETWORK
+              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+                struct.socialNetwork = com.talool.api.thrift.SocialNetwork_t.findByValue(iprot.readI32());
+                struct.setSocialNetworkIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, removeSocialAccount_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.socialNetwork != null) {
+          oprot.writeFieldBegin(SOCIAL_NETWORK_FIELD_DESC);
+          oprot.writeI32(struct.socialNetwork.getValue());
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class removeSocialAccount_argsTupleSchemeFactory implements SchemeFactory {
+      public removeSocialAccount_argsTupleScheme getScheme() {
+        return new removeSocialAccount_argsTupleScheme();
+      }
+    }
+
+    private static class removeSocialAccount_argsTupleScheme extends TupleScheme<removeSocialAccount_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, removeSocialAccount_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSocialNetwork()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSocialNetwork()) {
+          oprot.writeI32(struct.socialNetwork.getValue());
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, removeSocialAccount_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.socialNetwork = com.talool.api.thrift.SocialNetwork_t.findByValue(iprot.readI32());
+          struct.setSocialNetworkIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class removeSocialAccount_result implements org.apache.thrift.TBase<removeSocialAccount_result, removeSocialAccount_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("removeSocialAccount_result");
+
+    private static final org.apache.thrift.protocol.TField ERROR_FIELD_DESC = new org.apache.thrift.protocol.TField("error", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new removeSocialAccount_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new removeSocialAccount_resultTupleSchemeFactory());
+    }
+
+    public com.talool.api.thrift.ServiceException_t error; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      ERROR((short)1, "error");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // ERROR
+            return ERROR;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.ERROR, new org.apache.thrift.meta_data.FieldMetaData("error", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(removeSocialAccount_result.class, metaDataMap);
+    }
+
+    public removeSocialAccount_result() {
+    }
+
+    public removeSocialAccount_result(
+      com.talool.api.thrift.ServiceException_t error)
+    {
+      this();
+      this.error = error;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public removeSocialAccount_result(removeSocialAccount_result other) {
+      if (other.isSetError()) {
+        this.error = new com.talool.api.thrift.ServiceException_t(other.error);
+      }
+    }
+
+    public removeSocialAccount_result deepCopy() {
+      return new removeSocialAccount_result(this);
+    }
+
+    public void clear() {
+      this.error = null;
+    }
+
+    public com.talool.api.thrift.ServiceException_t getError() {
+      return this.error;
+    }
+
+    public removeSocialAccount_result setError(com.talool.api.thrift.ServiceException_t error) {
+      this.error = error;
+      return this;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case ERROR:
+        if (value == null) {
+          unsetError();
+        } else {
+          setError((com.talool.api.thrift.ServiceException_t)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case ERROR:
+        return getError();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case ERROR:
+        return isSetError();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof removeSocialAccount_result)
+        return this.equals((removeSocialAccount_result)that);
+      return false;
+    }
+
+    public boolean equals(removeSocialAccount_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(removeSocialAccount_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      removeSocialAccount_result typedOther = (removeSocialAccount_result)other;
+
+      lastComparison = Boolean.valueOf(isSetError()).compareTo(typedOther.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.error, typedOther.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("removeSocialAccount_result(");
+      boolean first = true;
+
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te.getMessage());
+      }
+    }
+
+    private static class removeSocialAccount_resultStandardSchemeFactory implements SchemeFactory {
+      public removeSocialAccount_resultStandardScheme getScheme() {
+        return new removeSocialAccount_resultStandardScheme();
+      }
+    }
+
+    private static class removeSocialAccount_resultStandardScheme extends StandardScheme<removeSocialAccount_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, removeSocialAccount_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // ERROR
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.error = new com.talool.api.thrift.ServiceException_t();
+                struct.error.read(iprot);
+                struct.setErrorIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, removeSocialAccount_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.error != null) {
+          oprot.writeFieldBegin(ERROR_FIELD_DESC);
+          struct.error.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class removeSocialAccount_resultTupleSchemeFactory implements SchemeFactory {
+      public removeSocialAccount_resultTupleScheme getScheme() {
+        return new removeSocialAccount_resultTupleScheme();
+      }
+    }
+
+    private static class removeSocialAccount_resultTupleScheme extends TupleScheme<removeSocialAccount_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, removeSocialAccount_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetError()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetError()) {
+          struct.error.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, removeSocialAccount_result struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {

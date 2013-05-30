@@ -37,12 +37,10 @@ struct SocialNetworkDetail_t {
 }
 
 struct SocialAccount_t {
-  1: required SocialNetwork_t socalNetwork;
+  1: required SocialNetwork_t socialNetwork;
   2: required string loginId;
   20: optional Timestamp created;
-  21: optional Timestamp updated;
 }
-
 
 struct Address_t {
   1: required string address1;
@@ -72,15 +70,16 @@ struct Customer_t {
   3: required string lastName;
   4: required string email;
   6: optional Sex_t sex;
-  7: optional map<SocialNetwork_t,SocialAccount_t> socialAccounts;
-  8: optional Timestamp created;
-  9: optional Timestamp updated;
+  7: optional Timestamp birthDate;
+  8: optional map<SocialNetwork_t,SocialAccount_t> socialAccounts;
+  9: optional Timestamp created;
+  10: optional Timestamp updated;
 }
 
 struct Token_t {
  1: required string accountId;
  2: required string email;
- 3: required i64 expires;
+ 3: required Timestamp expires;
 }
 
 struct Merchant_t {

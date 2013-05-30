@@ -33,10 +33,9 @@ import org.slf4j.LoggerFactory;
 public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t, SocialAccount_t._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("SocialAccount_t");
 
-  private static final org.apache.thrift.protocol.TField SOCAL_NETWORK_FIELD_DESC = new org.apache.thrift.protocol.TField("socalNetwork", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField SOCIAL_NETWORK_FIELD_DESC = new org.apache.thrift.protocol.TField("socialNetwork", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField LOGIN_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("loginId", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)21);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -48,10 +47,9 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
    * 
    * @see SocialNetwork_t
    */
-  public SocialNetwork_t socalNetwork; // required
+  public SocialNetwork_t socialNetwork; // required
   public String loginId; // required
   public long created; // optional
-  public long updated; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -59,10 +57,9 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
      * 
      * @see SocialNetwork_t
      */
-    SOCAL_NETWORK((short)1, "socalNetwork"),
+    SOCIAL_NETWORK((short)1, "socialNetwork"),
     LOGIN_ID((short)2, "loginId"),
-    CREATED((short)20, "created"),
-    UPDATED((short)21, "updated");
+    CREATED((short)20, "created");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -77,14 +74,12 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // SOCAL_NETWORK
-          return SOCAL_NETWORK;
+        case 1: // SOCIAL_NETWORK
+          return SOCIAL_NETWORK;
         case 2: // LOGIN_ID
           return LOGIN_ID;
         case 20: // CREATED
           return CREATED;
-        case 21: // UPDATED
-          return UPDATED;
         default:
           return null;
       }
@@ -126,19 +121,16 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
 
   // isset id assignments
   private static final int __CREATED_ISSET_ID = 0;
-  private static final int __UPDATED_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.CREATED,_Fields.UPDATED};
+  private _Fields optionals[] = {_Fields.CREATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.SOCAL_NETWORK, new org.apache.thrift.meta_data.FieldMetaData("socalNetwork", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+    tmpMap.put(_Fields.SOCIAL_NETWORK, new org.apache.thrift.meta_data.FieldMetaData("socialNetwork", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, SocialNetwork_t.class)));
     tmpMap.put(_Fields.LOGIN_ID, new org.apache.thrift.meta_data.FieldMetaData("loginId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.CREATED, new org.apache.thrift.meta_data.FieldMetaData("created", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
-    tmpMap.put(_Fields.UPDATED, new org.apache.thrift.meta_data.FieldMetaData("updated", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64        , "Timestamp")));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(SocialAccount_t.class, metaDataMap);
@@ -148,11 +140,11 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
   }
 
   public SocialAccount_t(
-    SocialNetwork_t socalNetwork,
+    SocialNetwork_t socialNetwork,
     String loginId)
   {
     this();
-    this.socalNetwork = socalNetwork;
+    this.socialNetwork = socialNetwork;
     this.loginId = loginId;
   }
 
@@ -161,14 +153,13 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
    */
   public SocialAccount_t(SocialAccount_t other) {
     __isset_bitfield = other.__isset_bitfield;
-    if (other.isSetSocalNetwork()) {
-      this.socalNetwork = other.socalNetwork;
+    if (other.isSetSocialNetwork()) {
+      this.socialNetwork = other.socialNetwork;
     }
     if (other.isSetLoginId()) {
       this.loginId = other.loginId;
     }
     this.created = other.created;
-    this.updated = other.updated;
   }
 
   public SocialAccount_t deepCopy() {
@@ -176,43 +167,41 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
   }
 
   public void clear() {
-    this.socalNetwork = null;
+    this.socialNetwork = null;
     this.loginId = null;
     setCreatedIsSet(false);
     this.created = 0;
-    setUpdatedIsSet(false);
-    this.updated = 0;
   }
 
   /**
    * 
    * @see SocialNetwork_t
    */
-  public SocialNetwork_t getSocalNetwork() {
-    return this.socalNetwork;
+  public SocialNetwork_t getSocialNetwork() {
+    return this.socialNetwork;
   }
 
   /**
    * 
    * @see SocialNetwork_t
    */
-  public SocialAccount_t setSocalNetwork(SocialNetwork_t socalNetwork) {
-    this.socalNetwork = socalNetwork;
+  public SocialAccount_t setSocialNetwork(SocialNetwork_t socialNetwork) {
+    this.socialNetwork = socialNetwork;
     return this;
   }
 
-  public void unsetSocalNetwork() {
-    this.socalNetwork = null;
+  public void unsetSocialNetwork() {
+    this.socialNetwork = null;
   }
 
-  /** Returns true if field socalNetwork is set (has been assigned a value) and false otherwise */
-  public boolean isSetSocalNetwork() {
-    return this.socalNetwork != null;
+  /** Returns true if field socialNetwork is set (has been assigned a value) and false otherwise */
+  public boolean isSetSocialNetwork() {
+    return this.socialNetwork != null;
   }
 
-  public void setSocalNetworkIsSet(boolean value) {
+  public void setSocialNetworkIsSet(boolean value) {
     if (!value) {
-      this.socalNetwork = null;
+      this.socialNetwork = null;
     }
   }
 
@@ -263,36 +252,13 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CREATED_ISSET_ID, value);
   }
 
-  public long getUpdated() {
-    return this.updated;
-  }
-
-  public SocialAccount_t setUpdated(long updated) {
-    this.updated = updated;
-    setUpdatedIsSet(true);
-    return this;
-  }
-
-  public void unsetUpdated() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  /** Returns true if field updated is set (has been assigned a value) and false otherwise */
-  public boolean isSetUpdated() {
-    return EncodingUtils.testBit(__isset_bitfield, __UPDATED_ISSET_ID);
-  }
-
-  public void setUpdatedIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __UPDATED_ISSET_ID, value);
-  }
-
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
-    case SOCAL_NETWORK:
+    case SOCIAL_NETWORK:
       if (value == null) {
-        unsetSocalNetwork();
+        unsetSocialNetwork();
       } else {
-        setSocalNetwork((SocialNetwork_t)value);
+        setSocialNetwork((SocialNetwork_t)value);
       }
       break;
 
@@ -312,30 +278,19 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
       }
       break;
 
-    case UPDATED:
-      if (value == null) {
-        unsetUpdated();
-      } else {
-        setUpdated((Long)value);
-      }
-      break;
-
     }
   }
 
   public Object getFieldValue(_Fields field) {
     switch (field) {
-    case SOCAL_NETWORK:
-      return getSocalNetwork();
+    case SOCIAL_NETWORK:
+      return getSocialNetwork();
 
     case LOGIN_ID:
       return getLoginId();
 
     case CREATED:
       return Long.valueOf(getCreated());
-
-    case UPDATED:
-      return Long.valueOf(getUpdated());
 
     }
     throw new IllegalStateException();
@@ -348,14 +303,12 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     }
 
     switch (field) {
-    case SOCAL_NETWORK:
-      return isSetSocalNetwork();
+    case SOCIAL_NETWORK:
+      return isSetSocialNetwork();
     case LOGIN_ID:
       return isSetLoginId();
     case CREATED:
       return isSetCreated();
-    case UPDATED:
-      return isSetUpdated();
     }
     throw new IllegalStateException();
   }
@@ -373,12 +326,12 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     if (that == null)
       return false;
 
-    boolean this_present_socalNetwork = true && this.isSetSocalNetwork();
-    boolean that_present_socalNetwork = true && that.isSetSocalNetwork();
-    if (this_present_socalNetwork || that_present_socalNetwork) {
-      if (!(this_present_socalNetwork && that_present_socalNetwork))
+    boolean this_present_socialNetwork = true && this.isSetSocialNetwork();
+    boolean that_present_socialNetwork = true && that.isSetSocialNetwork();
+    if (this_present_socialNetwork || that_present_socialNetwork) {
+      if (!(this_present_socialNetwork && that_present_socialNetwork))
         return false;
-      if (!this.socalNetwork.equals(that.socalNetwork))
+      if (!this.socialNetwork.equals(that.socialNetwork))
         return false;
     }
 
@@ -400,15 +353,6 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
         return false;
     }
 
-    boolean this_present_updated = true && this.isSetUpdated();
-    boolean that_present_updated = true && that.isSetUpdated();
-    if (this_present_updated || that_present_updated) {
-      if (!(this_present_updated && that_present_updated))
-        return false;
-      if (this.updated != that.updated)
-        return false;
-    }
-
     return true;
   }
 
@@ -425,12 +369,12 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     int lastComparison = 0;
     SocialAccount_t typedOther = (SocialAccount_t)other;
 
-    lastComparison = Boolean.valueOf(isSetSocalNetwork()).compareTo(typedOther.isSetSocalNetwork());
+    lastComparison = Boolean.valueOf(isSetSocialNetwork()).compareTo(typedOther.isSetSocialNetwork());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSocalNetwork()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.socalNetwork, typedOther.socalNetwork);
+    if (isSetSocialNetwork()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.socialNetwork, typedOther.socialNetwork);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -455,16 +399,6 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetUpdated()).compareTo(typedOther.isSetUpdated());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetUpdated()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.updated, typedOther.updated);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     return 0;
   }
 
@@ -485,11 +419,11 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     StringBuilder sb = new StringBuilder("SocialAccount_t(");
     boolean first = true;
 
-    sb.append("socalNetwork:");
-    if (this.socalNetwork == null) {
+    sb.append("socialNetwork:");
+    if (this.socialNetwork == null) {
       sb.append("null");
     } else {
-      sb.append(this.socalNetwork);
+      sb.append(this.socialNetwork);
     }
     first = false;
     if (!first) sb.append(", ");
@@ -506,20 +440,14 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
       sb.append(this.created);
       first = false;
     }
-    if (isSetUpdated()) {
-      if (!first) sb.append(", ");
-      sb.append("updated:");
-      sb.append(this.updated);
-      first = false;
-    }
     sb.append(")");
     return sb.toString();
   }
 
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
-    if (socalNetwork == null) {
-      throw new org.apache.thrift.protocol.TProtocolException("Required field 'socalNetwork' was not present! Struct: " + toString());
+    if (socialNetwork == null) {
+      throw new org.apache.thrift.protocol.TProtocolException("Required field 'socialNetwork' was not present! Struct: " + toString());
     }
     if (loginId == null) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'loginId' was not present! Struct: " + toString());
@@ -563,10 +491,10 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
           break;
         }
         switch (schemeField.id) {
-          case 1: // SOCAL_NETWORK
+          case 1: // SOCIAL_NETWORK
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.socalNetwork = SocialNetwork_t.findByValue(iprot.readI32());
-              struct.setSocalNetworkIsSet(true);
+              struct.socialNetwork = SocialNetwork_t.findByValue(iprot.readI32());
+              struct.setSocialNetworkIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -587,14 +515,6 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 21: // UPDATED
-            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
-              struct.updated = iprot.readI64();
-              struct.setUpdatedIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -610,9 +530,9 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.socalNetwork != null) {
-        oprot.writeFieldBegin(SOCAL_NETWORK_FIELD_DESC);
-        oprot.writeI32(struct.socalNetwork.getValue());
+      if (struct.socialNetwork != null) {
+        oprot.writeFieldBegin(SOCIAL_NETWORK_FIELD_DESC);
+        oprot.writeI32(struct.socialNetwork.getValue());
         oprot.writeFieldEnd();
       }
       if (struct.loginId != null) {
@@ -623,11 +543,6 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
       if (struct.isSetCreated()) {
         oprot.writeFieldBegin(CREATED_FIELD_DESC);
         oprot.writeI64(struct.created);
-        oprot.writeFieldEnd();
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeFieldBegin(UPDATED_FIELD_DESC);
-        oprot.writeI64(struct.updated);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -647,39 +562,29 @@ public class SocialAccount_t implements org.apache.thrift.TBase<SocialAccount_t,
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, SocialAccount_t struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
-      oprot.writeI32(struct.socalNetwork.getValue());
+      oprot.writeI32(struct.socialNetwork.getValue());
       oprot.writeString(struct.loginId);
       BitSet optionals = new BitSet();
       if (struct.isSetCreated()) {
         optionals.set(0);
       }
-      if (struct.isSetUpdated()) {
-        optionals.set(1);
-      }
-      oprot.writeBitSet(optionals, 2);
+      oprot.writeBitSet(optionals, 1);
       if (struct.isSetCreated()) {
         oprot.writeI64(struct.created);
-      }
-      if (struct.isSetUpdated()) {
-        oprot.writeI64(struct.updated);
       }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, SocialAccount_t struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      struct.socalNetwork = SocialNetwork_t.findByValue(iprot.readI32());
-      struct.setSocalNetworkIsSet(true);
+      struct.socialNetwork = SocialNetwork_t.findByValue(iprot.readI32());
+      struct.setSocialNetworkIsSet(true);
       struct.loginId = iprot.readString();
       struct.setLoginIdIsSet(true);
-      BitSet incoming = iprot.readBitSet(2);
+      BitSet incoming = iprot.readBitSet(1);
       if (incoming.get(0)) {
         struct.created = iprot.readI64();
         struct.setCreatedIsSet(true);
-      }
-      if (incoming.get(1)) {
-        struct.updated = iprot.readI64();
-        struct.setUpdatedIsSet(true);
       }
     }
   }

@@ -20,6 +20,7 @@ import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
+import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
@@ -29,10 +30,10 @@ import com.talool.core.DealOffer;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
-import com.talool.core.SocialAccount;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
+import com.talool.core.social.CustomerSocialAccount;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -104,36 +105,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
-			TException
-	{
-		final Token_t token = TokenUtil.getTokenFromRequest(true);
-
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(String.format("CustomerId %s adding social account %s", token.getAccountId(),
-					socialAccount_t.toString()));
-		}
-
-		try
-		{
-			final Customer cust = customerService.getCustomerById(UUID.fromString(token.getAccountId()));
-			final SocialAccount sac = FactoryManager.get().getDomainFactory()
-					.newSocialAccount(socialAccount_t.getSocalNetwork().name(), AccountType.CUS);
-
-			ConversionUtil.copyFromThrift(socialAccount_t, sac, cust.getId());
-			cust.addSocialAccount(sac);
-			customerService.save(cust);
-		}
-		catch (Exception e)
-		{
-			LOG.error("Problem registering customer: " + e, e);
-			throw new ServiceException_t(1000, e.getLocalizedMessage());
-		}
-
-	}
-
-	@Override
 	public CTokenAccess_t createAccount(final Customer_t customer, final String password)
 			throws ServiceException_t, TException
 	{
@@ -164,6 +135,16 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 
 			final Customer taloolCustomer = ConversionUtil.convertFromThrift(customer);
+			if (customer.getSocialAccounts() != null)
+			{
+				for (final SocialAccount_t sac : customer.getSocialAccounts().values())
+				{
+					final CustomerSocialAccount taloolSocialAccount = ConversionUtil.convertFromThrift(sac, taloolCustomer);
+					taloolCustomer.addSocialAccount(taloolSocialAccount);
+				}
+
+			}
+
 			customerService.createAccount(taloolCustomer, password);
 
 			final Customer_t updatedCustomer = ConversionUtil.convertToThrift(taloolCustomer);
@@ -202,31 +183,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem authenticatiing customer: " + e, e);
 			throw new ServiceException_t(1000, e.getLocalizedMessage());
 		}
-	}
-
-	@Override
-	public void save(final Customer_t cust_t) throws ServiceException_t, TException
-	{
-		final Token_t token = TokenUtil.getTokenFromRequest(true);
-
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(String.format("Saving customer %s", cust_t.toString()));
-		}
-
-		try
-		{
-			final Customer customer = customerService.getCustomerByEmail(token.getEmail());
-			ConversionUtil.copyFromThrift(cust_t, customer);
-			customerService.save(customer);
-
-		}
-		catch (Exception ex)
-		{
-			LOG.error("Problem saving customer: " + ex, ex);
-			throw new ServiceException_t(102, "Problem saving customer");
-		}
-
 	}
 
 	@Override
@@ -490,5 +446,53 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return ConversionUtil.convertToThriftMerchants(merchants);
+	}
+
+	@Override
+	public void removeSocialAccount(final SocialNetwork_t socialNetwork_t) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		try
+		{
+			customerService.removeSocialAccount(UUID.fromString(token.getAccountId()),
+					taloolService.getSocialNetwork(socialNetwork_t.toString()));
+		}
+		catch (ServiceException e)
+		{
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
+			TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s adding social account %s", token.getAccountId(),
+					socialAccount_t.toString()));
+		}
+
+		try
+		{
+			final Customer cust = customerService.getCustomerById(UUID.fromString(token.getAccountId()));
+
+			final CustomerSocialAccount sac = FactoryManager.get().getDomainFactory()
+					.newCustomerSocialAccount(socialAccount_t.getSocialNetwork().name());
+
+			ConversionUtil.copyFromThrift(socialAccount_t, sac, cust);
+
+			customerService.save(sac);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem addSocialAccount for customerId: " + token.getAccountId(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
 	}
 }
