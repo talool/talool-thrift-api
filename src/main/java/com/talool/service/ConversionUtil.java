@@ -46,6 +46,7 @@ import com.talool.core.SearchOptions;
 import com.talool.core.Sex;
 import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
+import com.talool.core.social.SocialNetwork;
 
 /**
  * @author clintz
@@ -200,7 +201,7 @@ public final class ConversionUtil
 		try
 		{
 			sac.setSocialNetwork(FactoryManager.get().getServiceFactory()
-					.getTaloolService().getSocialNetwork(socialAccount_t.getSocialNetwork().name()));
+					.getTaloolService().getSocialNetwork(SocialNetwork.NetworkName.valueOf(socialAccount_t.getSocialNetwork().toString())));
 		}
 		catch (ServiceException e)
 		{
@@ -360,11 +361,6 @@ public final class ConversionUtil
 			if (_dac.getSharedByCustomer() != null)
 			{
 				dac.setSharedByCustomer(convertToThrift(_dac.getSharedByCustomer()));
-			}
-
-			if (_dac.getSharedByMerchant() != null)
-			{
-				dac.setSharedByMerchant(convertToThrift(_dac.getSharedByMerchant()));
 			}
 
 			dac.setShareCount(_dac.getShareCount());

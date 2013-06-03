@@ -36,12 +36,11 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
   private static final org.apache.thrift.protocol.TField DEAL_ACQUIRE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("dealAcquireId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField DEAL_FIELD_DESC = new org.apache.thrift.protocol.TField("deal", org.apache.thrift.protocol.TType.STRUCT, (short)2);
   private static final org.apache.thrift.protocol.TField STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("status", org.apache.thrift.protocol.TType.STRING, (short)3);
-  private static final org.apache.thrift.protocol.TField SHARED_BY_MERCHANT_FIELD_DESC = new org.apache.thrift.protocol.TField("sharedByMerchant", org.apache.thrift.protocol.TType.STRUCT, (short)4);
-  private static final org.apache.thrift.protocol.TField SHARED_BY_CUSTOMER_FIELD_DESC = new org.apache.thrift.protocol.TField("sharedByCustomer", org.apache.thrift.protocol.TType.STRUCT, (short)5);
-  private static final org.apache.thrift.protocol.TField SHARE_COUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("shareCount", org.apache.thrift.protocol.TType.I32, (short)6);
-  private static final org.apache.thrift.protocol.TField REDEEMED_FIELD_DESC = new org.apache.thrift.protocol.TField("redeemed", org.apache.thrift.protocol.TType.I64, (short)7);
-  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)8);
-  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)9);
+  private static final org.apache.thrift.protocol.TField SHARED_BY_CUSTOMER_FIELD_DESC = new org.apache.thrift.protocol.TField("sharedByCustomer", org.apache.thrift.protocol.TType.STRUCT, (short)4);
+  private static final org.apache.thrift.protocol.TField SHARE_COUNT_FIELD_DESC = new org.apache.thrift.protocol.TField("shareCount", org.apache.thrift.protocol.TType.I32, (short)5);
+  private static final org.apache.thrift.protocol.TField REDEEMED_FIELD_DESC = new org.apache.thrift.protocol.TField("redeemed", org.apache.thrift.protocol.TType.I64, (short)6);
+  private static final org.apache.thrift.protocol.TField CREATED_FIELD_DESC = new org.apache.thrift.protocol.TField("created", org.apache.thrift.protocol.TType.I64, (short)7);
+  private static final org.apache.thrift.protocol.TField UPDATED_FIELD_DESC = new org.apache.thrift.protocol.TField("updated", org.apache.thrift.protocol.TType.I64, (short)8);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -52,7 +51,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
   public String dealAcquireId; // optional
   public Deal_t deal; // required
   public String status; // optional
-  public Merchant_t sharedByMerchant; // optional
   public Customer_t sharedByCustomer; // optional
   public int shareCount; // optional
   public long redeemed; // optional
@@ -64,12 +62,11 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     DEAL_ACQUIRE_ID((short)1, "dealAcquireId"),
     DEAL((short)2, "deal"),
     STATUS((short)3, "status"),
-    SHARED_BY_MERCHANT((short)4, "sharedByMerchant"),
-    SHARED_BY_CUSTOMER((short)5, "sharedByCustomer"),
-    SHARE_COUNT((short)6, "shareCount"),
-    REDEEMED((short)7, "redeemed"),
-    CREATED((short)8, "created"),
-    UPDATED((short)9, "updated");
+    SHARED_BY_CUSTOMER((short)4, "sharedByCustomer"),
+    SHARE_COUNT((short)5, "shareCount"),
+    REDEEMED((short)6, "redeemed"),
+    CREATED((short)7, "created"),
+    UPDATED((short)8, "updated");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -90,17 +87,15 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
           return DEAL;
         case 3: // STATUS
           return STATUS;
-        case 4: // SHARED_BY_MERCHANT
-          return SHARED_BY_MERCHANT;
-        case 5: // SHARED_BY_CUSTOMER
+        case 4: // SHARED_BY_CUSTOMER
           return SHARED_BY_CUSTOMER;
-        case 6: // SHARE_COUNT
+        case 5: // SHARE_COUNT
           return SHARE_COUNT;
-        case 7: // REDEEMED
+        case 6: // REDEEMED
           return REDEEMED;
-        case 8: // CREATED
+        case 7: // CREATED
           return CREATED;
-        case 9: // UPDATED
+        case 8: // UPDATED
           return UPDATED;
         default:
           return null;
@@ -147,7 +142,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
   private static final int __CREATED_ISSET_ID = 2;
   private static final int __UPDATED_ISSET_ID = 3;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.DEAL_ACQUIRE_ID,_Fields.STATUS,_Fields.SHARED_BY_MERCHANT,_Fields.SHARED_BY_CUSTOMER,_Fields.SHARE_COUNT,_Fields.REDEEMED,_Fields.CREATED,_Fields.UPDATED};
+  private _Fields optionals[] = {_Fields.DEAL_ACQUIRE_ID,_Fields.STATUS,_Fields.SHARED_BY_CUSTOMER,_Fields.SHARE_COUNT,_Fields.REDEEMED,_Fields.CREATED,_Fields.UPDATED};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -157,8 +152,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Deal_t.class)));
     tmpMap.put(_Fields.STATUS, new org.apache.thrift.meta_data.FieldMetaData("status", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.SHARED_BY_MERCHANT, new org.apache.thrift.meta_data.FieldMetaData("sharedByMerchant", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Merchant_t.class)));
     tmpMap.put(_Fields.SHARED_BY_CUSTOMER, new org.apache.thrift.meta_data.FieldMetaData("sharedByCustomer", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Customer_t.class)));
     tmpMap.put(_Fields.SHARE_COUNT, new org.apache.thrift.meta_data.FieldMetaData("shareCount", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
@@ -197,9 +190,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     if (other.isSetStatus()) {
       this.status = other.status;
     }
-    if (other.isSetSharedByMerchant()) {
-      this.sharedByMerchant = new Merchant_t(other.sharedByMerchant);
-    }
     if (other.isSetSharedByCustomer()) {
       this.sharedByCustomer = new Customer_t(other.sharedByCustomer);
     }
@@ -217,7 +207,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     this.dealAcquireId = null;
     this.deal = null;
     this.status = null;
-    this.sharedByMerchant = null;
     this.sharedByCustomer = null;
     setShareCountIsSet(false);
     this.shareCount = 0;
@@ -298,30 +287,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
   public void setStatusIsSet(boolean value) {
     if (!value) {
       this.status = null;
-    }
-  }
-
-  public Merchant_t getSharedByMerchant() {
-    return this.sharedByMerchant;
-  }
-
-  public DealAcquire_t setSharedByMerchant(Merchant_t sharedByMerchant) {
-    this.sharedByMerchant = sharedByMerchant;
-    return this;
-  }
-
-  public void unsetSharedByMerchant() {
-    this.sharedByMerchant = null;
-  }
-
-  /** Returns true if field sharedByMerchant is set (has been assigned a value) and false otherwise */
-  public boolean isSetSharedByMerchant() {
-    return this.sharedByMerchant != null;
-  }
-
-  public void setSharedByMerchantIsSet(boolean value) {
-    if (!value) {
-      this.sharedByMerchant = null;
     }
   }
 
@@ -467,14 +432,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       }
       break;
 
-    case SHARED_BY_MERCHANT:
-      if (value == null) {
-        unsetSharedByMerchant();
-      } else {
-        setSharedByMerchant((Merchant_t)value);
-      }
-      break;
-
     case SHARED_BY_CUSTOMER:
       if (value == null) {
         unsetSharedByCustomer();
@@ -529,9 +486,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     case STATUS:
       return getStatus();
 
-    case SHARED_BY_MERCHANT:
-      return getSharedByMerchant();
-
     case SHARED_BY_CUSTOMER:
       return getSharedByCustomer();
 
@@ -564,8 +518,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       return isSetDeal();
     case STATUS:
       return isSetStatus();
-    case SHARED_BY_MERCHANT:
-      return isSetSharedByMerchant();
     case SHARED_BY_CUSTOMER:
       return isSetSharedByCustomer();
     case SHARE_COUNT:
@@ -617,15 +569,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       if (!(this_present_status && that_present_status))
         return false;
       if (!this.status.equals(that.status))
-        return false;
-    }
-
-    boolean this_present_sharedByMerchant = true && this.isSetSharedByMerchant();
-    boolean that_present_sharedByMerchant = true && that.isSetSharedByMerchant();
-    if (this_present_sharedByMerchant || that_present_sharedByMerchant) {
-      if (!(this_present_sharedByMerchant && that_present_sharedByMerchant))
-        return false;
-      if (!this.sharedByMerchant.equals(that.sharedByMerchant))
         return false;
     }
 
@@ -716,16 +659,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     }
     if (isSetStatus()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.status, typedOther.status);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = Boolean.valueOf(isSetSharedByMerchant()).compareTo(typedOther.isSetSharedByMerchant());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetSharedByMerchant()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sharedByMerchant, typedOther.sharedByMerchant);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -827,16 +760,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       }
       first = false;
     }
-    if (isSetSharedByMerchant()) {
-      if (!first) sb.append(", ");
-      sb.append("sharedByMerchant:");
-      if (this.sharedByMerchant == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.sharedByMerchant);
-      }
-      first = false;
-    }
     if (isSetSharedByCustomer()) {
       if (!first) sb.append(", ");
       sb.append("sharedByCustomer:");
@@ -883,9 +806,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
     // check for sub-struct validity
     if (deal != null) {
       deal.validate();
-    }
-    if (sharedByMerchant != null) {
-      sharedByMerchant.validate();
     }
     if (sharedByCustomer != null) {
       sharedByCustomer.validate();
@@ -953,16 +873,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 4: // SHARED_BY_MERCHANT
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.sharedByMerchant = new Merchant_t();
-              struct.sharedByMerchant.read(iprot);
-              struct.setSharedByMerchantIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 5: // SHARED_BY_CUSTOMER
+          case 4: // SHARED_BY_CUSTOMER
             if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
               struct.sharedByCustomer = new Customer_t();
               struct.sharedByCustomer.read(iprot);
@@ -971,7 +882,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 6: // SHARE_COUNT
+          case 5: // SHARE_COUNT
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
               struct.shareCount = iprot.readI32();
               struct.setShareCountIsSet(true);
@@ -979,7 +890,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 7: // REDEEMED
+          case 6: // REDEEMED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.redeemed = iprot.readI64();
               struct.setRedeemedIsSet(true);
@@ -987,7 +898,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // CREATED
+          case 7: // CREATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.created = iprot.readI64();
               struct.setCreatedIsSet(true);
@@ -995,7 +906,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // UPDATED
+          case 8: // UPDATED
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.updated = iprot.readI64();
               struct.setUpdatedIsSet(true);
@@ -1034,13 +945,6 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
         if (struct.isSetStatus()) {
           oprot.writeFieldBegin(STATUS_FIELD_DESC);
           oprot.writeString(struct.status);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.sharedByMerchant != null) {
-        if (struct.isSetSharedByMerchant()) {
-          oprot.writeFieldBegin(SHARED_BY_MERCHANT_FIELD_DESC);
-          struct.sharedByMerchant.write(oprot);
           oprot.writeFieldEnd();
         }
       }
@@ -1096,33 +1000,27 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       if (struct.isSetStatus()) {
         optionals.set(1);
       }
-      if (struct.isSetSharedByMerchant()) {
+      if (struct.isSetSharedByCustomer()) {
         optionals.set(2);
       }
-      if (struct.isSetSharedByCustomer()) {
+      if (struct.isSetShareCount()) {
         optionals.set(3);
       }
-      if (struct.isSetShareCount()) {
+      if (struct.isSetRedeemed()) {
         optionals.set(4);
       }
-      if (struct.isSetRedeemed()) {
+      if (struct.isSetCreated()) {
         optionals.set(5);
       }
-      if (struct.isSetCreated()) {
+      if (struct.isSetUpdated()) {
         optionals.set(6);
       }
-      if (struct.isSetUpdated()) {
-        optionals.set(7);
-      }
-      oprot.writeBitSet(optionals, 8);
+      oprot.writeBitSet(optionals, 7);
       if (struct.isSetDealAcquireId()) {
         oprot.writeString(struct.dealAcquireId);
       }
       if (struct.isSetStatus()) {
         oprot.writeString(struct.status);
-      }
-      if (struct.isSetSharedByMerchant()) {
-        struct.sharedByMerchant.write(oprot);
       }
       if (struct.isSetSharedByCustomer()) {
         struct.sharedByCustomer.write(oprot);
@@ -1147,7 +1045,7 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
       struct.deal = new Deal_t();
       struct.deal.read(iprot);
       struct.setDealIsSet(true);
-      BitSet incoming = iprot.readBitSet(8);
+      BitSet incoming = iprot.readBitSet(7);
       if (incoming.get(0)) {
         struct.dealAcquireId = iprot.readString();
         struct.setDealAcquireIdIsSet(true);
@@ -1157,28 +1055,23 @@ public class DealAcquire_t implements org.apache.thrift.TBase<DealAcquire_t, Dea
         struct.setStatusIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.sharedByMerchant = new Merchant_t();
-        struct.sharedByMerchant.read(iprot);
-        struct.setSharedByMerchantIsSet(true);
-      }
-      if (incoming.get(3)) {
         struct.sharedByCustomer = new Customer_t();
         struct.sharedByCustomer.read(iprot);
         struct.setSharedByCustomerIsSet(true);
       }
-      if (incoming.get(4)) {
+      if (incoming.get(3)) {
         struct.shareCount = iprot.readI32();
         struct.setShareCountIsSet(true);
       }
-      if (incoming.get(5)) {
+      if (incoming.get(4)) {
         struct.redeemed = iprot.readI64();
         struct.setRedeemedIsSet(true);
       }
-      if (incoming.get(6)) {
+      if (incoming.get(5)) {
         struct.created = iprot.readI64();
         struct.setCreatedIsSet(true);
       }
-      if (incoming.get(7)) {
+      if (incoming.get(6)) {
         struct.updated = iprot.readI64();
         struct.setUpdatedIsSet(true);
       }

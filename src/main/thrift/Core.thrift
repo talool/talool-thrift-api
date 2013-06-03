@@ -125,12 +125,19 @@ struct DealAcquire_t {
   1: optional string dealAcquireId;
   2: required Deal_t deal;
   3: optional string status; 
-  4: optional Merchant_t sharedByMerchant;
-  5: optional Customer_t sharedByCustomer;
-  6: optional i32 shareCount;
-  7: optional Timestamp redeemed;
-  8: optional Timestamp created;
-  9: optional Timestamp updated;
+  4: optional Customer_t sharedByCustomer;
+  5: optional i32 shareCount;
+  6: optional Timestamp redeemed;
+  7: optional Timestamp created;
+  8: optional Timestamp updated;
+}
+
+struct Gift_t {
+  1: optional string giftId;
+  2: required DealAcquire_t dealAcquire;
+  3: optional string status; 
+  4: optional Timestamp created;
+  5: optional Timestamp updated;
 }
 
 

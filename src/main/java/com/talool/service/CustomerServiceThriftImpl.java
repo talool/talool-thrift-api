@@ -34,6 +34,7 @@ import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
+import com.talool.core.social.SocialNetwork;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -456,7 +457,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			customerService.removeSocialAccount(UUID.fromString(token.getAccountId()),
-					taloolService.getSocialNetwork(socialNetwork_t.toString()));
+					taloolService.getSocialNetwork(SocialNetwork.NetworkName.valueOf(socialNetwork_t.toString())));
 		}
 		catch (ServiceException e)
 		{
