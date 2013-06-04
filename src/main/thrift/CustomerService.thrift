@@ -48,5 +48,19 @@ service CustomerService_t {
    list<Core.Merchant_t> getFavoriteMerchants(1:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
 
    list<Core.Category_t> getCategories() throws (1:Core.ServiceException_t error);
+   
+   # Gift methods
+   
+   void giftToFacebook(1:string dealAcquireId,2:string facebookId,3:string receipientName) throws (1:Core.ServiceException_t error);
+   
+   void giftToEmail(1:string dealAcquireId,2:string email,3:string receipientName) throws (1:Core.ServiceException_t error);
+   
+   list<Core.Gift_t> getGifts() throws (1:Core.ServiceException_t error);
+   
+   list<Core.Gift_t> acceptGift(1:string giftId) throws (1:Core.ServiceException_t error);
+   
+   list<Core.Gift_t> rejectGift(1:string giftId) throws (1:Core.ServiceException_t error);
+   
+   
 
 }

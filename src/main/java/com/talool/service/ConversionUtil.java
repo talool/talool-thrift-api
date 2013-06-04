@@ -364,7 +364,7 @@ public final class ConversionUtil
 			}
 
 			dac.setShareCount(_dac.getShareCount());
-			dac.setStatus(_dac.getAcquireStatus().getStatus());
+			dac.setStatus(_dac.getAcquireStatus().toString());
 
 			deals.add(dac);
 

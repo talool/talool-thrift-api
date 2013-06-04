@@ -5795,6 +5795,1844 @@ static NSString * CTOKEN_NAME = @"ctok";
 
 @end
 
+@interface giftToFacebook_args : NSObject <NSCoding> {
+  NSString * __dealAcquireId;
+  NSString * __facebookId;
+  NSString * __receipientName;
+
+  BOOL __dealAcquireId_isset;
+  BOOL __facebookId_isset;
+  BOOL __receipientName_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=dealAcquireId, setter=setDealAcquireId:) NSString * dealAcquireId;
+@property (nonatomic, retain, getter=facebookId, setter=setFacebookId:) NSString * facebookId;
+@property (nonatomic, retain, getter=receipientName, setter=setReceipientName:) NSString * receipientName;
+#endif
+
+- (id) init;
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSString *) dealAcquireId;
+- (void) setDealAcquireId: (NSString *) dealAcquireId;
+#endif
+- (BOOL) dealAcquireIdIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) facebookId;
+- (void) setFacebookId: (NSString *) facebookId;
+#endif
+- (BOOL) facebookIdIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) receipientName;
+- (void) setReceipientName: (NSString *) receipientName;
+#endif
+- (BOOL) receipientNameIsSet;
+
+@end
+
+@implementation giftToFacebook_args
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName
+{
+  self = [super init];
+  __dealAcquireId = [dealAcquireId retain_stub];
+  __dealAcquireId_isset = YES;
+  __facebookId = [facebookId retain_stub];
+  __facebookId_isset = YES;
+  __receipientName = [receipientName retain_stub];
+  __receipientName_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"dealAcquireId"])
+  {
+    __dealAcquireId = [[decoder decodeObjectForKey: @"dealAcquireId"] retain_stub];
+    __dealAcquireId_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"facebookId"])
+  {
+    __facebookId = [[decoder decodeObjectForKey: @"facebookId"] retain_stub];
+    __facebookId_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"receipientName"])
+  {
+    __receipientName = [[decoder decodeObjectForKey: @"receipientName"] retain_stub];
+    __receipientName_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__dealAcquireId_isset)
+  {
+    [encoder encodeObject: __dealAcquireId forKey: @"dealAcquireId"];
+  }
+  if (__facebookId_isset)
+  {
+    [encoder encodeObject: __facebookId forKey: @"facebookId"];
+  }
+  if (__receipientName_isset)
+  {
+    [encoder encodeObject: __receipientName forKey: @"receipientName"];
+  }
+}
+
+- (void) dealloc
+{
+  [__dealAcquireId release_stub];
+  [__facebookId release_stub];
+  [__receipientName release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) dealAcquireId {
+  return [[__dealAcquireId retain_stub] autorelease_stub];
+}
+
+- (void) setDealAcquireId: (NSString *) dealAcquireId {
+  [dealAcquireId retain_stub];
+  [__dealAcquireId release_stub];
+  __dealAcquireId = dealAcquireId;
+  __dealAcquireId_isset = YES;
+}
+
+- (BOOL) dealAcquireIdIsSet {
+  return __dealAcquireId_isset;
+}
+
+- (void) unsetDealAcquireId {
+  [__dealAcquireId release_stub];
+  __dealAcquireId = nil;
+  __dealAcquireId_isset = NO;
+}
+
+- (NSString *) facebookId {
+  return [[__facebookId retain_stub] autorelease_stub];
+}
+
+- (void) setFacebookId: (NSString *) facebookId {
+  [facebookId retain_stub];
+  [__facebookId release_stub];
+  __facebookId = facebookId;
+  __facebookId_isset = YES;
+}
+
+- (BOOL) facebookIdIsSet {
+  return __facebookId_isset;
+}
+
+- (void) unsetFacebookId {
+  [__facebookId release_stub];
+  __facebookId = nil;
+  __facebookId_isset = NO;
+}
+
+- (NSString *) receipientName {
+  return [[__receipientName retain_stub] autorelease_stub];
+}
+
+- (void) setReceipientName: (NSString *) receipientName {
+  [receipientName retain_stub];
+  [__receipientName release_stub];
+  __receipientName = receipientName;
+  __receipientName_isset = YES;
+}
+
+- (BOOL) receipientNameIsSet {
+  return __receipientName_isset;
+}
+
+- (void) unsetReceipientName {
+  [__receipientName release_stub];
+  __receipientName = nil;
+  __receipientName_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setDealAcquireId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setFacebookId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 3:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setReceipientName: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"giftToFacebook_args"];
+  if (__dealAcquireId_isset) {
+    if (__dealAcquireId != nil) {
+      [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __dealAcquireId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__facebookId_isset) {
+    if (__facebookId != nil) {
+      [outProtocol writeFieldBeginWithName: @"facebookId" type: TType_STRING fieldID: 2];
+      [outProtocol writeString: __facebookId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__receipientName_isset) {
+    if (__receipientName != nil) {
+      [outProtocol writeFieldBeginWithName: @"receipientName" type: TType_STRING fieldID: 3];
+      [outProtocol writeString: __receipientName];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"giftToFacebook_args("];
+  [ms appendString: @"dealAcquireId:"];
+  [ms appendFormat: @"\"%@\"", __dealAcquireId];
+  [ms appendString: @",facebookId:"];
+  [ms appendFormat: @"\"%@\"", __facebookId];
+  [ms appendString: @",receipientName:"];
+  [ms appendFormat: @"\"%@\"", __receipientName];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface GiftToFacebook_result : NSObject <NSCoding> {
+  ServiceException_t * __error;
+
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithError: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation GiftToFacebook_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithError: (ServiceException_t *) error
+{
+  self = [super init];
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"GiftToFacebook_result"];
+
+  if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"GiftToFacebook_result("];
+  [ms appendString: @"error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface giftToEmail_args : NSObject <NSCoding> {
+  NSString * __dealAcquireId;
+  NSString * __email;
+  NSString * __receipientName;
+
+  BOOL __dealAcquireId_isset;
+  BOOL __email_isset;
+  BOOL __receipientName_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=dealAcquireId, setter=setDealAcquireId:) NSString * dealAcquireId;
+@property (nonatomic, retain, getter=email, setter=setEmail:) NSString * email;
+@property (nonatomic, retain, getter=receipientName, setter=setReceipientName:) NSString * receipientName;
+#endif
+
+- (id) init;
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSString *) dealAcquireId;
+- (void) setDealAcquireId: (NSString *) dealAcquireId;
+#endif
+- (BOOL) dealAcquireIdIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) email;
+- (void) setEmail: (NSString *) email;
+#endif
+- (BOOL) emailIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) receipientName;
+- (void) setReceipientName: (NSString *) receipientName;
+#endif
+- (BOOL) receipientNameIsSet;
+
+@end
+
+@implementation giftToEmail_args
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName
+{
+  self = [super init];
+  __dealAcquireId = [dealAcquireId retain_stub];
+  __dealAcquireId_isset = YES;
+  __email = [email retain_stub];
+  __email_isset = YES;
+  __receipientName = [receipientName retain_stub];
+  __receipientName_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"dealAcquireId"])
+  {
+    __dealAcquireId = [[decoder decodeObjectForKey: @"dealAcquireId"] retain_stub];
+    __dealAcquireId_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"email"])
+  {
+    __email = [[decoder decodeObjectForKey: @"email"] retain_stub];
+    __email_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"receipientName"])
+  {
+    __receipientName = [[decoder decodeObjectForKey: @"receipientName"] retain_stub];
+    __receipientName_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__dealAcquireId_isset)
+  {
+    [encoder encodeObject: __dealAcquireId forKey: @"dealAcquireId"];
+  }
+  if (__email_isset)
+  {
+    [encoder encodeObject: __email forKey: @"email"];
+  }
+  if (__receipientName_isset)
+  {
+    [encoder encodeObject: __receipientName forKey: @"receipientName"];
+  }
+}
+
+- (void) dealloc
+{
+  [__dealAcquireId release_stub];
+  [__email release_stub];
+  [__receipientName release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) dealAcquireId {
+  return [[__dealAcquireId retain_stub] autorelease_stub];
+}
+
+- (void) setDealAcquireId: (NSString *) dealAcquireId {
+  [dealAcquireId retain_stub];
+  [__dealAcquireId release_stub];
+  __dealAcquireId = dealAcquireId;
+  __dealAcquireId_isset = YES;
+}
+
+- (BOOL) dealAcquireIdIsSet {
+  return __dealAcquireId_isset;
+}
+
+- (void) unsetDealAcquireId {
+  [__dealAcquireId release_stub];
+  __dealAcquireId = nil;
+  __dealAcquireId_isset = NO;
+}
+
+- (NSString *) email {
+  return [[__email retain_stub] autorelease_stub];
+}
+
+- (void) setEmail: (NSString *) email {
+  [email retain_stub];
+  [__email release_stub];
+  __email = email;
+  __email_isset = YES;
+}
+
+- (BOOL) emailIsSet {
+  return __email_isset;
+}
+
+- (void) unsetEmail {
+  [__email release_stub];
+  __email = nil;
+  __email_isset = NO;
+}
+
+- (NSString *) receipientName {
+  return [[__receipientName retain_stub] autorelease_stub];
+}
+
+- (void) setReceipientName: (NSString *) receipientName {
+  [receipientName retain_stub];
+  [__receipientName release_stub];
+  __receipientName = receipientName;
+  __receipientName_isset = YES;
+}
+
+- (BOOL) receipientNameIsSet {
+  return __receipientName_isset;
+}
+
+- (void) unsetReceipientName {
+  [__receipientName release_stub];
+  __receipientName = nil;
+  __receipientName_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setDealAcquireId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 2:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setEmail: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 3:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setReceipientName: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"giftToEmail_args"];
+  if (__dealAcquireId_isset) {
+    if (__dealAcquireId != nil) {
+      [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __dealAcquireId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__email_isset) {
+    if (__email != nil) {
+      [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 2];
+      [outProtocol writeString: __email];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  if (__receipientName_isset) {
+    if (__receipientName != nil) {
+      [outProtocol writeFieldBeginWithName: @"receipientName" type: TType_STRING fieldID: 3];
+      [outProtocol writeString: __receipientName];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"giftToEmail_args("];
+  [ms appendString: @"dealAcquireId:"];
+  [ms appendFormat: @"\"%@\"", __dealAcquireId];
+  [ms appendString: @",email:"];
+  [ms appendFormat: @"\"%@\"", __email];
+  [ms appendString: @",receipientName:"];
+  [ms appendFormat: @"\"%@\"", __receipientName];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface GiftToEmail_result : NSObject <NSCoding> {
+  ServiceException_t * __error;
+
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithError: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation GiftToEmail_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithError: (ServiceException_t *) error
+{
+  self = [super init];
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"GiftToEmail_result"];
+
+  if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"GiftToEmail_result("];
+  [ms appendString: @"error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface getGifts_args : NSObject <NSCoding> {
+}
+
+- (id) init;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+@end
+
+@implementation getGifts_args
+
+- (id) init
+{
+  self = [super init];
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"getGifts_args"];
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"getGifts_args("];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface GetGifts_result : NSObject <NSCoding> {
+  NSMutableArray * __success;
+  ServiceException_t * __error;
+
+  BOOL __success_isset;
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=success, setter=setSuccess:) NSMutableArray * success;
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSMutableArray *) success;
+- (void) setSuccess: (NSMutableArray *) success;
+#endif
+- (BOOL) successIsSet;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation GetGifts_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error
+{
+  self = [super init];
+  __success = [success retain_stub];
+  __success_isset = YES;
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [[decoder decodeObjectForKey: @"success"] retain_stub];
+    __success_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeObject: __success forKey: @"success"];
+  }
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__success release_stub];
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (NSMutableArray *) success {
+  return [[__success retain_stub] autorelease_stub];
+}
+
+- (void) setSuccess: (NSMutableArray *) success {
+  [success retain_stub];
+  [__success release_stub];
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  [__success release_stub];
+  __success = nil;
+  __success_isset = NO;
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_LIST) {
+          int _size35;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size35];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size35];
+          int _i36;
+          for (_i36 = 0; _i36 < _size35; ++_i36)
+          {
+            Gift_t *_elem37 = [[Gift_t alloc] init];
+            [_elem37 read: inProtocol];
+            [fieldValue addObject: _elem37];
+            [_elem37 release_stub];
+          }
+          [inProtocol readListEnd];
+          [self setSuccess: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"GetGifts_result"];
+
+  if (__success_isset) {
+    if (__success != nil) {
+      [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
+      {
+        [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__success count]];
+        int i39;
+        for (i39 = 0; i39 < [__success count]; i39++)
+        {
+          [[__success objectAtIndex: i39] write: outProtocol];
+        }
+        [outProtocol writeListEnd];
+      }
+      [outProtocol writeFieldEnd];
+    }
+  } else if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"GetGifts_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%@", __success];
+  [ms appendString: @",error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface acceptGift_args : NSObject <NSCoding> {
+  NSString * __giftId;
+
+  BOOL __giftId_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=giftId, setter=setGiftId:) NSString * giftId;
+#endif
+
+- (id) init;
+- (id) initWithGiftId: (NSString *) giftId;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSString *) giftId;
+- (void) setGiftId: (NSString *) giftId;
+#endif
+- (BOOL) giftIdIsSet;
+
+@end
+
+@implementation acceptGift_args
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithGiftId: (NSString *) giftId
+{
+  self = [super init];
+  __giftId = [giftId retain_stub];
+  __giftId_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"giftId"])
+  {
+    __giftId = [[decoder decodeObjectForKey: @"giftId"] retain_stub];
+    __giftId_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__giftId_isset)
+  {
+    [encoder encodeObject: __giftId forKey: @"giftId"];
+  }
+}
+
+- (void) dealloc
+{
+  [__giftId release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) giftId {
+  return [[__giftId retain_stub] autorelease_stub];
+}
+
+- (void) setGiftId: (NSString *) giftId {
+  [giftId retain_stub];
+  [__giftId release_stub];
+  __giftId = giftId;
+  __giftId_isset = YES;
+}
+
+- (BOOL) giftIdIsSet {
+  return __giftId_isset;
+}
+
+- (void) unsetGiftId {
+  [__giftId release_stub];
+  __giftId = nil;
+  __giftId_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setGiftId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"acceptGift_args"];
+  if (__giftId_isset) {
+    if (__giftId != nil) {
+      [outProtocol writeFieldBeginWithName: @"giftId" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __giftId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"acceptGift_args("];
+  [ms appendString: @"giftId:"];
+  [ms appendFormat: @"\"%@\"", __giftId];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface AcceptGift_result : NSObject <NSCoding> {
+  NSMutableArray * __success;
+  ServiceException_t * __error;
+
+  BOOL __success_isset;
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=success, setter=setSuccess:) NSMutableArray * success;
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSMutableArray *) success;
+- (void) setSuccess: (NSMutableArray *) success;
+#endif
+- (BOOL) successIsSet;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation AcceptGift_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error
+{
+  self = [super init];
+  __success = [success retain_stub];
+  __success_isset = YES;
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [[decoder decodeObjectForKey: @"success"] retain_stub];
+    __success_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeObject: __success forKey: @"success"];
+  }
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__success release_stub];
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (NSMutableArray *) success {
+  return [[__success retain_stub] autorelease_stub];
+}
+
+- (void) setSuccess: (NSMutableArray *) success {
+  [success retain_stub];
+  [__success release_stub];
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  [__success release_stub];
+  __success = nil;
+  __success_isset = NO;
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_LIST) {
+          int _size40;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size40];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size40];
+          int _i41;
+          for (_i41 = 0; _i41 < _size40; ++_i41)
+          {
+            Gift_t *_elem42 = [[Gift_t alloc] init];
+            [_elem42 read: inProtocol];
+            [fieldValue addObject: _elem42];
+            [_elem42 release_stub];
+          }
+          [inProtocol readListEnd];
+          [self setSuccess: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"AcceptGift_result"];
+
+  if (__success_isset) {
+    if (__success != nil) {
+      [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
+      {
+        [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__success count]];
+        int i44;
+        for (i44 = 0; i44 < [__success count]; i44++)
+        {
+          [[__success objectAtIndex: i44] write: outProtocol];
+        }
+        [outProtocol writeListEnd];
+      }
+      [outProtocol writeFieldEnd];
+    }
+  } else if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"AcceptGift_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%@", __success];
+  [ms appendString: @",error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface rejectGift_args : NSObject <NSCoding> {
+  NSString * __giftId;
+
+  BOOL __giftId_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=giftId, setter=setGiftId:) NSString * giftId;
+#endif
+
+- (id) init;
+- (id) initWithGiftId: (NSString *) giftId;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSString *) giftId;
+- (void) setGiftId: (NSString *) giftId;
+#endif
+- (BOOL) giftIdIsSet;
+
+@end
+
+@implementation rejectGift_args
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithGiftId: (NSString *) giftId
+{
+  self = [super init];
+  __giftId = [giftId retain_stub];
+  __giftId_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"giftId"])
+  {
+    __giftId = [[decoder decodeObjectForKey: @"giftId"] retain_stub];
+    __giftId_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__giftId_isset)
+  {
+    [encoder encodeObject: __giftId forKey: @"giftId"];
+  }
+}
+
+- (void) dealloc
+{
+  [__giftId release_stub];
+  [super dealloc_stub];
+}
+
+- (NSString *) giftId {
+  return [[__giftId retain_stub] autorelease_stub];
+}
+
+- (void) setGiftId: (NSString *) giftId {
+  [giftId retain_stub];
+  [__giftId release_stub];
+  __giftId = giftId;
+  __giftId_isset = YES;
+}
+
+- (BOOL) giftIdIsSet {
+  return __giftId_isset;
+}
+
+- (void) unsetGiftId {
+  [__giftId release_stub];
+  __giftId = nil;
+  __giftId_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 1:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setGiftId: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"rejectGift_args"];
+  if (__giftId_isset) {
+    if (__giftId != nil) {
+      [outProtocol writeFieldBeginWithName: @"giftId" type: TType_STRING fieldID: 1];
+      [outProtocol writeString: __giftId];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"rejectGift_args("];
+  [ms appendString: @"giftId:"];
+  [ms appendFormat: @"\"%@\"", __giftId];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
+@interface RejectGift_result : NSObject <NSCoding> {
+  NSMutableArray * __success;
+  ServiceException_t * __error;
+
+  BOOL __success_isset;
+  BOOL __error_isset;
+}
+
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+@property (nonatomic, retain, getter=success, setter=setSuccess:) NSMutableArray * success;
+@property (nonatomic, retain, getter=error, setter=setError:) ServiceException_t * error;
+#endif
+
+- (id) init;
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error;
+
+- (void) read: (id <TProtocol>) inProtocol;
+- (void) write: (id <TProtocol>) outProtocol;
+
+#if !__has_feature(objc_arc)
+- (NSMutableArray *) success;
+- (void) setSuccess: (NSMutableArray *) success;
+#endif
+- (BOOL) successIsSet;
+
+#if !__has_feature(objc_arc)
+- (ServiceException_t *) error;
+- (void) setError: (ServiceException_t *) error;
+#endif
+- (BOOL) errorIsSet;
+
+@end
+
+@implementation RejectGift_result
+
+- (id) init
+{
+  self = [super init];
+#if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
+#endif
+  return self;
+}
+
+- (id) initWithSuccess: (NSMutableArray *) success error: (ServiceException_t *) error
+{
+  self = [super init];
+  __success = [success retain_stub];
+  __success_isset = YES;
+  __error = [error retain_stub];
+  __error_isset = YES;
+  return self;
+}
+
+- (id) initWithCoder: (NSCoder *) decoder
+{
+  self = [super init];
+  if ([decoder containsValueForKey: @"success"])
+  {
+    __success = [[decoder decodeObjectForKey: @"success"] retain_stub];
+    __success_isset = YES;
+  }
+  if ([decoder containsValueForKey: @"error"])
+  {
+    __error = [[decoder decodeObjectForKey: @"error"] retain_stub];
+    __error_isset = YES;
+  }
+  return self;
+}
+
+- (void) encodeWithCoder: (NSCoder *) encoder
+{
+  if (__success_isset)
+  {
+    [encoder encodeObject: __success forKey: @"success"];
+  }
+  if (__error_isset)
+  {
+    [encoder encodeObject: __error forKey: @"error"];
+  }
+}
+
+- (void) dealloc
+{
+  [__success release_stub];
+  [__error release_stub];
+  [super dealloc_stub];
+}
+
+- (NSMutableArray *) success {
+  return [[__success retain_stub] autorelease_stub];
+}
+
+- (void) setSuccess: (NSMutableArray *) success {
+  [success retain_stub];
+  [__success release_stub];
+  __success = success;
+  __success_isset = YES;
+}
+
+- (BOOL) successIsSet {
+  return __success_isset;
+}
+
+- (void) unsetSuccess {
+  [__success release_stub];
+  __success = nil;
+  __success_isset = NO;
+}
+
+- (ServiceException_t *) error {
+  return [[__error retain_stub] autorelease_stub];
+}
+
+- (void) setError: (ServiceException_t *) error {
+  [error retain_stub];
+  [__error release_stub];
+  __error = error;
+  __error_isset = YES;
+}
+
+- (BOOL) errorIsSet {
+  return __error_isset;
+}
+
+- (void) unsetError {
+  [__error release_stub];
+  __error = nil;
+  __error_isset = NO;
+}
+
+- (void) read: (id <TProtocol>) inProtocol
+{
+  NSString * fieldName;
+  int fieldType;
+  int fieldID;
+
+  [inProtocol readStructBeginReturningName: NULL];
+  while (true)
+  {
+    [inProtocol readFieldBeginReturningName: &fieldName type: &fieldType fieldID: &fieldID];
+    if (fieldType == TType_STOP) { 
+      break;
+    }
+    switch (fieldID)
+    {
+      case 0:
+        if (fieldType == TType_LIST) {
+          int _size45;
+          [inProtocol readListBeginReturningElementType: NULL size: &_size45];
+          NSMutableArray * fieldValue = [[NSMutableArray alloc] initWithCapacity: _size45];
+          int _i46;
+          for (_i46 = 0; _i46 < _size45; ++_i46)
+          {
+            Gift_t *_elem47 = [[Gift_t alloc] init];
+            [_elem47 read: inProtocol];
+            [fieldValue addObject: _elem47];
+            [_elem47 release_stub];
+          }
+          [inProtocol readListEnd];
+          [self setSuccess: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 1:
+        if (fieldType == TType_STRUCT) {
+          ServiceException_t *fieldValue = [[ServiceException_t alloc] init];
+          [fieldValue read: inProtocol];
+          [self setError: fieldValue];
+          [fieldValue release_stub];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      default:
+        [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        break;
+    }
+    [inProtocol readFieldEnd];
+  }
+  [inProtocol readStructEnd];
+}
+
+- (void) write: (id <TProtocol>) outProtocol {
+  [outProtocol writeStructBeginWithName: @"RejectGift_result"];
+
+  if (__success_isset) {
+    if (__success != nil) {
+      [outProtocol writeFieldBeginWithName: @"success" type: TType_LIST fieldID: 0];
+      {
+        [outProtocol writeListBeginWithElementType: TType_STRUCT size: [__success count]];
+        int i49;
+        for (i49 = 0; i49 < [__success count]; i49++)
+        {
+          [[__success objectAtIndex: i49] write: outProtocol];
+        }
+        [outProtocol writeListEnd];
+      }
+      [outProtocol writeFieldEnd];
+    }
+  } else if (__error_isset) {
+    if (__error != nil) {
+      [outProtocol writeFieldBeginWithName: @"error" type: TType_STRUCT fieldID: 1];
+      [__error write: outProtocol];
+      [outProtocol writeFieldEnd];
+    }
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+}
+
+- (NSString *) description {
+  NSMutableString * ms = [NSMutableString stringWithString: @"RejectGift_result("];
+  [ms appendString: @"success:"];
+  [ms appendFormat: @"%@", __success];
+  [ms appendString: @",error:"];
+  [ms appendFormat: @"%@", __error];
+  [ms appendString: @")"];
+  return [NSString stringWithString: ms];
+}
+
+@end
+
 @implementation CustomerService_tClient
 - (id) initWithProtocol: (id <TProtocol>) protocol
 {
@@ -6499,6 +8337,228 @@ static NSString * CTOKEN_NAME = @"ctok";
   return [self recv_getCategories];
 }
 
+- (void) send_giftToFacebook: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName
+{
+  [outProtocol writeMessageBeginWithName: @"giftToFacebook" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"giftToFacebook_args"];
+  if (dealAcquireId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: dealAcquireId];
+    [outProtocol writeFieldEnd];
+  }
+  if (facebookId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"facebookId" type: TType_STRING fieldID: 2];
+    [outProtocol writeString: facebookId];
+    [outProtocol writeFieldEnd];
+  }
+  if (receipientName != nil)  {
+    [outProtocol writeFieldBeginWithName: @"receipientName" type: TType_STRING fieldID: 3];
+    [outProtocol writeString: receipientName];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (void) recv_giftToFacebook
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  GiftToFacebook_result * result = [[[GiftToFacebook_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  return;
+}
+
+- (void) giftToFacebook: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName
+{
+  [self send_giftToFacebook : dealAcquireId facebookId: facebookId receipientName: receipientName];
+  [self recv_giftToFacebook];
+}
+
+- (void) send_giftToEmail: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName
+{
+  [outProtocol writeMessageBeginWithName: @"giftToEmail" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"giftToEmail_args"];
+  if (dealAcquireId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"dealAcquireId" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: dealAcquireId];
+    [outProtocol writeFieldEnd];
+  }
+  if (email != nil)  {
+    [outProtocol writeFieldBeginWithName: @"email" type: TType_STRING fieldID: 2];
+    [outProtocol writeString: email];
+    [outProtocol writeFieldEnd];
+  }
+  if (receipientName != nil)  {
+    [outProtocol writeFieldBeginWithName: @"receipientName" type: TType_STRING fieldID: 3];
+    [outProtocol writeString: receipientName];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (void) recv_giftToEmail
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  GiftToEmail_result * result = [[[GiftToEmail_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  return;
+}
+
+- (void) giftToEmail: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName
+{
+  [self send_giftToEmail : dealAcquireId email: email receipientName: receipientName];
+  [self recv_giftToEmail];
+}
+
+- (void) send_getGifts
+{
+  [outProtocol writeMessageBeginWithName: @"getGifts" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"getGifts_args"];
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (NSMutableArray *) recv_getGifts
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  GetGifts_result * result = [[[GetGifts_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"getGifts failed: unknown result"];
+}
+
+- (NSMutableArray *) getGifts
+{
+  [self send_getGifts];
+  return [self recv_getGifts];
+}
+
+- (void) send_acceptGift: (NSString *) giftId
+{
+  [outProtocol writeMessageBeginWithName: @"acceptGift" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"acceptGift_args"];
+  if (giftId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"giftId" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: giftId];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (NSMutableArray *) recv_acceptGift
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  AcceptGift_result * result = [[[AcceptGift_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"acceptGift failed: unknown result"];
+}
+
+- (NSMutableArray *) acceptGift: (NSString *) giftId
+{
+  [self send_acceptGift : giftId];
+  return [self recv_acceptGift];
+}
+
+- (void) send_rejectGift: (NSString *) giftId
+{
+  [outProtocol writeMessageBeginWithName: @"rejectGift" type: TMessageType_CALL sequenceID: 0];
+  [outProtocol writeStructBeginWithName: @"rejectGift_args"];
+  if (giftId != nil)  {
+    [outProtocol writeFieldBeginWithName: @"giftId" type: TType_STRING fieldID: 1];
+    [outProtocol writeString: giftId];
+    [outProtocol writeFieldEnd];
+  }
+  [outProtocol writeFieldStop];
+  [outProtocol writeStructEnd];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+}
+
+- (NSMutableArray *) recv_rejectGift
+{
+  int msgType = 0;
+  [inProtocol readMessageBeginReturningName: nil type: &msgType sequenceID: NULL];
+  if (msgType == TMessageType_EXCEPTION) {
+    TApplicationException * x = [TApplicationException read: inProtocol];
+    [inProtocol readMessageEnd];
+    @throw x;
+  }
+  RejectGift_result * result = [[[RejectGift_result alloc] init] autorelease_stub];
+  [result read: inProtocol];
+  [inProtocol readMessageEnd];
+  if ([result successIsSet]) {
+    return [result success];
+  }
+  if ([result errorIsSet]) {
+    @throw [result error];
+  }
+  @throw [TApplicationException exceptionWithType: TApplicationException_MISSING_RESULT
+                                           reason: @"rejectGift failed: unknown result"];
+}
+
+- (NSMutableArray *) rejectGift: (NSString *) giftId
+{
+  [self send_rejectGift : giftId];
+  return [self recv_rejectGift];
+}
+
 @end
 
 @implementation CustomerService_tProcessor
@@ -6638,6 +8698,46 @@ static NSString * CTOKEN_NAME = @"ctok";
     [invocation setSelector: s];
     [invocation retainArguments];
     [mMethodMap setValue: invocation forKey: @"getCategories"];
+  }
+  {
+    SEL s = @selector(process_giftToFacebook_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"giftToFacebook"];
+  }
+  {
+    SEL s = @selector(process_giftToEmail_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"giftToEmail"];
+  }
+  {
+    SEL s = @selector(process_getGifts_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"getGifts"];
+  }
+  {
+    SEL s = @selector(process_acceptGift_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"acceptGift"];
+  }
+  {
+    SEL s = @selector(process_rejectGift_withSequenceID:inProtocol:outProtocol:);
+    NSMethodSignature * sig = [self methodSignatureForSelector: s];
+    NSInvocation * invocation = [NSInvocation invocationWithMethodSignature: sig];
+    [invocation setSelector: s];
+    [invocation retainArguments];
+    [mMethodMap setValue: invocation forKey: @"rejectGift"];
   }
   return self;
 }
@@ -6943,6 +9043,91 @@ static NSString * CTOKEN_NAME = @"ctok";
   GetCategories_result * result = [[GetCategories_result alloc] init];
   [result setSuccess: [mService getCategories]];
   [outProtocol writeMessageBeginWithName: @"getCategories"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_giftToFacebook_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  giftToFacebook_args * args = [[giftToFacebook_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  GiftToFacebook_result * result = [[GiftToFacebook_result alloc] init];
+  [mService giftToFacebook: [args dealAcquireId] facebookId: [args facebookId] receipientName: [args receipientName]];
+  [outProtocol writeMessageBeginWithName: @"giftToFacebook"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_giftToEmail_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  giftToEmail_args * args = [[giftToEmail_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  GiftToEmail_result * result = [[GiftToEmail_result alloc] init];
+  [mService giftToEmail: [args dealAcquireId] email: [args email] receipientName: [args receipientName]];
+  [outProtocol writeMessageBeginWithName: @"giftToEmail"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_getGifts_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  getGifts_args * args = [[getGifts_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  GetGifts_result * result = [[GetGifts_result alloc] init];
+  [result setSuccess: [mService getGifts]];
+  [outProtocol writeMessageBeginWithName: @"getGifts"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_acceptGift_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  acceptGift_args * args = [[acceptGift_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  AcceptGift_result * result = [[AcceptGift_result alloc] init];
+  [result setSuccess: [mService acceptGift: [args giftId]]];
+  [outProtocol writeMessageBeginWithName: @"acceptGift"
+                                    type: TMessageType_REPLY
+                              sequenceID: seqID];
+  [result write: outProtocol];
+  [outProtocol writeMessageEnd];
+  [[outProtocol transport] flush];
+  [result release_stub];
+  [args release_stub];
+}
+
+- (void) process_rejectGift_withSequenceID: (int32_t) seqID inProtocol: (id<TProtocol>) inProtocol outProtocol: (id<TProtocol>) outProtocol
+{
+  rejectGift_args * args = [[rejectGift_args alloc] init];
+  [args read: inProtocol];
+  [inProtocol readMessageEnd];
+  RejectGift_result * result = [[RejectGift_result alloc] init];
+  [result setSuccess: [mService rejectGift: [args giftId]]];
+  [outProtocol writeMessageBeginWithName: @"rejectGift"
                                     type: TMessageType_REPLY
                               sequenceID: seqID];
   [result write: outProtocol];

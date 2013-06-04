@@ -15,6 +15,7 @@ import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.SearchOptions_t;
@@ -30,11 +31,13 @@ import com.talool.core.DealOffer;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
+import com.talool.core.gift.FaceBookGiftRequest;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.domain.gift.FacebookGiftRequestImpl;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -495,5 +498,68 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 
+	}
+
+	@Override
+	public void giftToFacebook(final String dealAcquireId, final String facebookId, final String receipientName)
+			throws ServiceException_t,
+			TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s giftToFacebook dealAcquireId %s facebookId %s receipientName %s",
+					token.getAccountId(),
+					dealAcquireId, facebookId, receipientName));
+		}
+
+		try
+		{
+			final FaceBookGiftRequest giftRequest = new FacebookGiftRequestImpl();
+			final DealAcquire dac = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
+			giftRequest.setDealAcquire(dac);
+
+			final Customer customer = customerService.getCustomerById(UUID.fromString(token.getAccountId()));
+			giftRequest.setFromCustomer(customer);
+			giftRequest.setToFacebookId(facebookId);
+			giftRequest.setReceipientName(receipientName);
+
+			customerService.createGiftRequest(giftRequest);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem giftToFacebook for customerId: " + token.getAccountId(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void giftToEmail(String dealAcquireId, String email, String receipientName) throws ServiceException_t, TException
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Gift_t> getGifts() throws ServiceException_t, TException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Gift_t> acceptGift(String giftId) throws ServiceException_t, TException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Gift_t> rejectGift(String giftId) throws ServiceException_t, TException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

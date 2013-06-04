@@ -33,7 +33,7 @@ import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.core.AcquireStatusType;
+import com.talool.core.AcquireStatus;
 import com.talool.core.service.ServiceException;
 
 /**
@@ -377,7 +377,7 @@ public class ServiceIntegrationTest
 		for (DealAcquire_t dac : dealAcquires)
 		{
 			totalAcs++;
-			if (dac.getStatus().equals(AcquireStatusType.REDEEMED.toString()))
+			if (dac.getStatus().equals(AcquireStatus.REDEEMED))
 			{
 				redeemedCnt++;
 			}
@@ -474,6 +474,56 @@ public class ServiceIntegrationTest
 		Assert.assertNotNull(tokenAccess.getToken());
 		Assert.assertEquals(TEST_USER_FIRST, tokenAccess.getCustomer().getFirstName());
 		Assert.assertEquals(TEST_USER_LAST, tokenAccess.getCustomer().getLastName());
+
+	}
+
+	@Test
+	public void testGiftRequests() throws ServiceException_t, TException
+	{
+		long now = System.currentTimeMillis();
+		String email = "giftGiver-" + now + "@talool.com";
+		String facebookId = "fBgiftGiverId-" + now;
+		String firstName = "Gift-" + now;
+		String lastName = "Giver-" + now;
+		String password = "pass123";
+
+		Customer_t giftGiver = new Customer_t();
+		giftGiver.setFirstName(firstName);
+		giftGiver.setLastName(lastName);
+		giftGiver.setSex(Sex_t.M);
+		giftGiver.setEmail(email);
+
+		client.createAccount(giftGiver, password);
+
+		String giftReceiverEmail = "giftReceiver-" + now + "@talool.com";
+		String giftReceiverFbId = "fBGiftReceiverId-" + now;
+		String giftReceiverFirst = "Gift-" + now;
+		String giftReceiverLast = "Receiver";
+
+		Customer_t giftReceiver = new Customer_t();
+		giftReceiver.setFirstName(giftReceiverFirst);
+		giftReceiver.setLastName(giftReceiverLast);
+		giftReceiver.setSex(Sex_t.M);
+		giftReceiver.setEmail(giftReceiverEmail);
+
+		Map<SocialNetwork_t, SocialAccount_t> socialAccounts = new HashMap<SocialNetwork_t, SocialAccount_t>();
+		socialAccounts.put(SocialNetwork_t.Facebook, new SocialAccount_t(SocialNetwork_t.Facebook, giftReceiverFbId));
+		giftReceiver.setSocialAccounts(socialAccounts);
+
+		client.createAccount(giftReceiver, password);
+
+		CTokenAccess_t tokenAccess = client.authenticate(email, password);
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<DealOffer_t> dealOffers = client.getDealOffers();
+
+		client.purchaseDealOffer(dealOffers.get(0).getDealOfferId());
+
+		List<Merchant_t> merchantsAcquired = client.getMerchantAcquires(null);
+
+		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
+
+		client.giftToFacebook(dealAcquires.get(0).getDealAcquireId(), giftReceiverFbId, giftReceiverFirst + " " + giftReceiverLast);
 
 	}
 }
