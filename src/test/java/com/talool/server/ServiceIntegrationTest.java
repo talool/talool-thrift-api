@@ -25,6 +25,7 @@ import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
@@ -524,6 +525,24 @@ public class ServiceIntegrationTest
 		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
 
 		client.giftToFacebook(dealAcquires.get(0).getDealAcquireId(), giftReceiverFbId, giftReceiverFirst + " " + giftReceiverLast);
+
+		// verify the gift made it to the user
+		tokenAccess = client.authenticate(giftReceiverEmail, password);
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Gift_t> gifts = client.getGifts();
+
+		Assert.assertEquals(1, gifts.size());
+		Assert.assertEquals(dealAcquires.get(0).getDeal().getDealId(), gifts.get(0).getDeal().getDealId());
+
+		// accept gift
+		client.acceptGift(gifts.get(0).getGiftId());
+
+		List<Merchant_t> giftedMerchants = client.getMerchantAcquires(null);
+		// verify i have a dealAcquire and no gifts!
+		Assert.assertEquals(1, giftedMerchants.size());
+		Assert.assertEquals(dealAcquires.get(0).getDeal().getMerchant().getMerchantId(), giftedMerchants.get(0).getMerchantId());
+		Assert.assertEquals(0, client.getGifts().size());
 
 	}
 }

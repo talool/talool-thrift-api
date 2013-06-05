@@ -68,8 +68,8 @@
 - (void) giftToFacebook: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
 - (void) giftToEmail: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getGifts;  // throws ServiceException_t *, TException
-- (NSMutableArray *) acceptGift: (NSString *) giftId;  // throws ServiceException_t *, TException
-- (NSMutableArray *) rejectGift: (NSString *) giftId;  // throws ServiceException_t *, TException
+- (void) acceptGift: (NSString *) giftId;  // throws ServiceException_t *, TException
+- (void) rejectGift: (NSString *) giftId;  // throws ServiceException_t *, TException
 @end
 
 @interface CustomerService_tClient : NSObject <CustomerService_t> {

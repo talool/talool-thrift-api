@@ -134,10 +134,9 @@ struct DealAcquire_t {
 
 struct Gift_t {
   1: required string giftId;
-  2: required DealAcquire_t dealAcquire;
-  3: required string status; 
-  4: optional Timestamp created;
-  5: optional Timestamp updated;
+  2: required Deal_t deal;
+  3: required Customer_t fromCustomer; 
+  4: required Timestamp created;
 }
 
 

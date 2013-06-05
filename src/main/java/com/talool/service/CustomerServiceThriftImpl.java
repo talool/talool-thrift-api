@@ -31,13 +31,13 @@ import com.talool.core.DealOffer;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
-import com.talool.core.gift.FaceBookGiftRequest;
+import com.talool.core.gift.Gift;
+import com.talool.core.gift.GiftStatus;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
-import com.talool.domain.gift.FacebookGiftRequestImpl;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -60,10 +60,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
+	private static final ImmutableList<Gift_t> EMPTY_GIFTS = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
 	private CategoryThread categoryThread;
+
+	private GiftStatus[] PENDING_GIFT_ACCEPT = new GiftStatus[] { GiftStatus.PENDING };
 
 	private class CategoryThread extends Thread
 	{
@@ -516,16 +519,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final FaceBookGiftRequest giftRequest = new FacebookGiftRequestImpl();
-			final DealAcquire dac = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
-			giftRequest.setDealAcquire(dac);
 
-			final Customer customer = customerService.getCustomerById(UUID.fromString(token.getAccountId()));
-			giftRequest.setFromCustomer(customer);
-			giftRequest.setToFacebookId(facebookId);
-			giftRequest.setReceipientName(receipientName);
-
-			customerService.createGiftRequest(giftRequest);
+			customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
+					facebookId, receipientName);
 		}
 		catch (ServiceException e)
 		{
@@ -536,30 +532,97 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void giftToEmail(String dealAcquireId, String email, String receipientName) throws ServiceException_t, TException
+	public void giftToEmail(final String dealAcquireId, final String email, final String receipientName) throws ServiceException_t,
+			TException
 	{
-		// TODO Auto-generated method stub
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s giftToEmail dealAcquireId %s email %s receipientName %s",
+					token.getAccountId(),
+					dealAcquireId, email, receipientName));
+		}
+
+		try
+		{
+
+			customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
+					email, receipientName);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem giftToEmail for customerId: " + token.getAccountId(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
 
 	}
 
 	@Override
 	public List<Gift_t> getGifts() throws ServiceException_t, TException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<Gift> gifts = null;
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s getGifts", token.getAccountId()));
+		}
+
+		try
+		{
+			gifts = customerService.getGifts(UUID.fromString(token.getAccountId()), PENDING_GIFT_ACCEPT);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
+		final List<Gift_t> thriftGifts = ConversionUtil.convertToThriftGifts(gifts);
+		return CollectionUtils.isEmpty(thriftGifts) ? EMPTY_GIFTS : thriftGifts;
 	}
 
 	@Override
-	public List<Gift_t> acceptGift(String giftId) throws ServiceException_t, TException
+	public void acceptGift(final String giftId) throws ServiceException_t, TException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s acceptGift giftId %s", token.getAccountId(), giftId));
+		}
+
+		try
+		{
+			customerService.acceptGift(UUID.fromString(giftId), UUID.fromString(token.getAccountId()));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(String.format("Problem acceptGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+
 	}
 
 	@Override
-	public List<Gift_t> rejectGift(String giftId) throws ServiceException_t, TException
+	public void rejectGift(final String giftId) throws ServiceException_t, TException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s rejectGift giftId %s", token.getAccountId(), giftId));
+		}
+
+		try
+		{
+			customerService.rejectGift(UUID.fromString(giftId), UUID.fromString(token.getAccountId()));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(String.format("Problem rejectGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
 	}
 }

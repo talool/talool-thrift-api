@@ -25,6 +25,7 @@ import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
@@ -44,6 +45,7 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
 import com.talool.core.Sex;
+import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
@@ -320,6 +322,28 @@ public final class ConversionUtil
 		return mLoc;
 	}
 
+	public static List<Gift_t> convertToThriftGifts(final List<Gift> gifts)
+	{
+		if (CollectionUtils.isEmpty(gifts))
+		{
+			return null;
+		}
+
+		final List<Gift_t> thriftGifts = new ArrayList<Gift_t>();
+
+		for (final Gift gift : gifts)
+		{
+			final Gift_t thriftGift = new Gift_t();
+			thriftGift.setCreated(gift.getCreated().getTime());
+			thriftGift.setFromCustomer(convertToThrift(gift.getFromCustomer()));
+			thriftGift.setGiftId(gift.getId().toString());
+			thriftGift.setDeal(convertToThrift(gift.getDealAcquire().getDeal()));
+			thriftGifts.add(thriftGift);
+		}
+
+		return thriftGifts;
+	}
+
 	public static Merchant_t convertToThrift(final Merchant merchant)
 	{
 		final Merchant_t thriftMerch = new Merchant_t();
@@ -341,37 +365,41 @@ public final class ConversionUtil
 		return thriftMerch;
 	}
 
+	public static DealAcquire_t convertToThrift(final DealAcquire dealAcquire)
+	{
+		final DealAcquire_t thriftDealAcquire = new DealAcquire_t();
+		thriftDealAcquire.setDealAcquireId(dealAcquire.getId().toString());
+		thriftDealAcquire.setCreated(dealAcquire.getCreated().getTime());
+		thriftDealAcquire.setUpdated(dealAcquire.getUpdated().getTime());
+		thriftDealAcquire.setDeal(convertToThrift(dealAcquire.getDeal()));
+
+		if (dealAcquire.getRedemptionDate() != null)
+		{
+			thriftDealAcquire.setRedeemed(dealAcquire.getRedemptionDate().getTime());
+		}
+
+		if (dealAcquire.getSharedByCustomer() != null)
+		{
+			thriftDealAcquire.setSharedByCustomer(convertToThrift(dealAcquire.getSharedByCustomer()));
+		}
+
+		thriftDealAcquire.setShareCount(dealAcquire.getShareCount());
+		thriftDealAcquire.setStatus(dealAcquire.getAcquireStatus().toString());
+
+		return thriftDealAcquire;
+
+	}
+
 	public static List<DealAcquire_t> convertToThriftDealAcquires(final List<DealAcquire> dealAcquires)
 	{
 		final List<DealAcquire_t> deals = new ArrayList<DealAcquire_t>();
 
 		for (final DealAcquire _dac : dealAcquires)
 		{
-			final DealAcquire_t dac = new DealAcquire_t();
-			dac.setDealAcquireId(_dac.getId().toString());
-			dac.setCreated(_dac.getCreated().getTime());
-			dac.setUpdated(_dac.getUpdated().getTime());
-			dac.setDeal(convertToThrift(_dac.getDeal()));
-
-			if (_dac.getRedemptionDate() != null)
-			{
-				dac.setRedeemed(_dac.getRedemptionDate().getTime());
-			}
-
-			if (_dac.getSharedByCustomer() != null)
-			{
-				dac.setSharedByCustomer(convertToThrift(_dac.getSharedByCustomer()));
-			}
-
-			dac.setShareCount(_dac.getShareCount());
-			dac.setStatus(_dac.getAcquireStatus().toString());
-
-			deals.add(dac);
-
+			deals.add(convertToThrift(_dac));
 		}
 
 		return deals;
-
 	}
 
 	public static List<Merchant_t> convertToThriftMerchants(final List<Merchant> listOfMerchants)

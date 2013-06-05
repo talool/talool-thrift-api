@@ -57,9 +57,9 @@ service CustomerService_t {
    
    list<Core.Gift_t> getGifts() throws (1:Core.ServiceException_t error);
    
-   list<Core.Gift_t> acceptGift(1:string giftId) throws (1:Core.ServiceException_t error);
+   void acceptGift(1:string giftId) throws (1:Core.ServiceException_t error);
    
-   list<Core.Gift_t> rejectGift(1:string giftId) throws (1:Core.ServiceException_t error);
+   void rejectGift(1:string giftId) throws (1:Core.ServiceException_t error);
    
    
 
