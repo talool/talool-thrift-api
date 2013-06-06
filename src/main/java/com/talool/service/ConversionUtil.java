@@ -167,6 +167,8 @@ public final class ConversionUtil
 		deal.setCode(mDeal.getCode());
 		deal.setCreated(mDeal.getCreated().getTime());
 		deal.setDealId(mDeal.getId().toString());
+		deal.setDealOfferId(mDeal.getDealOfferId().toString());
+
 		deal.setDetails(mDeal.geDetails());
 		if (mDeal.getExpires() != null)
 		{

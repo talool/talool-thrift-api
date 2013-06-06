@@ -364,7 +364,10 @@ public class ServiceIntegrationTest
 		List<DealAcquire_t> dealAcquires = client.getDealAcquires(selectedMerchant.getMerchantId(), null);
 		int purchasedCnt = dealAcquires.size();
 
-		// Assert.assertEquals(MERCHANT_ACQUIRE_CNT, purchasedCnt);
+		Assert.assertEquals(MERCHANT_ACQUIRE_CNT, purchasedCnt);
+
+		Assert.assertNotNull(dealAcquires.get(1).getDealAcquireId());
+		Assert.assertNotNull(dealAcquires.get(0).getDealAcquireId());
 
 		client.redeem(dealAcquires.get(0).getDealAcquireId(), BOULDER_LOCATION);
 		client.redeem(dealAcquires.get(1).getDealAcquireId(), BOULDER_LOCATION);
@@ -378,14 +381,14 @@ public class ServiceIntegrationTest
 		for (DealAcquire_t dac : dealAcquires)
 		{
 			totalAcs++;
-			if (dac.getStatus().equals(AcquireStatus.REDEEMED))
+			if (dac.getStatus().equals(AcquireStatus.REDEEMED.toString()))
 			{
 				redeemedCnt++;
 			}
 		}
 
 		Assert.assertEquals(purchasedCnt, totalAcs);
-		// Assert.assertEquals(2, redeemedCnt);
+		Assert.assertEquals(2, redeemedCnt);
 
 	}
 
@@ -536,12 +539,14 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(dealAcquires.get(0).getDeal().getDealId(), gifts.get(0).getDeal().getDealId());
 
 		// accept gift
+		System.out.println("Acceptiing giftId: " + gifts.get(0).getGiftId());
 		client.acceptGift(gifts.get(0).getGiftId());
 
 		List<Merchant_t> giftedMerchants = client.getMerchantAcquires(null);
 		// verify i have a dealAcquire and no gifts!
 		Assert.assertEquals(1, giftedMerchants.size());
 		Assert.assertEquals(dealAcquires.get(0).getDeal().getMerchant().getMerchantId(), giftedMerchants.get(0).getMerchantId());
+
 		Assert.assertEquals(0, client.getGifts().size());
 
 	}

@@ -593,6 +593,7 @@ typedef int64_t Timestamp;
 @interface Deal_t : NSObject <NSCoding> {
   NSString * __dealId;
   Merchant_t * __merchant;
+  NSString * __dealOfferId;
   NSString * __title;
   NSString * __summary;
   NSString * __details;
@@ -604,6 +605,7 @@ typedef int64_t Timestamp;
 
   BOOL __dealId_isset;
   BOOL __merchant_isset;
+  BOOL __dealOfferId_isset;
   BOOL __title_isset;
   BOOL __summary_isset;
   BOOL __details_isset;
@@ -617,6 +619,7 @@ typedef int64_t Timestamp;
 #if TARGET_OS_IPHONE || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 @property (nonatomic, retain, getter=dealId, setter=setDealId:) NSString * dealId;
 @property (nonatomic, retain, getter=merchant, setter=setMerchant:) Merchant_t * merchant;
+@property (nonatomic, retain, getter=dealOfferId, setter=setDealOfferId:) NSString * dealOfferId;
 @property (nonatomic, retain, getter=title, setter=setTitle:) NSString * title;
 @property (nonatomic, retain, getter=summary, setter=setSummary:) NSString * summary;
 @property (nonatomic, retain, getter=details, setter=setDetails:) NSString * details;
@@ -628,7 +631,7 @@ typedef int64_t Timestamp;
 #endif
 
 - (id) init;
-- (id) initWithDealId: (NSString *) dealId merchant: (Merchant_t *) merchant title: (NSString *) title summary: (NSString *) summary details: (NSString *) details code: (NSString *) code imageUrl: (NSString *) imageUrl expires: (Timestamp) expires created: (Timestamp) created updated: (Timestamp) updated;
+- (id) initWithDealId: (NSString *) dealId merchant: (Merchant_t *) merchant dealOfferId: (NSString *) dealOfferId title: (NSString *) title summary: (NSString *) summary details: (NSString *) details code: (NSString *) code imageUrl: (NSString *) imageUrl expires: (Timestamp) expires created: (Timestamp) created updated: (Timestamp) updated;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -644,6 +647,12 @@ typedef int64_t Timestamp;
 - (void) setMerchant: (Merchant_t *) merchant;
 #endif
 - (BOOL) merchantIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) dealOfferId;
+- (void) setDealOfferId: (NSString *) dealOfferId;
+#endif
+- (BOOL) dealOfferIdIsSet;
 
 #if !__has_feature(objc_arc)
 - (NSString *) title;
