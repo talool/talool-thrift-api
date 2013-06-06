@@ -4263,14 +4263,14 @@
   return self;
 }
 
-- (id) initWithDealAcquireId: (NSString *) dealAcquireId deal: (Deal_t *) deal status: (NSString *) status sharedByCustomer: (Customer_t *) sharedByCustomer shareCount: (int32_t) shareCount redeemed: (Timestamp) redeemed created: (Timestamp) created updated: (Timestamp) updated
+- (id) initWithDealAcquireId: (NSString *) dealAcquireId deal: (Deal_t *) deal status: (int) status sharedByCustomer: (Customer_t *) sharedByCustomer shareCount: (int32_t) shareCount redeemed: (Timestamp) redeemed created: (Timestamp) created updated: (Timestamp) updated
 {
   self = [super init];
   __dealAcquireId = [dealAcquireId retain_stub];
   __dealAcquireId_isset = YES;
   __deal = [deal retain_stub];
   __deal_isset = YES;
-  __status = [status retain_stub];
+  __status = status;
   __status_isset = YES;
   __sharedByCustomer = [sharedByCustomer retain_stub];
   __sharedByCustomer_isset = YES;
@@ -4300,7 +4300,7 @@
   }
   if ([decoder containsValueForKey: @"status"])
   {
-    __status = [[decoder decodeObjectForKey: @"status"] retain_stub];
+    __status = [decoder decodeIntForKey: @"status"];
     __status_isset = YES;
   }
   if ([decoder containsValueForKey: @"sharedByCustomer"])
@@ -4343,7 +4343,7 @@
   }
   if (__status_isset)
   {
-    [encoder encodeObject: __status forKey: @"status"];
+    [encoder encodeInt: __status forKey: @"status"];
   }
   if (__sharedByCustomer_isset)
   {
@@ -4371,7 +4371,6 @@
 {
   [__dealAcquireId release_stub];
   [__deal release_stub];
-  [__status release_stub];
   [__sharedByCustomer release_stub];
   [super dealloc_stub];
 }
@@ -4418,13 +4417,11 @@
   __deal_isset = NO;
 }
 
-- (NSString *) status {
-  return [[__status retain_stub] autorelease_stub];
+- (int) status {
+  return __status;
 }
 
-- (void) setStatus: (NSString *) status {
-  [status retain_stub];
-  [__status release_stub];
+- (void) setStatus: (int) status {
   __status = status;
   __status_isset = YES;
 }
@@ -4434,8 +4431,6 @@
 }
 
 - (void) unsetStatus {
-  [__status release_stub];
-  __status = nil;
   __status_isset = NO;
 }
 
@@ -4562,8 +4557,8 @@
         }
         break;
       case 3:
-        if (fieldType == TType_STRING) {
-          NSString * fieldValue = [inProtocol readString];
+        if (fieldType == TType_I32) {
+          int fieldValue = [inProtocol readI32];
           [self setStatus: fieldValue];
         } else { 
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
@@ -4637,11 +4632,9 @@
     }
   }
   if (__status_isset) {
-    if (__status != nil) {
-      [outProtocol writeFieldBeginWithName: @"status" type: TType_STRING fieldID: 3];
-      [outProtocol writeString: __status];
-      [outProtocol writeFieldEnd];
-    }
+    [outProtocol writeFieldBeginWithName: @"status" type: TType_I32 fieldID: 3];
+    [outProtocol writeI32: __status];
+    [outProtocol writeFieldEnd];
   }
   if (__sharedByCustomer_isset) {
     if (__sharedByCustomer != nil) {
@@ -4681,7 +4674,7 @@
   [ms appendString: @",deal:"];
   [ms appendFormat: @"%@", __deal];
   [ms appendString: @",status:"];
-  [ms appendFormat: @"\"%@\"", __status];
+  [ms appendFormat: @"%i", __status];
   [ms appendString: @",sharedByCustomer:"];
   [ms appendFormat: @"%@", __sharedByCustomer];
   [ms appendString: @",shareCount:"];

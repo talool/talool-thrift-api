@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
+import com.talool.api.thrift.AcquireStatus_t;
 import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.Customer_t;
@@ -386,7 +387,7 @@ public final class ConversionUtil
 		}
 
 		thriftDealAcquire.setShareCount(dealAcquire.getShareCount());
-		thriftDealAcquire.setStatus(dealAcquire.getAcquireStatus().toString());
+		thriftDealAcquire.setStatus(AcquireStatus_t.valueOf(dealAcquire.getAcquireStatus().toString()));
 
 		return thriftDealAcquire;
 

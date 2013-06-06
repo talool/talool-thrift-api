@@ -12,6 +12,9 @@ enum Sex_t { M,F,U }
 
 enum SocialNetwork_t { Facebook, Twitter, Pinterest }
 
+enum AcquireStatus_t {PURCHASED, REDEEMED, REJECTED_CUSTOMER_SHARE, REJECTED_MERCHANT_SHARE, 
+ ACCEPTED_MERCHANT_SHARE, ACCEPTED_CUSTOMER_SHARE, PENDING_ACCEPT_MERCHANT_SHARE, PENDING_ACCEPT_CUSTOMER_SHARE }
+
 enum DealType_t { PAID_BOOK, FREE_BOOK, PAID_DEAL, FREE_DEAL }
 
 exception ServiceException_t {
@@ -125,7 +128,7 @@ struct SearchOptions_t {
 struct DealAcquire_t {
   1: optional string dealAcquireId;
   2: required Deal_t deal;
-  3: optional string status; 
+  3: optional AcquireStatus_t status; 
   4: optional Customer_t sharedByCustomer;
   5: optional i32 shareCount;
   6: optional Timestamp redeemed;

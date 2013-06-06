@@ -18,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.talool.api.thrift.AcquireStatus_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerServiceConstants;
@@ -34,7 +35,6 @@ import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.core.AcquireStatus;
 import com.talool.core.service.ServiceException;
 
 /**
@@ -381,7 +381,7 @@ public class ServiceIntegrationTest
 		for (DealAcquire_t dac : dealAcquires)
 		{
 			totalAcs++;
-			if (dac.getStatus().equals(AcquireStatus.REDEEMED.toString()))
+			if (dac.getStatus().equals(AcquireStatus_t.REDEEMED))
 			{
 				redeemedCnt++;
 			}
