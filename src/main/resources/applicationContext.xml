@@ -15,7 +15,7 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<!--  <context:component-scan base-package="com.talool" />-->
 	
-	<bean id="propertyConfigurer"
+	<bean id="servicePropertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
