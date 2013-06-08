@@ -57,7 +57,7 @@
 - (NSMutableArray *) getMerchantAcquires: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getMerchantAcquiresByCategory: (int32_t) categoryId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealAcquires: (NSString *) merchantId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
-- (void) redeem: (NSString *) dealAcquireId location: (Location_t *) location;  // throws ServiceException_t *, TException
+- (NSString *) redeem: (NSString *) dealAcquireId location: (Location_t *) location;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealOffers;  // throws ServiceException_t *, TException
 - (void) purchaseDealOffer: (NSString *) dealOfferId;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getMerchantsWithin: (Location_t *) location maxMiles: (int32_t) maxMiles searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException

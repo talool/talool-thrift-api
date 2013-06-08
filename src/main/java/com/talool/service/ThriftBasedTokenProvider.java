@@ -37,7 +37,10 @@ public class ThriftBasedTokenProvider<T extends TBase> implements TokenProvider<
 		try
 		{
 			custBytes = ThriftUtil.serialize(t, new TBinaryProtocol.Factory());
-			token = Base64.encodeBase64String(BlowfishCipher.encrypt(custBytes, key));
+
+			token = Base64.encodeBase64URLSafeString(BlowfishCipher.encrypt(custBytes, key));
+			// token = Base64.encodeBase64String(BlowfishCipher.encrypt(custBytes,
+			// key));
 		}
 		catch (Exception e)
 		{
@@ -59,6 +62,7 @@ public class ThriftBasedTokenProvider<T extends TBase> implements TokenProvider<
 		try
 		{
 			thriftObj = clazz.newInstance();
+
 			final byte[] bytesToken = BlowfishCipher.decrypt(Base64.decodeBase64(token), key);
 			ThriftUtil.deserialize(bytesToken, thriftObj, new TBinaryProtocol.Factory());
 		}

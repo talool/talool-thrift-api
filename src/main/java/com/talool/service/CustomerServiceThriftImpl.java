@@ -157,6 +157,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final Customer_t updatedCustomer = ConversionUtil.convertToThrift(taloolCustomer);
 
 			token = TokenUtil.createTokenAccess(updatedCustomer);
+
+			LOG.info("Sending token:" + token.getToken());
 		}
 		catch (Exception e)
 		{
@@ -182,7 +184,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			final Customer customer = customerService.authenticateCustomer(email, password);
 			final Customer_t thriftCust = ConversionUtil.convertToThrift(customer);
+
 			token = TokenUtil.createTokenAccess(thriftCust);
+
+			LOG.info("Sending token:" + token.getToken());
+
 			return token;
 		}
 		catch (Exception e)
@@ -204,6 +210,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			return taloolService.emailExists(AccountType.CUS, email);
 		}
+
 		catch (Exception ex)
 		{
 			LOG.error("Problem saving customer: " + ex, ex);
@@ -299,10 +306,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void redeem(final String dealAcquireId, final Location_t location)
+	public String redeem(final String dealAcquireId, final Location_t location)
 			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		String redemptionCode = null;
 
 		if (LOG.isDebugEnabled())
 		{
@@ -314,13 +322,15 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			final DealAcquire dealAcquire = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
 
-			customerService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
+			redemptionCode = customerService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+
+		return redemptionCode;
 
 	}
 

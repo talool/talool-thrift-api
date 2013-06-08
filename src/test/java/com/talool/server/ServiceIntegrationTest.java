@@ -47,8 +47,10 @@ import com.talool.core.service.ServiceException;
 public class ServiceIntegrationTest
 {
 	// private static final String TEST_URL = "http://devapi.talool.com/1.1";
-	// private static final String TEST_URL = "http://66.171.251.77/1.1";
+
 	private static final String TEST_URL = "http://localhost:8082/1.1";
+
+	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -369,8 +371,11 @@ public class ServiceIntegrationTest
 		Assert.assertNotNull(dealAcquires.get(1).getDealAcquireId());
 		Assert.assertNotNull(dealAcquires.get(0).getDealAcquireId());
 
-		client.redeem(dealAcquires.get(0).getDealAcquireId(), BOULDER_LOCATION);
-		client.redeem(dealAcquires.get(1).getDealAcquireId(), BOULDER_LOCATION);
+		String redemptionCode = client.redeem(dealAcquires.get(0).getDealAcquireId(), BOULDER_LOCATION);
+		Assert.assertNotNull(redemptionCode);
+
+		redemptionCode = client.redeem(dealAcquires.get(1).getDealAcquireId(), BOULDER_LOCATION);
+		Assert.assertNotNull(redemptionCode);
 
 		// Step #6 - ensure purchases were counted
 

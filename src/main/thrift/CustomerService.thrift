@@ -32,7 +32,7 @@ service CustomerService_t {
       
    list<Core.DealAcquire_t> getDealAcquires(1:string merchantId,2:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
    
-   void redeem(1:string dealAcquireId,2:Core.Location_t location) throws (1:Core.ServiceException_t error);
+   string redeem(1:string dealAcquireId,2:Core.Location_t location) throws (1:Core.ServiceException_t error);
    
    list<Core.DealOffer_t> getDealOffers() throws (1:Core.ServiceException_t error);
    
