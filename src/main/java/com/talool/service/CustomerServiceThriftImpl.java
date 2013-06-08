@@ -320,9 +320,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final DealAcquire dealAcquire = customerService.getDealAcquire(UUID.fromString(dealAcquireId));
-
-			redemptionCode = customerService.redeemDeal(dealAcquire, UUID.fromString(token.getAccountId()));
+			redemptionCode = customerService.redeemDeal(UUID.fromString(dealAcquireId), UUID.fromString(token.getAccountId()));
 		}
 		catch (ServiceException e)
 		{
