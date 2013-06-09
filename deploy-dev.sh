@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#scp target/talool-website-1.0.0-SNAPSHOT.war talool:~/.
+warFile=talool-service-1.0.1-SNAPSHOT.war
+server=dev-api1
 
-
-ssh -t talool 'sudo /etc/init.d/tomcat stop'
-ssh -t talool 'sudo /etc/init.d/tomcat start'
+scp target/talool-service-1.0.1-SNAPSHOT.war $server:/opt/talool/builds
+ssh -t $server 'sudo /opt/talool/builds/deploy-service-api.sh $warFile'
