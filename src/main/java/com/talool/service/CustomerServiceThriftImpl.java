@@ -174,6 +174,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			throws ServiceException_t, TException
 	{
 		CTokenAccess_t token = null;
+		Customer customer = null;
+		Customer_t thriftCust = null;
 
 		if (LOG.isDebugEnabled())
 		{
@@ -182,20 +184,36 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer customer = customerService.authenticateCustomer(email, password);
-			final Customer_t thriftCust = ConversionUtil.convertToThrift(customer);
-
-			token = TokenUtil.createTokenAccess(thriftCust);
-
-			LOG.info("Sending token:" + token.getToken());
-
-			return token;
+			customer = customerService.authenticateCustomer(email, password);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem authenticating customer: " + e, e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 		catch (Exception e)
 		{
-			LOG.error("Problem authenticatiing customer: " + e, e);
-			throw new ServiceException_t(1000, e.getLocalizedMessage());
+			LOG.error("Problem authenticating customer: " + e, e);
+			throw new ServiceException_t(1000, e.getMessage());
 		}
+
+		if (customer == null)
+		{
+			throw new ServiceException_t(ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getCode(),
+					ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getMessage());
+		}
+		try
+		{
+			thriftCust = ConversionUtil.convertToThrift(customer);
+			token = TokenUtil.createTokenAccess(thriftCust);
+		}
+		catch (Exception e)
+		{
+			LOG.error("Problem converting customer: " + e, e);
+			throw new ServiceException_t(1000, e.getMessage());
+		}
+
+		return token;
 	}
 
 	@Override

@@ -245,6 +245,11 @@ public final class ConversionUtil
 
 	public static Customer_t convertToThrift(final Customer customer)
 	{
+		if (customer == null)
+		{
+			return null;
+		}
+
 		final Customer_t thriftCust = new Customer_t();
 		thriftCust.setCustomerId(customer.getId().toString());
 		thriftCust.setEmail(customer.getEmail());

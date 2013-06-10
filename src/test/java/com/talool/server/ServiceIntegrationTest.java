@@ -50,6 +50,7 @@ public class ServiceIntegrationTest
 
 	private static final String TEST_URL = "http://localhost:8082/1.1";
 
+	// dev-apo1
 	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";

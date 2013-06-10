@@ -1,7 +1,16 @@
 #!/bin/sh
 
-warFile=talool-service-1.0.1-SNAPSHOT.war
 server=dev-api1
 
-scp target/talool-service-1.0.1-SNAPSHOT.war $server:/opt/talool/builds
-ssh -t $server 'sudo /opt/talool/builds/deploy-service-api.sh $warFile'
+if [ -n "$1" ]; then
+  warFile="$1"
+else
+ warFile=$(ls target/*SNAPSHOT.war | cut -d'/' -f2)
+fi
+
+read -s -p "sudo pass on $server? " pass
+
+echo "\nDeploying $warFile..."
+scp "$warFile" $server:/opt/talool/builds
+
+ssh -t $server "echo $pass | sudo -S /opt/talool/builds/deploy-service-api.sh $warFile"
