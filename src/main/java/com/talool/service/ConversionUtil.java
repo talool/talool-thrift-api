@@ -191,6 +191,11 @@ public final class ConversionUtil
 
 	public static Location convertFromThrift(final Location_t location_t)
 	{
+		if (location_t == null)
+		{
+			return null;
+
+		}
 		Location location = FactoryManager.get().getDomainFactory().newLocation(location_t.getLongitude(),
 				location_t.getLatitude());
 

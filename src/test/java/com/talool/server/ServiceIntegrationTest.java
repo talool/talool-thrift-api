@@ -376,6 +376,7 @@ public class ServiceIntegrationTest
 		Assert.assertNotNull(redemptionCode);
 
 		redemptionCode = client.redeem(dealAcquires.get(1).getDealAcquireId(), BOULDER_LOCATION);
+
 		Assert.assertNotNull(redemptionCode);
 
 		// Step #6 - ensure purchases were counted
