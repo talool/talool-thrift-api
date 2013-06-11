@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.core.Merchant;
@@ -23,7 +25,9 @@ import com.talool.core.service.ServiceException;
  */
 public class TServletTaloolService extends TServlet
 {
+	private static final Logger LOG = LoggerFactory.getLogger(TServletTaloolService.class);
 	private static final long serialVersionUID = 2766746006277115123L;
+	private static String[] HEALTH_IP_SOURCES = { "10.14", "127.0", "0:0" };
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -48,6 +52,26 @@ public class TServletTaloolService extends TServlet
 
 	public void doHealthCheck(final HttpServletRequest request, final HttpServletResponse response)
 	{
+		boolean isInternalRequest = false;
+
+		for (String ipStartsWith : HEALTH_IP_SOURCES)
+		{
+			if (request.getRemoteAddr().startsWith(ipStartsWith))
+			{
+				isInternalRequest = true;
+			}
+		}
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("Health check from IP: " + request.getRemoteAddr());
+		}
+
+		if (isInternalRequest == false)
+		{
+			return;
+		}
+
 		response.setContentType("text/html");
 		PrintWriter out;
 		try
