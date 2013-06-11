@@ -1,6 +1,8 @@
 package com.talool.service;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,8 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServlet;
 
 import com.talool.api.thrift.CustomerService_t;
+import com.talool.core.Merchant;
+import com.talool.core.service.ServiceException;
 
 /**
  * 
@@ -19,6 +23,7 @@ import com.talool.api.thrift.CustomerService_t;
  */
 public class TServletTaloolService extends TServlet
 {
+	private static final long serialVersionUID = 2766746006277115123L;
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -28,16 +33,42 @@ public class TServletTaloolService extends TServlet
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
 	{
-		RequestUtils.setRequest(request);
-		super.doGet(request, response);
+		if (request.getParameterMap().size() > 0)
+		{
+			doHealthCheck(request, response);
+		}
+		else
+		{
+			RequestUtils.setRequest(request);
+			super.doGet(request, response);
+		}
 	}
 
-	private static final long serialVersionUID = 2766746006277115123L;
+	public void doHealthCheck(final HttpServletRequest request, final HttpServletResponse response)
+	{
+		response.setContentType("text/html");
+		PrintWriter out;
+		try
+		{
+			final List<Merchant> merchants = ServiceFactory.get().getTaloolService().getMerchantByName("Talool");
+			out = response.getWriter();
+			out.println(merchants.get(0).getName());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (ServiceException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public TServletTaloolService()
 	{
-		super(new CustomerService_t.Processor<CustomerServiceThriftImpl>(new CustomerServiceThriftImpl()), new TBinaryProtocol.Factory());
+		super(new CustomerService_t.Processor<CustomerServiceThriftImpl>(new CustomerServiceThriftImpl()),
+				new TBinaryProtocol.Factory());
 	}
 }
