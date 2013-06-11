@@ -24,6 +24,10 @@
 		</property>
 	</bean>
 	
+	<bean id="serviceApiConfig" class="com.talool.service.ServiceApiConfig"
+		factory-method="createInstance">
+		<constructor-arg value="/etc/talool/service-api.properties" />
+	</bean>
 	
 	<import resource="./dataSource.xml"/>
 	<import resource="./taloolService.xml"/>

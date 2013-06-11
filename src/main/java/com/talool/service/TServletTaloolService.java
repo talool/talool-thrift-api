@@ -27,7 +27,6 @@ public class TServletTaloolService extends TServlet
 {
 	private static final Logger LOG = LoggerFactory.getLogger(TServletTaloolService.class);
 	private static final long serialVersionUID = 2766746006277115123L;
-	private static String[] HEALTH_IP_SOURCES = { "10.14", "127.0", "0:0" };
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -54,7 +53,7 @@ public class TServletTaloolService extends TServlet
 	{
 		boolean isInternalRequest = false;
 
-		for (String ipStartsWith : HEALTH_IP_SOURCES)
+		for (final String ipStartsWith : ServiceApiConfig.get().getAllowableHealthCheckIps())
 		{
 			if (request.getRemoteAddr().startsWith(ipStartsWith))
 			{
