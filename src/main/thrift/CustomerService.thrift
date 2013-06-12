@@ -36,6 +36,8 @@ service CustomerService_t {
    
    list<Core.DealOffer_t> getDealOffers() throws (1:Core.ServiceException_t error);
    
+   Core.DealOffer_t getDealOffer(1:string dealOfferId) throws (1:Core.ServiceException_t error);
+   
    void purchaseDealOffer(1:string dealOfferId) throws (1:Core.ServiceException_t error);
    
    list<Core.Merchant_t> getMerchantsWithin(1:Core.Location_t location, 2:i32 maxMiles, 
@@ -51,9 +53,9 @@ service CustomerService_t {
    
    # Gift methods
    
-   void giftToFacebook(1:string dealAcquireId,2:string facebookId,3:string receipientName) throws (1:Core.ServiceException_t error);
+   string giftToFacebook(1:string dealAcquireId,2:string facebookId,3:string receipientName) throws (1:Core.ServiceException_t error);
    
-   void giftToEmail(1:string dealAcquireId,2:string email,3:string receipientName) throws (1:Core.ServiceException_t error);
+   string giftToEmail(1:string dealAcquireId,2:string email,3:string receipientName) throws (1:Core.ServiceException_t error);
    
    list<Core.Gift_t> getGifts() throws (1:Core.ServiceException_t error);
    

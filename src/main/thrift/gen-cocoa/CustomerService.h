@@ -59,14 +59,15 @@
 - (NSMutableArray *) getDealAcquires: (NSString *) merchantId searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSString *) redeem: (NSString *) dealAcquireId location: (Location_t *) location;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getDealOffers;  // throws ServiceException_t *, TException
+- (DealOffer_t *) getDealOffer: (NSString *) dealOfferId;  // throws ServiceException_t *, TException
 - (void) purchaseDealOffer: (NSString *) dealOfferId;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getMerchantsWithin: (Location_t *) location maxMiles: (int32_t) maxMiles searchOptions: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (void) addFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
 - (void) removeFavoriteMerchant: (NSString *) merchantId;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getFavoriteMerchants: (SearchOptions_t *) searchOptions;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getCategories;  // throws ServiceException_t *, TException
-- (void) giftToFacebook: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
-- (void) giftToEmail: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
+- (NSString *) giftToFacebook: (NSString *) dealAcquireId facebookId: (NSString *) facebookId receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
+- (NSString *) giftToEmail: (NSString *) dealAcquireId email: (NSString *) email receipientName: (NSString *) receipientName;  // throws ServiceException_t *, TException
 - (NSMutableArray *) getGifts;  // throws ServiceException_t *, TException
 - (void) acceptGift: (NSString *) giftId;  // throws ServiceException_t *, TException
 - (void) rejectGift: (NSString *) giftId;  // throws ServiceException_t *, TException

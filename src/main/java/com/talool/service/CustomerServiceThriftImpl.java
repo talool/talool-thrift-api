@@ -531,11 +531,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void giftToFacebook(final String dealAcquireId, final String facebookId, final String receipientName)
+	public String giftToFacebook(final String dealAcquireId, final String facebookId, final String receipientName)
 			throws ServiceException_t,
 			TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		UUID giftId = null;
 
 		if (LOG.isDebugEnabled())
 		{
@@ -546,9 +547,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-
-			customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
+			giftId = customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
 					facebookId, receipientName);
+			return giftId.toString();
 		}
 		catch (ServiceException e)
 		{
@@ -559,10 +560,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void giftToEmail(final String dealAcquireId, final String email, final String receipientName) throws ServiceException_t,
+	public String giftToEmail(final String dealAcquireId, final String email, final String receipientName)
+			throws ServiceException_t,
 			TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		UUID giftId = null;
 
 		if (LOG.isDebugEnabled())
 		{
@@ -574,8 +577,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 
-			customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
+			giftId = customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
 					email, receipientName);
+			return giftId.toString();
 		}
 		catch (ServiceException e)
 		{
@@ -649,6 +653,29 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(String.format("Problem rejectGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+	}
+
+	@Override
+	public DealOffer_t getDealOffer(final String dealOfferId) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		DealOffer dealOffer = null;
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s getDealOffer dealOfferId %s", token.getAccountId(), dealOfferId));
+		}
+
+		try
+		{
+			dealOffer = taloolService.getDealOffer(UUID.fromString(dealOfferId));
+			return ConversionUtil.convertToThrift(dealOffer);
+		}
+		catch (ServiceException e)
+		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 	}

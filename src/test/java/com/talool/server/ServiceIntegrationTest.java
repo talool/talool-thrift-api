@@ -50,7 +50,7 @@ public class ServiceIntegrationTest
 
 	private static final String TEST_URL = "http://localhost:8082/1.1";
 
-	// dev-apo1
+	// dev-api1
 	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
@@ -480,11 +480,18 @@ public class ServiceIntegrationTest
 	@Test
 	public void testAuthenticate() throws ServiceException_t, TException
 	{
-		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+		try
+		{
+			CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
 
-		Assert.assertNotNull(tokenAccess.getToken());
-		Assert.assertEquals(TEST_USER_FIRST, tokenAccess.getCustomer().getFirstName());
-		Assert.assertEquals(TEST_USER_LAST, tokenAccess.getCustomer().getLastName());
+			Assert.assertNotNull(tokenAccess.getToken());
+			Assert.assertEquals(TEST_USER_FIRST, tokenAccess.getCustomer().getFirstName());
+			Assert.assertEquals(TEST_USER_LAST, tokenAccess.getCustomer().getLastName());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 	}
 
@@ -534,7 +541,13 @@ public class ServiceIntegrationTest
 
 		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
 
-		client.giftToFacebook(dealAcquires.get(0).getDealAcquireId(), giftReceiverFbId, giftReceiverFirst + " " + giftReceiverLast);
+		String giftId = client.giftToFacebook(dealAcquires.get(0).getDealAcquireId(), giftReceiverFbId, giftReceiverFirst + " "
+				+ giftReceiverLast);
+
+		Assert.assertNotNull(giftId);
+
+		giftId = client.giftToEmail(dealAcquires.get(1).getDealAcquireId(), "someemail@" + "test.talool.com", "Someone");
+		Assert.assertNotNull(giftId);
 
 		// verify the gift made it to the user
 		tokenAccess = client.authenticate(giftReceiverEmail, password);
