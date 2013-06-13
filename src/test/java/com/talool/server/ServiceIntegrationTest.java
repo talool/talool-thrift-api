@@ -68,6 +68,7 @@ public class ServiceIntegrationTest
 
 	private static final Location_t BOULDER_LOCATION = new Location_t(-105.2700, 40.0150);
 	private static final Location_t DENVER_LOCATION = new Location_t(-104.9842, 39.7392);
+	private static final Location_t BRAZIL_LOCATION = new Location_t(-47.4384, -15.6778);
 
 	private static THttpClient tHttpClient;
 	private static TProtocol protocol;
