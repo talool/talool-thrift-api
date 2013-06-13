@@ -57,6 +57,43 @@ import com.talool.core.social.SocialNetwork;
  */
 public final class ConversionUtil
 {
+	static final ThreadLocal<ConversionOptions> conversionOptions = new ThreadLocal<ConversionOptions>();
+
+	public static class ConversionOptions
+	{
+		boolean loadMerchant = false;
+		boolean loadDeal = false;
+		boolean loadMerchantLocations = false;
+		boolean loadMerchantAccounts = false;
+
+		ConversionOptions()
+		{}
+
+		public ConversionOptions loadMerchant(boolean loadMerchant)
+		{
+			this.loadMerchant = loadMerchant;
+			return this;
+		}
+
+		public ConversionOptions loadMerchantAccounts(boolean loadMerchantAccounts)
+		{
+			this.loadMerchantAccounts = loadMerchantAccounts;
+			return this;
+		}
+
+		public ConversionOptions loadMerchantLocations(boolean loadMerchantLocations)
+		{
+			this.loadMerchantLocations = loadMerchantLocations;
+			return this;
+		}
+
+		public ConversionOptions loadDeal(boolean loadDeal)
+		{
+			this.loadDeal = loadDeal;
+			return this;
+		}
+	}
+
 	private static final Logger LOG = LoggerFactory.getLogger(ConversionUtil.class);
 
 	/**
@@ -359,7 +396,9 @@ public final class ConversionUtil
 
 	public static Merchant_t convertToThrift(final Merchant merchant)
 	{
+		final ConversionOptions options = conversionOptions.get();
 		final Merchant_t thriftMerch = new Merchant_t();
+
 		thriftMerch.setMerchantId(merchant.getId().toString());
 		thriftMerch.setName(merchant.getName());
 
@@ -368,12 +407,15 @@ public final class ConversionUtil
 			thriftMerch.setCategory(convertToThriftCategory(merchant.getCategory()));
 		}
 
-		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
-		for (MerchantLocation mLoc : merchant.getLocations())
+		if (options == null || options.loadMerchantLocations)
 		{
-			locations.add(convertToThrift(mLoc));
+			final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
+			for (MerchantLocation mLoc : merchant.getLocations())
+			{
+				locations.add(convertToThrift(mLoc));
+			}
+			thriftMerch.setLocations(locations);
 		}
-		thriftMerch.setLocations(locations);
 
 		return thriftMerch;
 	}

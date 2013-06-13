@@ -433,6 +433,25 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
+	public void testGetADealOffer() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+
+		List<DealOffer_t> dealOffers = client.getDealOffers();
+
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		DealOffer_t dealOfferResult = client.getDealOffer(dealOffers.get(0).getDealOfferId());
+
+		Assert.assertEquals(dealOfferResult.getDealType(), dealOffers.get(0).getDealType());
+		Assert.assertEquals(dealOfferResult.getSummary(), dealOffers.get(0).getSummary());
+		Assert.assertEquals(dealOfferResult.getImageUrl(), dealOffers.get(0).getImageUrl());
+		Assert.assertEquals(dealOfferResult.getTitle(), dealOffers.get(0).getTitle());
+		Assert.assertEquals(dealOfferResult.getMerchant().getName(), dealOffers.get(0).getMerchant().getName());
+
+	}
+
+	@Test
 	public void testGetMerchantsWithin() throws ServiceException_t, TException
 	{
 		SearchOptions_t searchOptions = new SearchOptions_t();

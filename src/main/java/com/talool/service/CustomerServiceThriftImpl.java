@@ -38,6 +38,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.service.ConversionUtil.ConversionOptions;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -663,6 +664,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
 		DealOffer dealOffer = null;
+		DealOffer_t thriftDealOffer = null;
 
 		if (LOG.isDebugEnabled())
 		{
@@ -672,7 +674,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			dealOffer = taloolService.getDealOffer(UUID.fromString(dealOfferId));
-			return ConversionUtil.convertToThrift(dealOffer);
+			ConversionUtil.conversionOptions.set(new ConversionOptions().loadMerchant(true).loadMerchantLocations(false));
+			thriftDealOffer = ConversionUtil.convertToThrift(dealOffer);
+			return thriftDealOffer;
 		}
 		catch (ServiceException e)
 		{
