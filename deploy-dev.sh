@@ -1,7 +1,9 @@
 #!/bin/sh
+ 
+#set -e
 
-set -e
 server=dev-api1
+buildDir=/opt/talool/builds
 
 if [ -n "$1" ]; then
   warFile="$1"
@@ -13,7 +15,9 @@ warFileName=$(basename $warFile)
 
 read -s -p "sudo pass on $server? " pass
 
-echo "\nDeploying $warFile..."
-scp "$warFile" $server:/opt/talool/builds
+ssh -t $server "echo $pass | sudo -S rm -rf $buildDir/$warFileName"
 
-ssh -t $server "echo $pass | sudo -S /opt/talool/builds/deploy-service-api.sh $warFileName"
+echo "\nDeploying $warFile..."
+scp -p "$warFile" $server:$buildDir
+
+ssh -t $server "echo $pass | sudo -S /opt/talool/builds/deploy.sh $warFileName"
