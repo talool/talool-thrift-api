@@ -14,7 +14,7 @@ public class ServiceApiConfig extends PropertiesConfiguration
 	private static ServiceApiConfig instance;
 
 	private static final String ALLOWED_HEALTH_CHECK_IPS = "allowable.health.check.ips";
-	private static final String LOG_API_METHOD_RT = "log.api.method.respone.times";
+	private static final String LOG_API_METHOD_RT = "log.api.method.response.times";
 
 	private ServiceApiConfig(String file) throws ConfigurationException
 	{
