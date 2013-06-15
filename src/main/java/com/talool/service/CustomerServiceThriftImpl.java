@@ -3,10 +3,10 @@ package com.talool.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.talool.api.thrift.CTokenAccess_t;
@@ -51,6 +51,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 {
 	private static final Logger LOG = LoggerFactory.getLogger(TaloolServiceImpl.class);
 
+	private static final int CATEGORY_REFRESH_INTERVAL = 600000;
+
 	private static final transient TaloolService taloolService = FactoryManager.get()
 			.getServiceFactory().getTaloolService();
 
@@ -64,6 +66,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final ImmutableList<Gift_t> EMPTY_GIFTS = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
+
+	// a thread local convenience
+	private static ResponseTimer responseTimer = new ResponseTimer();
 
 	private CategoryThread categoryThread;
 
@@ -87,8 +92,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					}
 					else
 					{
-						LOG.info("Loaded " + categories.size() + " total categories");
-						sleep(60000);
+						LOG.info("Loaded " + categories.size() + " total categories.  Refreshing in " + CATEGORY_REFRESH_INTERVAL + " ms");
+						sleep(CATEGORY_REFRESH_INTERVAL);
 					}
 				}
 				catch (Exception e)
@@ -105,11 +110,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	public CustomerServiceThriftImpl()
 	{
 		super();
+
 		categoryThread = new CategoryThread();
 		categoryThread.setName("ThriftCategoryThread");
 		categoryThread.setDaemon(true);
 		categoryThread.start();
 		LOG.info("Started CategoryThread");
+
 	}
 
 	@Override
@@ -170,6 +177,34 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		return token;
 	}
 
+	private void beginRequest(final String method)
+	{
+		if (!ServiceApiConfig.get().logApiMethodResponseTimes())
+		{
+			return;
+		}
+
+		responseTimer.get().watch.reset();
+		responseTimer.get().method = method;
+		responseTimer.get().watch.start();
+	}
+
+	private void endRequest()
+	{
+		if (!ServiceApiConfig.get().logApiMethodResponseTimes())
+		{
+			return;
+		}
+
+		responseTimer.get().watch.stop();
+
+		// yes i want to log INFO level so that we can enable dynamic logging in
+		// prod
+		// id necessary without logging DEBUG level
+		LOG.info(responseTimer.get().method + "/" + responseTimer.get().watch.getTime());
+
+	}
+
 	@Override
 	public CTokenAccess_t authenticate(final String email, final String password)
 			throws ServiceException_t, TException
@@ -178,6 +213,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		Customer customer = null;
 		Customer_t thriftCust = null;
 
+		beginRequest("authenticate");
+
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("authenticate received for :" + email);
@@ -185,41 +222,55 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			customer = customerService.authenticateCustomer(email, password);
+			try
+			{
+				customer = customerService.authenticateCustomer(email, password);
+			}
+			catch (ServiceException e)
+			{
+				LOG.error("Problem authenticating customer: " + e, e);
+				throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			}
+			catch (Exception e)
+			{
+				LOG.error("Problem authenticating customer: " + e, e);
+				throw new ServiceException_t(1000, e.getMessage());
+			}
+
+			if (customer == null)
+			{
+				throw new ServiceException_t(ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getCode(),
+						ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getMessage());
+			}
+			try
+			{
+				thriftCust = ConversionUtil.convertToThrift(customer);
+				token = TokenUtil.createTokenAccess(thriftCust);
+				return token;
+			}
+			catch (Exception e)
+			{
+				LOG.error("Problem converting customer: " + e, e);
+				throw new ServiceException_t(1000, e.getMessage());
+			}
 		}
-		catch (ServiceException e)
+		catch (ServiceException_t e)
 		{
-			LOG.error("Problem authenticating customer: " + e, e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			// yes this catch is here simply so we can have a finally and endRequest
+			// cleanly
+			throw e;
 		}
-		catch (Exception e)
+		finally
 		{
-			LOG.error("Problem authenticating customer: " + e, e);
-			throw new ServiceException_t(1000, e.getMessage());
+			endRequest();
 		}
 
-		if (customer == null)
-		{
-			throw new ServiceException_t(ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getCode(),
-					ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getMessage());
-		}
-		try
-		{
-			thriftCust = ConversionUtil.convertToThrift(customer);
-			token = TokenUtil.createTokenAccess(thriftCust);
-		}
-		catch (Exception e)
-		{
-			LOG.error("Problem converting customer: " + e, e);
-			throw new ServiceException_t(1000, e.getMessage());
-		}
-
-		return token;
 	}
 
 	@Override
 	public boolean customerEmailExists(final String email) throws ServiceException_t, TException
 	{
+
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("customerEmailExists received: " + email);
@@ -246,6 +297,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		List<Merchant> merchants = null;
 		List<Merchant_t> resultMerchants = null;
 
+		beginRequest("getMerchantAcquires");
+
 		if (LOG.isDebugEnabled())
 		{
 			if (searchOptions != null)
@@ -266,16 +319,20 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
 					ConversionUtil.convertFromThrift(searchOptions));
+
+			resultMerchants = ConversionUtil.convertToThriftMerchants(merchants);
+
+			return CollectionUtils.isEmpty(resultMerchants) ? EMPTY_MERCHANTS : resultMerchants;
 		}
 		catch (Exception ex)
 		{
 			LOG.error("Problem getting merchants for customer " + token.getAccountId(), ex);
 			throw new ServiceException_t(1087, "Problem getting merchants");
 		}
-
-		resultMerchants = ConversionUtil.convertToThriftMerchants(merchants);
-
-		return CollectionUtils.isEmpty(resultMerchants) ? EMPTY_MERCHANTS : resultMerchants;
+		finally
+		{
+			endRequest();
+		}
 
 	}
 
@@ -285,6 +342,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<DealAcquire> dealAcquires = null;
+
+		beginRequest("getDealAcquires");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -307,20 +366,29 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()),
 					UUID.fromString(merchantId), null);
+
+			if (CollectionUtils.isEmpty(dealAcquires))
+			{
+				LOG.error("No deals available for merchant: " + merchantId);
+				throw new ServiceException_t(1088, "No deals available for merchant");
+			}
+
+			return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
+
+		}
+		catch (ServiceException_t se)
+		{
+			throw se;
 		}
 		catch (Exception ex)
 		{
 			LOG.error("There was a problem retrieving deals for merchant: " + merchantId, ex);
 			throw new ServiceException_t(1087, "There was a problem retrieving deals for merchant");
 		}
-
-		if (CollectionUtils.isEmpty(dealAcquires))
+		finally
 		{
-			LOG.error("No deals available for merchant: " + merchantId);
-			throw new ServiceException_t(1088, "No deals available for merchant");
+			endRequest();
 		}
-
-		return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
 
 	}
 
@@ -330,6 +398,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		String redemptionCode = null;
+
+		beginRequest("redeem");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -341,14 +411,18 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			redemptionCode = customerService.redeemDeal(UUID.fromString(dealAcquireId), UUID.fromString(token.getAccountId()),
 					ConversionUtil.convertFromThrift(location));
+
+			return redemptionCode;
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
-
-		return redemptionCode;
+		finally
+		{
+			endRequest();
+		}
 
 	}
 
@@ -392,6 +466,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		List<Merchant> merchants = null;
 
+		beginRequest("getMerchantsWithin");
+
 		try
 		{
 			merchants = taloolService.getMerchantsWithin(ConversionUtil.convertFromThrift(location), maxMiles,
@@ -400,6 +476,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 
 		return ConversionUtil.convertToThriftMerchants(merchants);
@@ -410,6 +490,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
+		beginRequest("addFavoriteMerchant");
+
 		try
 		{
 			customerService.addFavoriteMerchant(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId));
@@ -417,6 +499,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 
 	}
@@ -426,6 +512,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
+		beginRequest("removeFavoriteMerchant");
+
 		try
 		{
 			customerService.removeFavoriteMerchant(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId));
@@ -433,6 +521,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 
 	}
@@ -443,17 +535,24 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
 
+		beginRequest("getFavoriteMerchants");
+
 		try
 		{
 			merchants = customerService
 					.getFavoriteMerchants(UUID.fromString(token.getAccountId()), ConversionUtil.convertFromThrift(searchOptions));
+
+			return ConversionUtil.convertToThriftMerchants(merchants);
 		}
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
 
-		return ConversionUtil.convertToThriftMerchants(merchants);
 	}
 
 	@Override
@@ -470,17 +569,24 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
 
+		beginRequest("getMerchantAcquiresByCategory");
+
 		try
 		{
 			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()), categoryId,
 					ConversionUtil.convertFromThrift(searchOptions));
+
+			return ConversionUtil.convertToThriftMerchants(merchants);
 		}
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
 
-		return ConversionUtil.convertToThriftMerchants(merchants);
 	}
 
 	@Override
@@ -539,6 +645,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		UUID giftId = null;
 
+		beginRequest("giftToFacebook");
+
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug(String.format("CustomerId %s giftToFacebook dealAcquireId %s facebookId %s receipientName %s",
@@ -550,12 +658,17 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			giftId = customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
 					facebookId, receipientName);
+
 			return giftId.toString();
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("Problem giftToFacebook for customerId: " + token.getAccountId(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 
 	}
@@ -567,6 +680,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		UUID giftId = null;
+
+		beginRequest("giftToEmail");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -580,12 +695,17 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			giftId = customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
 					email, receipientName);
+
 			return giftId.toString();
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("Problem giftToEmail for customerId: " + token.getAccountId(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 
 	}
@@ -596,6 +716,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Gift> gifts = null;
 
+		beginRequest("getGifts");
+
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug(String.format("CustomerId %s getGifts", token.getAccountId()));
@@ -604,21 +726,27 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			gifts = customerService.getGifts(UUID.fromString(token.getAccountId()), PENDING_GIFT_ACCEPT);
+			final List<Gift_t> thriftGifts = ConversionUtil.convertToThriftGifts(gifts);
+			return CollectionUtils.isEmpty(thriftGifts) ? EMPTY_GIFTS : thriftGifts;
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
 
-		final List<Gift_t> thriftGifts = ConversionUtil.convertToThriftGifts(gifts);
-		return CollectionUtils.isEmpty(thriftGifts) ? EMPTY_GIFTS : thriftGifts;
 	}
 
 	@Override
 	public void acceptGift(final String giftId) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("acceptGift");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -634,6 +762,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error(String.format("Problem acceptGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
 
 	}
 
@@ -641,6 +773,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	public void rejectGift(final String giftId) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("rejectGift");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -656,6 +790,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error(String.format("Problem rejectGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
+
 	}
 
 	@Override
@@ -665,6 +804,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		DealOffer dealOffer = null;
 		DealOffer_t thriftDealOffer = null;
+
+		beginRequest("getDealOffer");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -676,11 +817,16 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			dealOffer = taloolService.getDealOffer(UUID.fromString(dealOfferId));
 			ConversionUtil.conversionOptions.set(new ConversionOptions().loadMerchant(true).loadMerchantLocations(false));
 			thriftDealOffer = ConversionUtil.convertToThrift(dealOffer);
+
 			return thriftDealOffer;
 		}
 		catch (ServiceException e)
 		{
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
 		}
 	}
 }

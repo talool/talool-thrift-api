@@ -14,6 +14,7 @@ public class ServiceApiConfig extends PropertiesConfiguration
 	private static ServiceApiConfig instance;
 
 	private static final String ALLOWED_HEALTH_CHECK_IPS = "allowable.health.check.ips";
+	private static final String LOG_API_METHOD_RT = "log.api.method.respone.times";
 
 	private ServiceApiConfig(String file) throws ConfigurationException
 	{
@@ -23,6 +24,11 @@ public class ServiceApiConfig extends PropertiesConfiguration
 	public static ServiceApiConfig get()
 	{
 		return instance;
+	}
+
+	public boolean logApiMethodResponseTimes()
+	{
+		return getBoolean(LOG_API_METHOD_RT, false);
 	}
 
 	public String[] getAllowableHealthCheckIps()

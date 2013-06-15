@@ -27,6 +27,11 @@
 	<bean id="serviceApiConfig" class="com.talool.service.ServiceApiConfig"
 		factory-method="createInstance">
 		<constructor-arg value="/etc/talool/service-api.properties" />
+		<property name="reloadingStrategy" ref="reloadStrategy"/>
+	</bean>
+	
+	<bean id="reloadStrategy" class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy">
+	   <property name="refreshDelay" value="120000"></property>
 	</bean>
 	
 	<import resource="./dataSource.xml"/>
