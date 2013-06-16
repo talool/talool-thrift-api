@@ -34,7 +34,6 @@ import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.core.Address;
 import com.talool.core.Category;
 import com.talool.core.Customer;
 import com.talool.core.Deal;
@@ -319,19 +318,6 @@ public final class ConversionUtil
 		return thriftCust;
 	}
 
-	public static Address_t convertToThrift(final Address address)
-	{
-		final Address_t thriftAddr = new Address_t();
-		thriftAddr.setAddress1(address.getAddress1());
-		thriftAddr.setAddress2(address.getAddress2());
-		thriftAddr.setCity(address.getCity());
-		thriftAddr.setZip(address.getZip());
-		thriftAddr.setStateProvinceCounty(address.getStateProvinceCounty());
-		thriftAddr.setCountry(address.getCountry());
-
-		return thriftAddr;
-	}
-
 	public static MerchantLocation_t convertToThrift(final MerchantLocation merchantLocation)
 	{
 		if (merchantLocation == null)
@@ -340,7 +326,16 @@ public final class ConversionUtil
 		}
 
 		final MerchantLocation_t mLoc = new MerchantLocation_t();
-		mLoc.setAddress(convertToThrift(merchantLocation.getAddress()));
+
+		final Address_t addr = new Address_t();
+		addr.setAddress1(merchantLocation.getAddress1());
+		addr.setAddress2(merchantLocation.getAddress2());
+		addr.setCity(merchantLocation.getCity());
+		addr.setZip(merchantLocation.getZip());
+		addr.setStateProvinceCounty(merchantLocation.getStateProvinceCounty());
+		addr.setCountry(merchantLocation.getCountry());
+		mLoc.setAddress(addr);
+
 		mLoc.setEmail(merchantLocation.getEmail());
 		mLoc.setName(merchantLocation.getLocationName());
 		mLoc.setLocationId(merchantLocation.getId());
