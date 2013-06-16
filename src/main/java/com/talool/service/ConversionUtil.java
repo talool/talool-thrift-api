@@ -428,12 +428,11 @@ public final class ConversionUtil
 			thriftDealAcquire.setRedeemed(dealAcquire.getRedemptionDate().getTime());
 		}
 
-		if (dealAcquire.getSharedByCustomer() != null)
+		if (dealAcquire.getGiftId() != null && dealAcquire.getGift().getFromCustomer() != null)
 		{
-			thriftDealAcquire.setSharedByCustomer(convertToThrift(dealAcquire.getSharedByCustomer()));
+			thriftDealAcquire.setSharedByCustomer(convertToThrift(dealAcquire.getGift().getFromCustomer()));
 		}
 
-		thriftDealAcquire.setShareCount(dealAcquire.getShareCount());
 		thriftDealAcquire.setStatus(AcquireStatus_t.valueOf(dealAcquire.getAcquireStatus().toString()));
 
 		return thriftDealAcquire;
