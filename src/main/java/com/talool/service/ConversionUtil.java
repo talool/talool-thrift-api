@@ -56,7 +56,10 @@ import com.talool.core.social.SocialNetwork;
  */
 public final class ConversionUtil
 {
-	static final ThreadLocal<ConversionOptions> conversionOptions = new ThreadLocal<ConversionOptions>();
+	// TODO - Experiemental do not use ThreadLocal yet! Need to carfeful cleanup
+	// tomcat threads in order to use this safely
+	// static final ThreadLocal<ConversionOptions> conversionOptions = new
+	// ThreadLocal<ConversionOptions>();
 
 	public static class ConversionOptions
 	{
@@ -391,7 +394,6 @@ public final class ConversionUtil
 
 	public static Merchant_t convertToThrift(final Merchant merchant)
 	{
-		final ConversionOptions options = conversionOptions.get();
 		final Merchant_t thriftMerch = new Merchant_t();
 
 		thriftMerch.setMerchantId(merchant.getId().toString());
@@ -402,15 +404,12 @@ public final class ConversionUtil
 			thriftMerch.setCategory(convertToThriftCategory(merchant.getCategory()));
 		}
 
-		if (options == null || options.loadMerchantLocations)
+		final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
+		for (MerchantLocation mLoc : merchant.getLocations())
 		{
-			final List<MerchantLocation_t> locations = new ArrayList<MerchantLocation_t>();
-			for (MerchantLocation mLoc : merchant.getLocations())
-			{
-				locations.add(convertToThrift(mLoc));
-			}
-			thriftMerch.setLocations(locations);
+			locations.add(convertToThrift(mLoc));
 		}
+		thriftMerch.setLocations(locations);
 
 		return thriftMerch;
 	}

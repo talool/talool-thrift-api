@@ -38,7 +38,6 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
-import com.talool.service.ConversionUtil.ConversionOptions;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -303,13 +302,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			if (searchOptions != null)
 			{
-				LOG.debug(String.format("CustomerId %s getting acquired merchants with searchOptions %s",
+				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s",
 						token.getAccountId(), searchOptions.toString()));
 			}
 			else
 			{
 				LOG.debug(String.format(
-						"CustomerId %s getting acquired merchants with no searchOptions",
+						"CustomerId %s getMerchantAcquiress with no searchOptions",
 						token.getAccountId()));
 			}
 
@@ -326,7 +325,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (Exception ex)
 		{
-			LOG.error("Problem getting merchants for customer " + token.getAccountId(), ex);
+			LOG.error("Problem getMerchantAcquires for customer " + token.getAccountId(), ex);
 			throw new ServiceException_t(1087, "Problem getting merchants");
 		}
 		finally
@@ -815,7 +814,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			dealOffer = taloolService.getDealOffer(UUID.fromString(dealOfferId));
-			ConversionUtil.conversionOptions.set(new ConversionOptions().loadMerchant(true).loadMerchantLocations(false));
 			thriftDealOffer = ConversionUtil.convertToThrift(dealOffer);
 
 			return thriftDealOffer;
