@@ -1,4 +1,4 @@
-talool-service
+talool-thrift-api
 ==============
 
-Talool Service API (WAR)
+Talool Thrift API (WAR)
