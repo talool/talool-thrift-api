@@ -7,19 +7,18 @@
 		<artifactId>talool-base</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.talool</groupId>
-	<artifactId>talool-service</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<artifactId>talool-thrift-api</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Talool Service (Thrift)</name>
+	<name>Talool Thrift API</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.talool</groupId>
-			<artifactId>talool-persistence</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<artifactId>talool-service</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.cli-parser</groupId>
