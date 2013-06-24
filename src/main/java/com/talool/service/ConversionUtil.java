@@ -268,6 +268,7 @@ public final class ConversionUtil
 		dealOffer_t.setCode(dealOffer.getCode());
 		dealOffer_t.setDealOfferId(dealOffer.getId().toString());
 		dealOffer_t.setDealType(DealType_t.valueOf(dealOffer.getType().toString()));
+		dealOffer_t.setLocationName(dealOffer.getLocationName());
 
 		if (dealOffer.getExpires() != null)
 		{
@@ -465,6 +466,24 @@ public final class ConversionUtil
 	public static Category_t convertToThriftCategory(final Category categeory)
 	{
 		return new Category_t(categeory.getId(), categeory.getName());
+	}
+
+	public static List<Deal_t> convertToThriftDeals(final List<Deal> deals)
+	{
+		if (CollectionUtils.isEmpty(deals))
+		{
+			return null;
+		}
+
+		final List<Deal_t> thriftDeals = new ArrayList<Deal_t>();
+
+		for (final Deal deal : deals)
+		{
+			thriftDeals.add(convertToThrift(deal));
+		}
+
+		return thriftDeals;
+
 	}
 
 	public static List<Category_t> convertToThriftCategories(final List<Category> categories)

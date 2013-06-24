@@ -15,6 +15,7 @@ import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
@@ -26,6 +27,7 @@ import com.talool.api.thrift.Token_t;
 import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
+import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
 import com.talool.core.DomainFactory;
@@ -72,6 +74,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private CategoryThread categoryThread;
 
 	private GiftStatus[] PENDING_GIFT_ACCEPT = new GiftStatus[] { GiftStatus.PENDING };
+
+	private static String[] EAGER_DEAL_PROPS = { "image", "merchant.locations" };
 
 	private class CategoryThread extends Thread
 	{
@@ -437,6 +441,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
+			LOG.error(e.getMessage(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 
@@ -454,6 +459,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
+			LOG.error(e.getMessage(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 
@@ -474,6 +480,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
+			LOG.error(e.getMessage(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 		finally
@@ -820,6 +827,35 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
+			LOG.error(e.getMessage(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
+		}
+	}
+
+	@Override
+	public List<Deal_t> getDealsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions)
+			throws ServiceException_t, TException
+	{
+		TokenUtil.getTokenFromRequest(true);
+
+		List<Deal> deals = null;
+
+		beginRequest("getDealsByDealOfferId");
+
+		try
+		{
+			deals = taloolService.getDealsByDealOfferId(UUID.fromString(dealOfferId),
+					ConversionUtil.convertFromThrift(searchOptions), EAGER_DEAL_PROPS);
+
+			return ConversionUtil.convertToThriftDeals(deals);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(e.getMessage(), e);
 			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 		finally

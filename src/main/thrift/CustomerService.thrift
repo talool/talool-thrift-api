@@ -31,12 +31,15 @@ service CustomerService_t {
    list<Core.Merchant_t> getMerchantAcquiresByCategory(1:i32 categoryId,2:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
       
    list<Core.DealAcquire_t> getDealAcquires(1:string merchantId,2:Core.SearchOptions_t searchOptions) throws (1:Core.ServiceException_t error);
-   
+      
    string redeem(1:string dealAcquireId,2:Core.Location_t location) throws (1:Core.ServiceException_t error);
    
    list<Core.DealOffer_t> getDealOffers() throws (1:Core.ServiceException_t error);
    
    Core.DealOffer_t getDealOffer(1:string dealOfferId) throws (1:Core.ServiceException_t error);
+   
+   list<Core.Deal_t> getDealsByDealOfferId(1:string dealOfferId,2:Core.SearchOptions_t searchOptions) 
+    throws (1:Core.ServiceException_t error);
    
    void purchaseDealOffer(1:string dealOfferId) throws (1:Core.ServiceException_t error);
    

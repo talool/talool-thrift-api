@@ -26,6 +26,7 @@ import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
@@ -449,6 +450,40 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(dealOfferResult.getImageUrl(), dealOffers.get(0).getImageUrl());
 		Assert.assertEquals(dealOfferResult.getTitle(), dealOffers.get(0).getTitle());
 		Assert.assertEquals(dealOfferResult.getMerchant().getName(), dealOffers.get(0).getMerchant().getName());
+
+	}
+
+	@Test
+	public void testGetDealsByDealOfferId() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setSortProperty("merchant.name");
+		searchOptions.setPage(0);
+		searchOptions.setAscending(true);
+		searchOptions.setMaxResults(10);
+
+		List<DealOffer_t> dealOffers = client.getDealOffers();
+		DealOffer_t dealOffer = null;
+		for (DealOffer_t dof : dealOffers)
+		{
+			if (dof.getTitle().equals(DEAL_OFFER_TITLE))
+			{
+				dealOffer = dof;
+				break;
+			}
+		}
+		List<Deal_t> deals = client.getDealsByDealOfferId(dealOffer.getDealOfferId(), searchOptions);
+
+		Assert.assertEquals(4, deals.size());
+
+		Deal_t deal = deals.get(0);
+
+		Assert.assertNotNull(deal.getMerchant());
+		Assert.assertTrue(deal.getMerchant().getLocations().size() > 0);
 
 	}
 

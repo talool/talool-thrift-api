@@ -40,8 +40,9 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
   private static final org.apache.thrift.protocol.TField SUMMARY_FIELD_DESC = new org.apache.thrift.protocol.TField("summary", org.apache.thrift.protocol.TType.STRING, (short)5);
   private static final org.apache.thrift.protocol.TField CODE_FIELD_DESC = new org.apache.thrift.protocol.TField("code", org.apache.thrift.protocol.TType.STRING, (short)6);
   private static final org.apache.thrift.protocol.TField IMAGE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("imageUrl", org.apache.thrift.protocol.TType.STRING, (short)7);
-  private static final org.apache.thrift.protocol.TField PRICE_FIELD_DESC = new org.apache.thrift.protocol.TField("price", org.apache.thrift.protocol.TType.DOUBLE, (short)8);
-  private static final org.apache.thrift.protocol.TField EXPIRES_FIELD_DESC = new org.apache.thrift.protocol.TField("expires", org.apache.thrift.protocol.TType.I64, (short)9);
+  private static final org.apache.thrift.protocol.TField LOCATION_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("locationName", org.apache.thrift.protocol.TType.STRING, (short)8);
+  private static final org.apache.thrift.protocol.TField PRICE_FIELD_DESC = new org.apache.thrift.protocol.TField("price", org.apache.thrift.protocol.TType.DOUBLE, (short)9);
+  private static final org.apache.thrift.protocol.TField EXPIRES_FIELD_DESC = new org.apache.thrift.protocol.TField("expires", org.apache.thrift.protocol.TType.I64, (short)10);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -60,6 +61,7 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
   public String summary; // optional
   public String code; // optional
   public String imageUrl; // optional
+  public String locationName; // optional
   public double price; // optional
   public long expires; // optional
 
@@ -76,8 +78,9 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     SUMMARY((short)5, "summary"),
     CODE((short)6, "code"),
     IMAGE_URL((short)7, "imageUrl"),
-    PRICE((short)8, "price"),
-    EXPIRES((short)9, "expires");
+    LOCATION_NAME((short)8, "locationName"),
+    PRICE((short)9, "price"),
+    EXPIRES((short)10, "expires");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -106,9 +109,11 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
           return CODE;
         case 7: // IMAGE_URL
           return IMAGE_URL;
-        case 8: // PRICE
+        case 8: // LOCATION_NAME
+          return LOCATION_NAME;
+        case 9: // PRICE
           return PRICE;
-        case 9: // EXPIRES
+        case 10: // EXPIRES
           return EXPIRES;
         default:
           return null;
@@ -153,7 +158,7 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
   private static final int __PRICE_ISSET_ID = 0;
   private static final int __EXPIRES_ISSET_ID = 1;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.SUMMARY,_Fields.CODE,_Fields.IMAGE_URL,_Fields.PRICE,_Fields.EXPIRES};
+  private _Fields optionals[] = {_Fields.SUMMARY,_Fields.CODE,_Fields.IMAGE_URL,_Fields.LOCATION_NAME,_Fields.PRICE,_Fields.EXPIRES};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -170,6 +175,8 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     tmpMap.put(_Fields.CODE, new org.apache.thrift.meta_data.FieldMetaData("code", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.IMAGE_URL, new org.apache.thrift.meta_data.FieldMetaData("imageUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.LOCATION_NAME, new org.apache.thrift.meta_data.FieldMetaData("locationName", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PRICE, new org.apache.thrift.meta_data.FieldMetaData("price", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
@@ -221,6 +228,9 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     if (other.isSetImageUrl()) {
       this.imageUrl = other.imageUrl;
     }
+    if (other.isSetLocationName()) {
+      this.locationName = other.locationName;
+    }
     this.price = other.price;
     this.expires = other.expires;
   }
@@ -237,6 +247,7 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     this.summary = null;
     this.code = null;
     this.imageUrl = null;
+    this.locationName = null;
     setPriceIsSet(false);
     this.price = 0.0;
     setExpiresIsSet(false);
@@ -419,6 +430,30 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     }
   }
 
+  public String getLocationName() {
+    return this.locationName;
+  }
+
+  public DealOffer_t setLocationName(String locationName) {
+    this.locationName = locationName;
+    return this;
+  }
+
+  public void unsetLocationName() {
+    this.locationName = null;
+  }
+
+  /** Returns true if field locationName is set (has been assigned a value) and false otherwise */
+  public boolean isSetLocationName() {
+    return this.locationName != null;
+  }
+
+  public void setLocationNameIsSet(boolean value) {
+    if (!value) {
+      this.locationName = null;
+    }
+  }
+
   public double getPrice() {
     return this.price;
   }
@@ -523,6 +558,14 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       }
       break;
 
+    case LOCATION_NAME:
+      if (value == null) {
+        unsetLocationName();
+      } else {
+        setLocationName((String)value);
+      }
+      break;
+
     case PRICE:
       if (value == null) {
         unsetPrice();
@@ -565,6 +608,9 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
     case IMAGE_URL:
       return getImageUrl();
 
+    case LOCATION_NAME:
+      return getLocationName();
+
     case PRICE:
       return Double.valueOf(getPrice());
 
@@ -596,6 +642,8 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       return isSetCode();
     case IMAGE_URL:
       return isSetImageUrl();
+    case LOCATION_NAME:
+      return isSetLocationName();
     case PRICE:
       return isSetPrice();
     case EXPIRES:
@@ -677,6 +725,15 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       if (!(this_present_imageUrl && that_present_imageUrl))
         return false;
       if (!this.imageUrl.equals(that.imageUrl))
+        return false;
+    }
+
+    boolean this_present_locationName = true && this.isSetLocationName();
+    boolean that_present_locationName = true && that.isSetLocationName();
+    if (this_present_locationName || that_present_locationName) {
+      if (!(this_present_locationName && that_present_locationName))
+        return false;
+      if (!this.locationName.equals(that.locationName))
         return false;
     }
 
@@ -784,6 +841,16 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetLocationName()).compareTo(typedOther.isSetLocationName());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLocationName()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.locationName, typedOther.locationName);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     lastComparison = Boolean.valueOf(isSetPrice()).compareTo(typedOther.isSetPrice());
     if (lastComparison != 0) {
       return lastComparison;
@@ -882,6 +949,16 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
         sb.append("null");
       } else {
         sb.append(this.imageUrl);
+      }
+      first = false;
+    }
+    if (isSetLocationName()) {
+      if (!first) sb.append(", ");
+      sb.append("locationName:");
+      if (this.locationName == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.locationName);
       }
       first = false;
     }
@@ -1014,7 +1091,15 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // PRICE
+          case 8: // LOCATION_NAME
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.locationName = iprot.readString();
+              struct.setLocationNameIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 9: // PRICE
             if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
               struct.price = iprot.readDouble();
               struct.setPriceIsSet(true);
@@ -1022,7 +1107,7 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // EXPIRES
+          case 10: // EXPIRES
             if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
               struct.expires = iprot.readI64();
               struct.setExpiresIsSet(true);
@@ -1086,6 +1171,13 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
           oprot.writeFieldEnd();
         }
       }
+      if (struct.locationName != null) {
+        if (struct.isSetLocationName()) {
+          oprot.writeFieldBegin(LOCATION_NAME_FIELD_DESC);
+          oprot.writeString(struct.locationName);
+          oprot.writeFieldEnd();
+        }
+      }
       if (struct.isSetPrice()) {
         oprot.writeFieldBegin(PRICE_FIELD_DESC);
         oprot.writeDouble(struct.price);
@@ -1127,13 +1219,16 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       if (struct.isSetImageUrl()) {
         optionals.set(2);
       }
-      if (struct.isSetPrice()) {
+      if (struct.isSetLocationName()) {
         optionals.set(3);
       }
-      if (struct.isSetExpires()) {
+      if (struct.isSetPrice()) {
         optionals.set(4);
       }
-      oprot.writeBitSet(optionals, 5);
+      if (struct.isSetExpires()) {
+        optionals.set(5);
+      }
+      oprot.writeBitSet(optionals, 6);
       if (struct.isSetSummary()) {
         oprot.writeString(struct.summary);
       }
@@ -1142,6 +1237,9 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       }
       if (struct.isSetImageUrl()) {
         oprot.writeString(struct.imageUrl);
+      }
+      if (struct.isSetLocationName()) {
+        oprot.writeString(struct.locationName);
       }
       if (struct.isSetPrice()) {
         oprot.writeDouble(struct.price);
@@ -1163,7 +1261,7 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
       struct.setDealTypeIsSet(true);
       struct.title = iprot.readString();
       struct.setTitleIsSet(true);
-      BitSet incoming = iprot.readBitSet(5);
+      BitSet incoming = iprot.readBitSet(6);
       if (incoming.get(0)) {
         struct.summary = iprot.readString();
         struct.setSummaryIsSet(true);
@@ -1177,10 +1275,14 @@ public class DealOffer_t implements org.apache.thrift.TBase<DealOffer_t, DealOff
         struct.setImageUrlIsSet(true);
       }
       if (incoming.get(3)) {
+        struct.locationName = iprot.readString();
+        struct.setLocationNameIsSet(true);
+      }
+      if (incoming.get(4)) {
         struct.price = iprot.readDouble();
         struct.setPriceIsSet(true);
       }
-      if (incoming.get(4)) {
+      if (incoming.get(5)) {
         struct.expires = iprot.readI64();
         struct.setExpiresIsSet(true);
       }

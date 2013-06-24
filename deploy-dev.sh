@@ -2,7 +2,7 @@
  
 #set -e
 
-server=dev-api1
+server=api2
 buildDir=/opt/talool/builds
 
 if [ -n "$1" ]; then

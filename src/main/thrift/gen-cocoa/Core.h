@@ -723,6 +723,7 @@ typedef int64_t Timestamp;
   NSString * __summary;
   NSString * __code;
   NSString * __imageUrl;
+  NSString * __locationName;
   double __price;
   Timestamp __expires;
 
@@ -733,6 +734,7 @@ typedef int64_t Timestamp;
   BOOL __summary_isset;
   BOOL __code_isset;
   BOOL __imageUrl_isset;
+  BOOL __locationName_isset;
   BOOL __price_isset;
   BOOL __expires_isset;
 }
@@ -745,12 +747,13 @@ typedef int64_t Timestamp;
 @property (nonatomic, retain, getter=summary, setter=setSummary:) NSString * summary;
 @property (nonatomic, retain, getter=code, setter=setCode:) NSString * code;
 @property (nonatomic, retain, getter=imageUrl, setter=setImageUrl:) NSString * imageUrl;
+@property (nonatomic, retain, getter=locationName, setter=setLocationName:) NSString * locationName;
 @property (nonatomic, getter=price, setter=setPrice:) double price;
 @property (nonatomic, getter=expires, setter=setExpires:) Timestamp expires;
 #endif
 
 - (id) init;
-- (id) initWithDealOfferId: (NSString *) dealOfferId merchant: (Merchant_t *) merchant dealType: (int) dealType title: (NSString *) title summary: (NSString *) summary code: (NSString *) code imageUrl: (NSString *) imageUrl price: (double) price expires: (Timestamp) expires;
+- (id) initWithDealOfferId: (NSString *) dealOfferId merchant: (Merchant_t *) merchant dealType: (int) dealType title: (NSString *) title summary: (NSString *) summary code: (NSString *) code imageUrl: (NSString *) imageUrl locationName: (NSString *) locationName price: (double) price expires: (Timestamp) expires;
 
 - (void) read: (id <TProtocol>) inProtocol;
 - (void) write: (id <TProtocol>) outProtocol;
@@ -796,6 +799,12 @@ typedef int64_t Timestamp;
 - (void) setImageUrl: (NSString *) imageUrl;
 #endif
 - (BOOL) imageUrlIsSet;
+
+#if !__has_feature(objc_arc)
+- (NSString *) locationName;
+- (void) setLocationName: (NSString *) locationName;
+#endif
+- (BOOL) locationNameIsSet;
 
 #if !__has_feature(objc_arc)
 - (double) price;

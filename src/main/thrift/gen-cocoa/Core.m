@@ -3515,7 +3515,7 @@
   return self;
 }
 
-- (id) initWithDealOfferId: (NSString *) dealOfferId merchant: (Merchant_t *) merchant dealType: (int) dealType title: (NSString *) title summary: (NSString *) summary code: (NSString *) code imageUrl: (NSString *) imageUrl price: (double) price expires: (Timestamp) expires
+- (id) initWithDealOfferId: (NSString *) dealOfferId merchant: (Merchant_t *) merchant dealType: (int) dealType title: (NSString *) title summary: (NSString *) summary code: (NSString *) code imageUrl: (NSString *) imageUrl locationName: (NSString *) locationName price: (double) price expires: (Timestamp) expires
 {
   self = [super init];
   __dealOfferId = [dealOfferId retain_stub];
@@ -3532,6 +3532,8 @@
   __code_isset = YES;
   __imageUrl = [imageUrl retain_stub];
   __imageUrl_isset = YES;
+  __locationName = [locationName retain_stub];
+  __locationName_isset = YES;
   __price = price;
   __price_isset = YES;
   __expires = expires;
@@ -3577,6 +3579,11 @@
     __imageUrl = [[decoder decodeObjectForKey: @"imageUrl"] retain_stub];
     __imageUrl_isset = YES;
   }
+  if ([decoder containsValueForKey: @"locationName"])
+  {
+    __locationName = [[decoder decodeObjectForKey: @"locationName"] retain_stub];
+    __locationName_isset = YES;
+  }
   if ([decoder containsValueForKey: @"price"])
   {
     __price = [decoder decodeDoubleForKey: @"price"];
@@ -3620,6 +3627,10 @@
   {
     [encoder encodeObject: __imageUrl forKey: @"imageUrl"];
   }
+  if (__locationName_isset)
+  {
+    [encoder encodeObject: __locationName forKey: @"locationName"];
+  }
   if (__price_isset)
   {
     [encoder encodeDouble: __price forKey: @"price"];
@@ -3638,6 +3649,7 @@
   [__summary release_stub];
   [__code release_stub];
   [__imageUrl release_stub];
+  [__locationName release_stub];
   [super dealloc_stub];
 }
 
@@ -3784,6 +3796,27 @@
   __imageUrl_isset = NO;
 }
 
+- (NSString *) locationName {
+  return [[__locationName retain_stub] autorelease_stub];
+}
+
+- (void) setLocationName: (NSString *) locationName {
+  [locationName retain_stub];
+  [__locationName release_stub];
+  __locationName = locationName;
+  __locationName_isset = YES;
+}
+
+- (BOOL) locationNameIsSet {
+  return __locationName_isset;
+}
+
+- (void) unsetLocationName {
+  [__locationName release_stub];
+  __locationName = nil;
+  __locationName_isset = NO;
+}
+
 - (double) price {
   return __price;
 }
@@ -3892,6 +3925,14 @@
         }
         break;
       case 8:
+        if (fieldType == TType_STRING) {
+          NSString * fieldValue = [inProtocol readString];
+          [self setLocationName: fieldValue];
+        } else { 
+          [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
+        }
+        break;
+      case 9:
         if (fieldType == TType_DOUBLE) {
           double fieldValue = [inProtocol readDouble];
           [self setPrice: fieldValue];
@@ -3899,7 +3940,7 @@
           [TProtocolUtil skipType: fieldType onProtocol: inProtocol];
         }
         break;
-      case 9:
+      case 10:
         if (fieldType == TType_I64) {
           int64_t fieldValue = [inProtocol readI64];
           [self setExpires: fieldValue];
@@ -3965,13 +4006,20 @@
       [outProtocol writeFieldEnd];
     }
   }
+  if (__locationName_isset) {
+    if (__locationName != nil) {
+      [outProtocol writeFieldBeginWithName: @"locationName" type: TType_STRING fieldID: 8];
+      [outProtocol writeString: __locationName];
+      [outProtocol writeFieldEnd];
+    }
+  }
   if (__price_isset) {
-    [outProtocol writeFieldBeginWithName: @"price" type: TType_DOUBLE fieldID: 8];
+    [outProtocol writeFieldBeginWithName: @"price" type: TType_DOUBLE fieldID: 9];
     [outProtocol writeDouble: __price];
     [outProtocol writeFieldEnd];
   }
   if (__expires_isset) {
-    [outProtocol writeFieldBeginWithName: @"expires" type: TType_I64 fieldID: 9];
+    [outProtocol writeFieldBeginWithName: @"expires" type: TType_I64 fieldID: 10];
     [outProtocol writeI64: __expires];
     [outProtocol writeFieldEnd];
   }
@@ -3995,6 +4043,8 @@
   [ms appendFormat: @"\"%@\"", __code];
   [ms appendString: @",imageUrl:"];
   [ms appendFormat: @"\"%@\"", __imageUrl];
+  [ms appendString: @",locationName:"];
+  [ms appendFormat: @"\"%@\"", __locationName];
   [ms appendString: @",price:"];
   [ms appendFormat: @"%f", __price];
   [ms appendString: @",expires:"];
