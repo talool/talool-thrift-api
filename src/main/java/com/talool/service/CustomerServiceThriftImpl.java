@@ -33,8 +33,11 @@ import com.talool.core.DealOffer;
 import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
+import com.talool.core.activity.Activity;
+import com.talool.core.activity.ActivityType;
 import com.talool.core.gift.Gift;
 import com.talool.core.gift.GiftStatus;
+import com.talool.core.service.ActivityService;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
@@ -59,6 +62,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final transient CustomerService customerService = FactoryManager.get()
 			.getServiceFactory().getCustomerService();
+
+	private static final transient ActivityService activityService = FactoryManager.get()
+			.getServiceFactory().getActivityService();
 
 	private static final transient DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 
@@ -410,10 +416,36 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					dealAcquireId));
 		}
 
+		final UUID customerUuid = UUID.fromString(token.getAccountId());
+		final UUID dealAcquireUuid = UUID.fromString(dealAcquireId);
+
 		try
 		{
-			redemptionCode = customerService.redeemDeal(UUID.fromString(dealAcquireId), UUID.fromString(token.getAccountId()),
+			redemptionCode = customerService.redeemDeal(UUID.fromString(dealAcquireId), customerUuid,
 					ConversionUtil.convertFromThrift(location));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
+		}
+
+		try
+		{
+
+			Activity activity = domainFactory.newActivity(ActivityType.REDEEM, customerUuid);
+			activityService.save(activity);
+
+			final Gift gift = customerService.getGiftOnDealAcquire(dealAcquireUuid);
+			if (gift != null)
+			{
+				activity = domainFactory.newActivity(ActivityType.FRIEND_GIFT_REDEEM, customerUuid);
+				activityService.save(activity);
+			}
 
 			return redemptionCode;
 		}
