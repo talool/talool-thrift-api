@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.talool.api.thrift.AcquireStatus_t;
+import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerServiceConstants;
@@ -47,9 +48,9 @@ import com.talool.core.service.ServiceException;
  */
 public class ServiceIntegrationTest
 {
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
 	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
@@ -614,8 +615,16 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(dealAcquires.get(0).getDeal().getDealId(), gifts.get(0).getDeal().getDealId());
 
 		// accept gift
-		System.out.println("Acceptiing giftId: " + gifts.get(0).getGiftId());
 		client.acceptGift(gifts.get(0).getGiftId());
+
+		// acquire it
+		List<DealAcquire_t> dac = client.getDealAcquires(gifts.get(0).getDeal().getMerchant().getMerchantId(), null);
+		client.redeem(dac.get(0).getDealAcquireId(), BOULDER_LOCATION);
+
+		// verify there is activity
+		List<Activity_t> acts = client.getActivities(null);
+		Assert.assertEquals(1, acts.size());
+		Assert.assertTrue(acts.get(0).getTitle().contains(dac.get(0).getDeal().getTitle()));
 
 		List<Merchant_t> giftedMerchants = client.getMerchantAcquires(null);
 		// verify i have a dealAcquire and no gifts!

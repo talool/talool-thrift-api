@@ -14,11 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.talool.api.thrift.AcquireStatus_t;
+import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.Customer_t;
@@ -45,10 +47,13 @@ import com.talool.core.Merchant;
 import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
 import com.talool.core.Sex;
+import com.talool.core.activity.Activity;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.service.util.Constants;
+import com.talool.service.util.ThriftUtil;
 
 /**
  * @author clintz
@@ -483,6 +488,38 @@ public final class ConversionUtil
 		}
 
 		return thriftDeals;
+
+	}
+
+	public static Activity_t convertToThrift(final Activity activity)
+	{
+		final Activity_t act = new Activity_t();
+		try
+		{
+			ThriftUtil.deserialize(activity.getActivityData(), act, Constants.PROTOCOL_FACTORY);
+		}
+		catch (TException e)
+		{
+			LOG.error("Problem deserializing Activity: " + e.getLocalizedMessage(), e);
+		}
+		return act;
+	}
+
+	public static List<Activity_t> convertToThriftActivites(final List<Activity> activities)
+	{
+		if (CollectionUtils.isEmpty(activities))
+		{
+			return null;
+		}
+
+		final List<Activity_t> thriftAct = new ArrayList<Activity_t>();
+
+		for (final Activity act : activities)
+		{
+			thriftAct.add(convertToThrift(act));
+		}
+
+		return thriftAct;
 
 	}
 

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerService_t;
@@ -34,7 +35,7 @@ import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
-import com.talool.core.activity.ActivityType;
+import com.talool.core.activity.ActivityEvent;
 import com.talool.core.gift.Gift;
 import com.talool.core.gift.GiftStatus;
 import com.talool.core.service.ActivityService;
@@ -43,6 +44,9 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.service.util.ActivityUtil;
+import com.talool.service.util.Constants;
+import com.talool.service.util.ThriftUtil;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -427,25 +431,33 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
-		}
-		finally
-		{
 			endRequest();
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
 		}
 
 		try
 		{
+			final DealAcquire dealAcquire = customerService.getDealAcquire(dealAcquireUuid);
 
-			Activity activity = domainFactory.newActivity(ActivityType.REDEEM, customerUuid);
-			activityService.save(activity);
+			final Activity activity = domainFactory.newActivity(ActivityEvent.REDEEM, customerUuid);
+			Activity_t activityDetails = ActivityUtil.createRedeem(dealAcquire);
 
-			final Gift gift = customerService.getGiftOnDealAcquire(dealAcquireUuid);
+			// if we have a gift, we have a bi-directional activity (for friend that
+			// gave gift)
+			final Gift gift = dealAcquire.getGift();
 			if (gift != null)
 			{
-				activity = domainFactory.newActivity(ActivityType.FRIEND_GIFT_REDEEM, customerUuid);
-				activityService.save(activity);
+				activityDetails.setSubtitle("Gift from  " + gift.getFromCustomer().getFullName());
+
+				final Activity friendActivity = domainFactory.newActivity(ActivityEvent.FRIEND_GIFT_REDEEM, gift.getFromCustomer()
+						.getId());
+				final Activity_t friendActivityDetails = ActivityUtil.createFriendGiftReedem(dealAcquire);
+				friendActivity.setActivityData(ThriftUtil.serialize(friendActivityDetails, Constants.PROTOCOL_FACTORY));
+				activityService.save(friendActivity);
 			}
+
+			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
+			activityService.save(activity);
 
 			return redemptionCode;
 		}
@@ -487,7 +499,18 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			customerService.createDealOfferPurchase(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId));
+			final UUID customerUuid = UUID.fromString(token.getAccountId());
+			final UUID dealOfferUuid = UUID.fromString(dealOfferId);
+			customerService.createDealOfferPurchase(customerUuid, dealOfferUuid);
+
+			final DealOffer dealOffer = taloolService.getDealOffer(dealOfferUuid);
+
+			// create a purchase activity
+			final Activity activity = domainFactory.newActivity(ActivityEvent.PURCHASE, customerUuid);
+			final Activity_t act = ActivityUtil.createPurchase(dealOffer.getId(), dealOffer.getTitle());
+			activity.setActivityData(ThriftUtil.serialize(act, Constants.PROTOCOL_FACTORY));
+
+			activityService.save(activity);
 		}
 		catch (ServiceException e)
 		{
@@ -821,7 +844,23 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			customerService.rejectGift(UUID.fromString(giftId), UUID.fromString(token.getAccountId()));
+			final UUID giftUUid = UUID.fromString(giftId);
+			final UUID customerUuid = UUID.fromString(token.getAccountId());
+			customerService.rejectGift(UUID.fromString(giftId), customerUuid);
+
+			Activity activity = domainFactory.newActivity(ActivityEvent.REJECT, customerUuid);
+			final Gift gift = customerService.getGift(giftUUid);
+
+			Activity_t activityDetails = ActivityUtil.createReject(gift);
+			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
+			activityService.save(activity);
+
+			// create the bi-directional activity
+			activity = domainFactory.newActivity(ActivityEvent.FRIEND_GIFT_REJECT, gift.getFromCustomer().getId());
+			activityDetails = ActivityUtil.createFriendRejectGift(gift);
+			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
+			activityService.save(activity);
+
 		}
 		catch (ServiceException e)
 		{
@@ -884,6 +923,31 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					ConversionUtil.convertFromThrift(searchOptions), EAGER_DEAL_PROPS);
 
 			return ConversionUtil.convertToThriftDeals(deals);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(e.getMessage(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
+		}
+	}
+
+	@Override
+	public List<Activity_t> getActivities(final SearchOptions_t searchOptions) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("getActivities");
+
+		try
+		{
+			final List<Activity> activities = activityService.getActivities(UUID.fromString(token.getAccountId()),
+					ConversionUtil.convertFromThrift(searchOptions));
+
+			return ConversionUtil.convertToThriftActivites(activities);
 		}
 		catch (ServiceException e)
 		{
