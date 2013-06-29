@@ -7,7 +7,7 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import com.talool.core.TokenProvider;
 import com.talool.core.TokenProviderException;
 import com.talool.security.BlowfishCipher;
-import com.talool.service.util.ThriftUtil;
+import com.talool.thrift.ThriftUtil;
 
 /**
  * A token provider implementation supporting any Thrift object. The thrift

@@ -35,7 +35,6 @@ import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
-import com.talool.core.activity.ActivityEvent;
 import com.talool.core.gift.Gift;
 import com.talool.core.gift.GiftStatus;
 import com.talool.core.service.ActivityService;
@@ -44,9 +43,6 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
-import com.talool.service.util.ActivityUtil;
-import com.talool.service.util.Constants;
-import com.talool.service.util.ThriftUtil;
 import com.talool.service.util.TokenUtil;
 
 /**
@@ -439,25 +435,17 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			final DealAcquire dealAcquire = customerService.getDealAcquire(dealAcquireUuid);
 
-			final Activity activity = domainFactory.newActivity(ActivityEvent.REDEEM, customerUuid);
-			Activity_t activityDetails = ActivityUtil.createRedeem(dealAcquire);
+			Activity activity = ActivityUtil.createRedeem(dealAcquire, customerUuid);
+			activityService.save(activity);
 
 			// if we have a gift, we have a bi-directional activity (for friend that
 			// gave gift)
 			final Gift gift = dealAcquire.getGift();
 			if (gift != null)
 			{
-				activityDetails.setSubtitle("Gift from  " + gift.getFromCustomer().getFullName());
-
-				final Activity friendActivity = domainFactory.newActivity(ActivityEvent.FRIEND_GIFT_REDEEM, gift.getFromCustomer()
-						.getId());
-				final Activity_t friendActivityDetails = ActivityUtil.createFriendGiftReedem(dealAcquire);
-				friendActivity.setActivityData(ThriftUtil.serialize(friendActivityDetails, Constants.PROTOCOL_FACTORY));
-				activityService.save(friendActivity);
+				activity = ActivityUtil.createFriendGiftReedem(dealAcquire);
+				activityService.save(activity);
 			}
-
-			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
-			activityService.save(activity);
 
 			return redemptionCode;
 		}
@@ -506,9 +494,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final DealOffer dealOffer = taloolService.getDealOffer(dealOfferUuid);
 
 			// create a purchase activity
-			final Activity activity = domainFactory.newActivity(ActivityEvent.PURCHASE, customerUuid);
-			final Activity_t act = ActivityUtil.createPurchase(dealOffer.getId(), dealOffer.getTitle());
-			activity.setActivityData(ThriftUtil.serialize(act, Constants.PROTOCOL_FACTORY));
+			final Activity activity = ActivityUtil.createPurchase(dealOffer, customerUuid);
 
 			activityService.save(activity);
 		}
@@ -848,17 +834,15 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final UUID customerUuid = UUID.fromString(token.getAccountId());
 			customerService.rejectGift(UUID.fromString(giftId), customerUuid);
 
-			Activity activity = domainFactory.newActivity(ActivityEvent.REJECT, customerUuid);
 			final Gift gift = customerService.getGift(giftUUid);
 
-			Activity_t activityDetails = ActivityUtil.createReject(gift);
-			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
+			Activity activity = ActivityUtil.createReject(gift, customerUuid);
+
 			activityService.save(activity);
 
 			// create the bi-directional activity
-			activity = domainFactory.newActivity(ActivityEvent.FRIEND_GIFT_REJECT, gift.getFromCustomer().getId());
-			activityDetails = ActivityUtil.createFriendRejectGift(gift);
-			activity.setActivityData(ThriftUtil.serialize(activityDetails, Constants.PROTOCOL_FACTORY));
+			activity = ActivityUtil.createFriendRejectGift(gift);
+
 			activityService.save(activity);
 
 		}

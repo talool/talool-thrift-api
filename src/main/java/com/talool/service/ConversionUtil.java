@@ -53,7 +53,7 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
 import com.talool.service.util.Constants;
-import com.talool.service.util.ThriftUtil;
+import com.talool.thrift.ThriftUtil;
 
 /**
  * @author clintz
