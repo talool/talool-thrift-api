@@ -552,6 +552,17 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
+	public void testGetGiftsByUser() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tok = client.authenticate("christopher.justin@gmail.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tok.getToken());
+
+		List<Activity_t> gifts = client.getActivities(null);
+
+		System.out.println(gifts.size());
+	}
+
+	@Test
 	public void testGiftRequests() throws ServiceException_t, TException
 	{
 		long now = System.currentTimeMillis();
@@ -574,18 +585,6 @@ public class ServiceIntegrationTest
 		String giftReceiverFirst = "Gift-" + now;
 		String giftReceiverLast = "Receiver";
 
-		Customer_t giftReceiver = new Customer_t();
-		giftReceiver.setFirstName(giftReceiverFirst);
-		giftReceiver.setLastName(giftReceiverLast);
-		giftReceiver.setSex(Sex_t.M);
-		giftReceiver.setEmail(giftReceiverEmail);
-
-		Map<SocialNetwork_t, SocialAccount_t> socialAccounts = new HashMap<SocialNetwork_t, SocialAccount_t>();
-		socialAccounts.put(SocialNetwork_t.Facebook, new SocialAccount_t(SocialNetwork_t.Facebook, giftReceiverFbId));
-		giftReceiver.setSocialAccounts(socialAccounts);
-
-		client.createAccount(giftReceiver, password);
-
 		CTokenAccess_t tokenAccess = client.authenticate(email, password);
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
@@ -602,6 +601,18 @@ public class ServiceIntegrationTest
 
 		Assert.assertNotNull(giftId);
 
+		Customer_t giftReceiver = new Customer_t();
+		giftReceiver.setFirstName(giftReceiverFirst);
+		giftReceiver.setLastName(giftReceiverLast);
+		giftReceiver.setSex(Sex_t.M);
+		giftReceiver.setEmail(giftReceiverEmail);
+
+		Map<SocialNetwork_t, SocialAccount_t> socialAccounts = new HashMap<SocialNetwork_t, SocialAccount_t>();
+		socialAccounts.put(SocialNetwork_t.Facebook, new SocialAccount_t(SocialNetwork_t.Facebook, giftReceiverFbId));
+		giftReceiver.setSocialAccounts(socialAccounts);
+
+		client.createAccount(giftReceiver, password);
+
 		giftId = client.giftToEmail(dealAcquires.get(1).getDealAcquireId(), "someemail@" + "test.talool.com", "Someone");
 		Assert.assertNotNull(giftId);
 
@@ -615,7 +626,8 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(dealAcquires.get(0).getDeal().getDealId(), gifts.get(0).getDeal().getDealId());
 
 		// accept gift
-		client.acceptGift(gifts.get(0).getGiftId());
+		DealAcquire_t _dac = client.acceptGift(gifts.get(0).getGiftId());
+		Assert.assertEquals(AcquireStatus_t.ACCEPTED_CUSTOMER_SHARE.name(), _dac.getStatus().name());
 
 		// acquire it
 		List<DealAcquire_t> dac = client.getDealAcquires(gifts.get(0).getDeal().getMerchant().getMerchantId(), null);
@@ -632,6 +644,8 @@ public class ServiceIntegrationTest
 		Assert.assertEquals(dealAcquires.get(0).getDeal().getMerchant().getMerchantId(), giftedMerchants.get(0).getMerchantId());
 
 		Assert.assertEquals(0, client.getGifts().size());
+
+		// Create the account so we can see the gifts for new user!
 
 	}
 }

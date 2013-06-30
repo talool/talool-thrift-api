@@ -71,6 +71,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
 	private static final ImmutableList<Gift_t> EMPTY_GIFTS = ImmutableList.of();
+	private static final ImmutableList<Activity_t> EMPTY_ACTIVITIES = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
@@ -435,7 +436,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			final DealAcquire dealAcquire = customerService.getDealAcquire(dealAcquireUuid);
 
-			Activity activity = ActivityUtil.createRedeem(dealAcquire, customerUuid);
+			Activity activity = ActivityFactory.createRedeem(dealAcquire, customerUuid);
 			activityService.save(activity);
 
 			// if we have a gift, we have a bi-directional activity (for friend that
@@ -443,7 +444,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final Gift gift = dealAcquire.getGift();
 			if (gift != null)
 			{
-				activity = ActivityUtil.createFriendGiftReedem(dealAcquire);
+				activity = ActivityFactory.createFriendGiftReedem(dealAcquire);
 				activityService.save(activity);
 			}
 
@@ -494,7 +495,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final DealOffer dealOffer = taloolService.getDealOffer(dealOfferUuid);
 
 			// create a purchase activity
-			final Activity activity = ActivityUtil.createPurchase(dealOffer, customerUuid);
+			final Activity activity = ActivityFactory.createPurchase(dealOffer, customerUuid);
 
 			activityService.save(activity);
 		}
@@ -789,7 +790,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void acceptGift(final String giftId) throws ServiceException_t, TException
+	public DealAcquire_t acceptGift(final String giftId) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
@@ -802,7 +803,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			customerService.acceptGift(UUID.fromString(giftId), UUID.fromString(token.getAccountId()));
+			final DealAcquire dac = customerService.acceptGift(UUID.fromString(giftId), UUID.fromString(token.getAccountId()));
+			return ConversionUtil.convertToThrift(dac);
 		}
 		catch (ServiceException e)
 		{
@@ -836,12 +838,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			final Gift gift = customerService.getGift(giftUUid);
 
-			Activity activity = ActivityUtil.createReject(gift, customerUuid);
+			Activity activity = ActivityFactory.createReject(gift, customerUuid);
 
 			activityService.save(activity);
 
 			// create the bi-directional activity
-			activity = ActivityUtil.createFriendRejectGift(gift);
+			activity = ActivityFactory.createFriendRejectGift(gift);
 
 			activityService.save(activity);
 
@@ -931,7 +933,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final List<Activity> activities = activityService.getActivities(UUID.fromString(token.getAccountId()),
 					ConversionUtil.convertFromThrift(searchOptions));
 
-			return ConversionUtil.convertToThriftActivites(activities);
+			return CollectionUtils.isEmpty(activities) ? EMPTY_ACTIVITIES : ConversionUtil.convertToThriftActivites(activities);
 		}
 		catch (ServiceException e)
 		{
