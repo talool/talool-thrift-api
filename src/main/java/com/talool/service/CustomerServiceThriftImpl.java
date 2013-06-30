@@ -759,12 +759,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<Gift_t> getGifts() throws ServiceException_t, TException
+	public Gift_t getGift(final String giftId) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
-		List<Gift> gifts = null;
+		Gift_t thriftGift = null;
 
-		beginRequest("getGifts");
+		beginRequest("getGift");
 
 		if (LOG.isDebugEnabled())
 		{
@@ -773,9 +773,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			gifts = customerService.getGifts(UUID.fromString(token.getAccountId()), PENDING_GIFT_ACCEPT);
-			final List<Gift_t> thriftGifts = ConversionUtil.convertToThriftGifts(gifts);
-			return CollectionUtils.isEmpty(thriftGifts) ? EMPTY_GIFTS : thriftGifts;
+			final Gift gift = customerService.getGift(UUID.fromString(giftId));
+			thriftGift = ConversionUtil.convertToThrift(gift);
 		}
 		catch (ServiceException e)
 		{
@@ -786,6 +785,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			endRequest();
 		}
+
+		return thriftGift;
 
 	}
 

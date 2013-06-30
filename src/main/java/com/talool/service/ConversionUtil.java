@@ -376,6 +376,16 @@ public final class ConversionUtil
 		return mLoc;
 	}
 
+	public static Gift_t convertToThrift(final Gift gift)
+	{
+		final Gift_t thriftGift = new Gift_t();
+		thriftGift.setCreated(gift.getCreated().getTime());
+		thriftGift.setFromCustomer(convertToThrift(gift.getFromCustomer()));
+		thriftGift.setGiftId(gift.getId().toString());
+		thriftGift.setDeal(convertToThrift(gift.getDealAcquire().getDeal()));
+		return thriftGift;
+	}
+
 	public static List<Gift_t> convertToThriftGifts(final List<Gift> gifts)
 	{
 		if (CollectionUtils.isEmpty(gifts))
