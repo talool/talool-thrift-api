@@ -550,7 +550,6 @@ public class ServiceIntegrationTest
 
 	}
 
-	@Test
 	public void testGetGiftsByUser() throws ServiceException_t, TException
 	{
 		CTokenAccess_t tok = client.authenticate("christopher.justin@gmail.com", "pass123");
@@ -622,6 +621,9 @@ public class ServiceIntegrationTest
 		// verify there is activity
 		List<Activity_t> acts = client.getActivities(null);
 		Assert.assertEquals(1, acts.size());
+
+		String _giftId = acts.get(0).getActivityLink().getLinkElement();
+		client.acceptGift(_giftId);
 		// Assert.assertTrue(acts.get(0).getTitle().contains(dac.get(0).getDeal().getTitle()));
 
 		List<Merchant_t> giftedMerchants = client.getMerchantAcquires(null);

@@ -36,7 +36,6 @@ import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
 import com.talool.core.gift.Gift;
-import com.talool.core.gift.GiftStatus;
 import com.talool.core.service.ActivityService;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
@@ -70,7 +69,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
-	private static final ImmutableList<Gift_t> EMPTY_GIFTS = ImmutableList.of();
 	private static final ImmutableList<Activity_t> EMPTY_ACTIVITIES = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
@@ -79,8 +77,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static ResponseTimer responseTimer = new ResponseTimer();
 
 	private CategoryThread categoryThread;
-
-	private GiftStatus[] PENDING_GIFT_ACCEPT = new GiftStatus[] { GiftStatus.PENDING };
 
 	private static String[] EAGER_DEAL_PROPS = { "image", "merchant.locations" };
 
@@ -833,21 +829,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final UUID giftUUid = UUID.fromString(giftId);
 			final UUID customerUuid = UUID.fromString(token.getAccountId());
 			customerService.rejectGift(UUID.fromString(giftId), customerUuid);
-
-			final Gift gift = customerService.getGift(giftUUid);
-
-			Activity activity = ActivityFactory.createReject(gift, customerUuid);
-
-			activityService.save(activity);
-
-			// create the bi-directional activity
-			activity = ActivityFactory.createFriendRejectGift(gift);
-
-			activityService.save(activity);
-
 		}
 		catch (ServiceException e)
 		{
