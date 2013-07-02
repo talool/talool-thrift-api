@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,9 @@ import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.service.util.Constants;
 import com.talool.service.util.TokenUtil;
+import com.talool.thrift.ThriftUtil;
 
 /**
  * 
@@ -301,7 +304,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
-		List<Merchant_t> resultMerchants = null;
+		List<Merchant_t> thriftMerchants = null;
 
 		beginRequest("getMerchantAcquires");
 
@@ -326,9 +329,23 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
 					ConversionUtil.convertFromThrift(searchOptions));
 
-			resultMerchants = ConversionUtil.convertToThriftMerchants(merchants);
+			thriftMerchants = ConversionUtil.convertToThriftMerchants(merchants);
 
-			return CollectionUtils.isEmpty(resultMerchants) ? EMPTY_MERCHANTS : resultMerchants;
+			if (LOG.isDebugEnabled() && thriftMerchants != null)
+			{
+				long byteTotal = 0;
+				for (Merchant_t merchant : thriftMerchants)
+				{
+					byteTotal += ThriftUtil.serialize(merchant, Constants.PROTOCOL_FACTORY).length;
+				}
+
+				LOG.debug(String.format("getMerchantAcquires - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
+						byteTotal,
+						FileUtils.byteCountToDisplaySize(byteTotal)));
+
+			}
+
+			return CollectionUtils.isEmpty(thriftMerchants) ? EMPTY_MERCHANTS : thriftMerchants;
 		}
 		catch (Exception ex)
 		{
@@ -515,6 +532,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			merchants = taloolService.getMerchantsWithin(ConversionUtil.convertFromThrift(location), maxMiles,
 					ConversionUtil.convertFromThrift(searchOptions));
+
 		}
 		catch (ServiceException e)
 		{
@@ -526,7 +544,24 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			endRequest();
 		}
 
-		return ConversionUtil.convertToThriftMerchants(merchants);
+		final List<Merchant_t> thriftMerchants = ConversionUtil.convertToThriftMerchants(merchants);
+
+		if (LOG.isDebugEnabled() && thriftMerchants != null)
+		{
+			long byteTotal = 0;
+			for (Merchant_t merchant : thriftMerchants)
+			{
+				byteTotal += ThriftUtil.serialize(merchant, Constants.PROTOCOL_FACTORY).length;
+			}
+
+			LOG.debug(String.format("getMerchantsWithin - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
+					byteTotal,
+					FileUtils.byteCountToDisplaySize(byteTotal)));
+
+		}
+
+		return CollectionUtils.isEmpty(thriftMerchants) ? EMPTY_MERCHANTS : thriftMerchants;
+
 	}
 
 	@Override
