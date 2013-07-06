@@ -507,6 +507,7 @@ public final class ConversionUtil
 		try
 		{
 			ThriftUtil.deserialize(activity.getActivityData(), act, Constants.PROTOCOL_FACTORY);
+			act.setActivityId(activity.getId().toString());
 		}
 		catch (TException e)
 		{

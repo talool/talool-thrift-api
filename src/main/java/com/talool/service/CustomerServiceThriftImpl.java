@@ -964,4 +964,32 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			endRequest();
 		}
 	}
+
+	@Override
+	public void activityAction(final String activityId) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("activityAction");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s activityAction activityId %s", token.getAccountId(), activityId));
+		}
+
+		try
+		{
+			activityService.activityAction(UUID.fromString(activityId));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(e.getMessage(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
+		}
+
+	}
 }

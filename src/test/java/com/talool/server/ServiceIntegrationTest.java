@@ -634,4 +634,45 @@ public class ServiceIntegrationTest
 		// Create the account so we can see the gifts for new user!
 
 	}
+
+	@Test
+	public void testActivities() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		String pass = "pass123";
+		String email = "jimmy" + System.currentTimeMillis() + "@gmail.com";
+
+		Customer_t customer = new Customer_t();
+		customer.setFirstName("jimmy");
+		customer.setLastName("jikes");
+		customer.setSex(Sex_t.M);
+
+		customer.setEmail(email);
+
+		CTokenAccess_t accessToken = client.createAccount(customer, pass);
+
+		// test removing social account
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, accessToken.getToken());
+
+		client.authenticate(email, pass);
+
+		List<Activity_t> acts = client.getActivities(null);
+
+		Assert.assertTrue(acts.size() > 0);
+
+		Activity_t act = acts.get(0);
+
+		Assert.assertFalse(act.actionTaken);
+
+		client.activityAction(acts.get(0).getActivityId());
+
+		acts = client.getActivities(null);
+
+		act = acts.get(0);
+
+		Assert.assertTrue(act.actionTaken);
+
+	}
 }
