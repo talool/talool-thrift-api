@@ -992,4 +992,32 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 	}
+
+	@Override
+	public void activateCode(final String dealOfferid, final String code) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("activateCode");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("CustomerId %s activateCode dealOfferId %s code %s", dealOfferid, token.getAccountId(), code));
+		}
+
+		try
+		{
+			customerService.activateCode(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferid), code);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error(e.getMessage(), e);
+			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+		}
+		finally
+		{
+			endRequest();
+		}
+
+	}
 }
