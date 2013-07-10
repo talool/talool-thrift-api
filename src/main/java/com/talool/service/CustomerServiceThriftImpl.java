@@ -1002,7 +1002,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s activateCode dealOfferId %s code %s", dealOfferid, token.getAccountId(), code));
+			LOG.debug(String.format("CustomerId %s activateCode dealOfferId %s code %s", token.getAccountId(), dealOfferid, code));
+		}
+
+		if (dealOfferid == null || code == null)
+
+		{
+			throw new ServiceException_t(ServiceException.Type.UNKNOWN.getCode(), "dealOfferId and code cannot be null");
 		}
 
 		try
