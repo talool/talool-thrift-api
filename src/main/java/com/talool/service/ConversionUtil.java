@@ -348,8 +348,7 @@ public final class ConversionUtil
 		mLoc.setEmail(merchantLocation.getEmail());
 		mLoc.setName(merchantLocation.getLocationName());
 
-		// TODO - remove locationId from thrift object
-		// mLoc.setLocationId(merchantLocation.getId());
+		mLoc.setLocationId(merchantLocation.getId());
 
 		if (merchantLocation.getDistanceInMeters() != null)
 		{
