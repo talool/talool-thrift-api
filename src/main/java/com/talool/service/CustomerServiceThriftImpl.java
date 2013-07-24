@@ -297,7 +297,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 	}
 
+	@Deprecated
 	@Override
+	/**
+	 * Deprecated - see  getMerchantAcquiresWithLocation(SearchOptions_t searchOptions, Location_t location) 
+	 */
 	public List<Merchant_t> getMerchantAcquires(final SearchOptions_t searchOptions)
 			throws ServiceException_t, TException
 	{
@@ -1025,5 +1029,65 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			endRequest();
 		}
 
+	}
+
+	@Override
+	public List<Merchant_t> getMerchantAcquiresWithLocation(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t,
+			TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		List<Merchant> merchants = null;
+		List<Merchant_t> thriftMerchants = null;
+
+		beginRequest("getMerchantAcquiresWithLocation");
+
+		if (LOG.isDebugEnabled())
+		{
+			if (searchOptions != null)
+			{
+				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s",
+						token.getAccountId(), searchOptions.toString()));
+			}
+			else
+			{
+				LOG.debug(String.format(
+						"CustomerId %s getMerchantAcquiress with no searchOptions",
+						token.getAccountId()));
+			}
+
+		}
+
+		try
+		{
+			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
+					ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(location));
+
+			thriftMerchants = ConversionUtil.convertToThriftMerchants(merchants);
+
+			if (LOG.isDebugEnabled() && thriftMerchants != null)
+			{
+				long byteTotal = 0;
+				for (Merchant_t merchant : thriftMerchants)
+				{
+					byteTotal += ThriftUtil.serialize(merchant, Constants.PROTOCOL_FACTORY).length;
+				}
+
+				LOG.debug(String.format("getMerchantAcquiresWithLocation - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
+						byteTotal,
+						FileUtils.byteCountToDisplaySize(byteTotal)));
+
+			}
+
+			return CollectionUtils.isEmpty(thriftMerchants) ? EMPTY_MERCHANTS : thriftMerchants;
+		}
+		catch (Exception ex)
+		{
+			LOG.error("Problem getMerchantAcquiresWithLocation for customer " + token.getAccountId(), ex);
+			throw new ServiceException_t(1087, "Problem getting merchants");
+		}
+		finally
+		{
+			endRequest();
+		}
 	}
 }

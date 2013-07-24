@@ -47,9 +47,9 @@ import com.talool.core.service.ServiceException;
  */
 public class ServiceIntegrationTest
 {
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
 	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
@@ -398,6 +398,23 @@ public class ServiceIntegrationTest
 
 		Assert.assertEquals(purchasedCnt, totalAcs);
 		Assert.assertEquals(2, redeemedCnt);
+
+	}
+
+	public void testGetAcquiredMerchantsLocation() throws ServiceException_t, TException
+	{
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setSortProperty("merchant.name");
+		searchOptions.setPage(0);
+		searchOptions.setAscending(true);
+		searchOptions.setMaxResults(10);
+
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Merchant_t> merchants = client.getMerchantAcquiresWithLocation(searchOptions, BOULDER_LOCATION);
+
+		Assert.assertTrue(merchants.size() > 0);
 
 	}
 
