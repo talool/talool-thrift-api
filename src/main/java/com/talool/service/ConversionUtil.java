@@ -444,11 +444,10 @@ public final class ConversionUtil
 			thriftDealAcquire.setRedeemed(dealAcquire.getRedemptionDate().getTime());
 		}
 
-		// if (dealAcquire.getGiftId() != null &&
-		// dealAcquire.getGift().getFromCustomer() != null)
-		// {
-		// thriftDealAcquire.setSharedByCustomer(convertToThrift(dealAcquire.getGift().getFromCustomer()));
-		// }
+		if (dealAcquire.getRedemptionCode() != null)
+		{
+			thriftDealAcquire.setRedemptionCode(dealAcquire.getRedemptionCode());
+		}
 
 		thriftDealAcquire.setStatus(AcquireStatus_t.valueOf(dealAcquire.getAcquireStatus().toString()));
 

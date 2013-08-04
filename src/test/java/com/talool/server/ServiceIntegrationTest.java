@@ -693,4 +693,18 @@ public class ServiceIntegrationTest
 		Assert.assertTrue(act.actionTaken);
 
 	}
+
+	@Ignore
+	public void testDealAcquiresForCustomer() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Merchant_t> merchantsAcquired = client.getMerchantAcquires(null);
+
+		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
+
+		System.out.println(dealAcquires.size());
+	}
+
 }
