@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import junit.framework.TestCase;
+
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -45,7 +47,8 @@ import com.talool.core.service.ServiceException;
  * @author clintz
  * 
  */
-public class ServiceIntegrationTest
+@Ignore
+public class ServiceIntegrationTest extends TestCase
 {
 	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 
@@ -78,6 +81,7 @@ public class ServiceIntegrationTest
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
+	@Ignore
 	@BeforeClass
 	public static void setUpThrift() throws TTransportException
 	{
@@ -86,6 +90,7 @@ public class ServiceIntegrationTest
 		client = new CustomerService_t.Client(protocol);
 	}
 
+	@Ignore
 	@After
 	public void cleanupClient() throws TTransportException
 	{
