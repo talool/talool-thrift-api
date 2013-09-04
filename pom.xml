@@ -5,12 +5,23 @@
 	<parent>
 		<groupId>com.talool</groupId>
 		<artifactId>talool-base</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>talool-thrift-api</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Talool Thrift API</name>
+	<scm>
+		<connection>scm:git:git@github.com:talool/talool-thrift-api.git</connection>
+		<url>scm:git:git@github.com:talool/talool-thrift-api.git</url>
+		<developerConnection>scm:git:git@github.com:talool/talool-thrift-api.git</developerConnection>
+	</scm>
+	<repositories>
+		<repository>
+			<id>talool-maven-ftp</id>
+			<url>ftp://syslog1/repository</url>
+		</repository>
+	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -18,12 +29,12 @@
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-thrift</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-service</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.cli-parser</groupId>
