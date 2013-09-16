@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import junit.framework.TestCase;
-
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -47,15 +45,16 @@ import com.talool.core.service.ServiceException;
  * @author clintz
  * 
  */
-@Ignore
-public class ServiceIntegrationTest extends TestCase
-{
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+public class ServiceIntegrationTest
+{
+
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://10.14.2.166:8080/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -81,7 +80,6 @@ public class ServiceIntegrationTest extends TestCase
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
-	@Ignore
 	@BeforeClass
 	public static void setUpThrift() throws TTransportException
 	{
@@ -90,7 +88,6 @@ public class ServiceIntegrationTest extends TestCase
 		client = new CustomerService_t.Client(protocol);
 	}
 
-	@Ignore
 	@After
 	public void cleanupClient() throws TTransportException
 	{
@@ -710,6 +707,38 @@ public class ServiceIntegrationTest extends TestCase
 		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
 
 		System.out.println(dealAcquires.size());
+	}
+
+	@Test
+	public void testResetPasswordRequest() throws ServiceException_t, TException
+	{
+		try
+		{
+			client.sendResetPasswordEmail("chris@talool.com");
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void testResetPassword() throws ServiceException_t, TException
+	{
+		// http: //
+		// local-www.talool.com:8080/rpw/9aa5272e-20bd-45e6-a406-f408ec63914f/eN5dTlMIlZUHZGTy
+		try
+		{
+			client.resetPassword("9aa5272e-20bd-45e6-a406-f408ec63914f", "tq0N96hHSnWzECWI", "walkon03");
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 }

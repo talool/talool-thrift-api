@@ -1,10 +1,12 @@
 package com.talool.service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1089,5 +1091,100 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			endRequest();
 		}
+	}
+
+	@Override
+	public void sendResetPasswordEmail(final String email) throws ServiceException_t, TException
+	{
+		beginRequest("sendResetPasswordEmail");
+
+		LOG.info("sendResetPasswordEmail " + email);
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("sendResetPasswordEmail email " + email));
+		}
+
+		try
+		{
+			final Customer customer = customerService.getCustomerByEmail(email);
+			if (customer != null)
+			{
+				customerService.createPasswordReset(customer);
+			}
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("Problem generating password reset for user " + email, se);
+			throw new ServiceException_t(se.getType().getCode(), se.getMessage());
+		}
+
+	}
+
+	@Override
+	public void resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws ServiceException_t, TException
+	{
+		beginRequest("resetPassword");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("resetPassword customerId " + customerId);
+		}
+
+		if (StringUtils.isEmpty(newPassword))
+		{
+			throw new ServiceException_t(ServiceException.Type.PASS_REQUIRED.getCode(),
+					ServiceException.Type.PASS_REQUIRED.getMessage());
+		}
+
+		if (StringUtils.isEmpty(resetPasswordCode))
+		{
+			throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_REQUIRED.getCode(),
+					ServiceException.Type.PASS_RESET_CODE_REQUIRED.getMessage());
+		}
+
+		Customer customer = null;
+
+		try
+		{
+			customer = customerService.getCustomerById(UUID.fromString(customerId));
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("Problem resetPassword for customerId " + customerId, se);
+			throw new ServiceException_t(se.getType().getCode(), se.getMessage());
+		}
+
+		if (customer != null)
+		{
+			if (!customer.getResetPasswordCode().equals(resetPasswordCode))
+			{
+				throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_INVALID.getCode(),
+						ServiceException.Type.PASS_RESET_CODE_INVALID.getMessage());
+			}
+
+			if (Calendar.getInstance().getTime().getTime() > customer.getResetPasswordExpires().getTime())
+			{
+				throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_EXPIRED.getCode(),
+						ServiceException.Type.PASS_RESET_CODE_EXPIRED.getMessage());
+			}
+
+			try
+			{ // encrypts and sets
+				customer.setPassword(newPassword);
+				customerService.save(customer);
+			}
+			catch (ServiceException e)
+			{
+				throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			}
+		}
+		else
+		{
+			LOG.warn("Customer not found customerId:" + customerId);
+			throw new ServiceException_t(ServiceException.Type.CUSTOMER_NOT_FOUND.getCode(),
+					ServiceException.Type.CUSTOMER_NOT_FOUND.getMessage());
+		}
+
 	}
 }
