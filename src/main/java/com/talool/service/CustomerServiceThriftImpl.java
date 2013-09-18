@@ -23,11 +23,13 @@ import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.PaymentDetail;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.api.thrift.Token_t;
+import com.talool.api.thrift.TransactionResult;
 import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
@@ -42,6 +44,7 @@ import com.talool.core.gift.Gift;
 import com.talool.core.service.ActivityService;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.ServiceException;
+import com.talool.core.service.ServiceException.Type;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
@@ -1112,6 +1115,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			{
 				customerService.createPasswordReset(customer);
 			}
+
+			if (customer == null)
+			{
+				throw new ServiceException(Type.CUSTOMER_NOT_FOUND);
+			}
 		}
 		catch (ServiceException se)
 		{
@@ -1186,5 +1194,28 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					ServiceException.Type.CUSTOMER_NOT_FOUND.getMessage());
 		}
 
+	}
+
+	@Override
+	public TransactionResult purchaseByCard(final String dealOfferId, final PaymentDetail paymentDetail) throws ServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		beginRequest("purchaseByCard");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("purchaseByCard customerId " + token.getAccountId());
+		}
+
+		return null;
+
+	}
+
+	@Override
+	public TransactionResult purchaseByCode(String dealOfferId, String paymentCode) throws ServiceException_t, TException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -558,7 +558,6 @@ public class ServiceIntegrationTest
 		try
 		{
 			CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
-
 			Assert.assertNotNull(tokenAccess.getToken());
 			Assert.assertEquals(TEST_USER_FIRST, tokenAccess.getCustomer().getFirstName());
 			Assert.assertEquals(TEST_USER_LAST, tokenAccess.getCustomer().getLastName());
