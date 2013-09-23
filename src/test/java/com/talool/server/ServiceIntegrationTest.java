@@ -36,7 +36,7 @@ import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
-import com.talool.core.service.ServiceException;
+import com.talool.service.ErrorCode;
 
 /**
  * Integration tests for the Thrift service . A running Thrift server needs to
@@ -199,7 +199,7 @@ public class ServiceIntegrationTest
 			throws ServiceException_t, TException
 	{
 		thrown.expect(ServiceException_t.class);
-		thrown.expect(new ServiceExceptionMatcher(ServiceException.Type.EMAIL_ALREADY_TAKEN.getCode()));
+		thrown.expect(new ServiceExceptionMatcher(ErrorCode.EMAIL_ALREADY_TAKEN.getCode()));
 
 		Customer_t customer = new Customer_t();
 		customer.setFirstName(TEST_USER_FIRST);

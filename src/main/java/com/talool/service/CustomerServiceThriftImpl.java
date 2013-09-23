@@ -20,16 +20,20 @@ import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.ErrorCode_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
-import com.talool.api.thrift.PaymentDetail;
+import com.talool.api.thrift.PaymentDetail_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
+import com.talool.api.thrift.TNotFoundException_t;
+import com.talool.api.thrift.TServiceException_t;
+import com.talool.api.thrift.TUserException_t;
 import com.talool.api.thrift.Token_t;
-import com.talool.api.thrift.TransactionResult;
+import com.talool.api.thrift.TransactionResult_t;
 import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
@@ -43,12 +47,15 @@ import com.talool.core.activity.Activity;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ActivityService;
 import com.talool.core.service.CustomerService;
+import com.talool.core.service.InvalidInputException;
+import com.talool.core.service.NotFoundException;
 import com.talool.core.service.ServiceException;
-import com.talool.core.service.ServiceException.Type;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.payment.TransactionResult;
 import com.talool.service.util.Constants;
+import com.talool.service.util.ExceptionUtil;
 import com.talool.service.util.TokenUtil;
 import com.talool.thrift.ThriftUtil;
 
@@ -150,14 +157,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			if (taloolService.emailExists(AccountType.CUS, customer.getEmail()))
 			{
 				LOG.error("Email already taken: " + customer.getEmail());
-				throw new ServiceException_t(ServiceException.Type.EMAIL_ALREADY_TAKEN.getCode(),
-						ServiceException.Type.EMAIL_ALREADY_TAKEN.getMessage());
+				throw new ServiceException_t(ErrorCode.EMAIL_ALREADY_TAKEN.getCode(),
+						ErrorCode.EMAIL_ALREADY_TAKEN.getMessage());
 			}
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("Problem registering customer: " + e, e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 		try
@@ -243,18 +250,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			catch (ServiceException e)
 			{
 				LOG.error("Problem authenticating customer: " + e, e);
-				throw new ServiceException_t(e.getType().getCode(), e.getMessage());
-			}
-			catch (Exception e)
-			{
-				LOG.error("Problem authenticating customer: " + e, e);
-				throw new ServiceException_t(1000, e.getMessage());
+				throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 			}
 
 			if (customer == null)
 			{
-				throw new ServiceException_t(ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getCode(),
-						ServiceException.Type.INVALID_USERNAME_OR_PASSWORD.getMessage());
+				throw new ServiceException_t(ErrorCode.CUSTOMER_NOT_FOUND.getCode(), ErrorCode.CUSTOMER_NOT_FOUND.getMessage());
 			}
 			try
 			{
@@ -451,7 +452,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
 			endRequest();
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 		try
@@ -475,7 +476,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("There was a problem redeeming deal : " + dealAcquireId, e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -497,7 +498,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 		return ConversionUtil.convertToThrift(dealOffers);
@@ -524,7 +525,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 	}
@@ -546,7 +547,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -586,7 +587,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -608,7 +609,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -634,7 +635,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -668,7 +669,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -689,7 +690,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		catch (ServiceException e)
 		{
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 	}
@@ -720,7 +721,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("Problem addSocialAccount for customerId: " + token.getAccountId(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 
 	}
@@ -752,7 +753,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("Problem giftToFacebook for customerId: " + token.getAccountId(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -789,7 +790,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("Problem giftToEmail for customerId: " + token.getAccountId(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -819,7 +820,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -850,7 +851,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(String.format("Problem acceptGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -879,7 +880,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(String.format("Problem rejectGift for customerId %s giftId %s", token.getAccountId(), giftId), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -913,7 +914,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -941,7 +942,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -966,7 +967,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -993,7 +994,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -1017,7 +1018,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		if (dealOfferid == null || code == null)
 
 		{
-			throw new ServiceException_t(ServiceException.Type.UNKNOWN.getCode(), "dealOfferId and code cannot be null");
+			throw new ServiceException_t(ErrorCode.UNKNOWN.getCode(), "dealOfferId and code cannot be null");
 		}
 
 		try
@@ -1027,7 +1028,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException e)
 		{
 			LOG.error(e.getMessage(), e);
-			throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
 		}
 		finally
 		{
@@ -1097,7 +1098,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void sendResetPasswordEmail(final String email) throws ServiceException_t, TException
+	public void sendResetPasswordEmail(final String email) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		beginRequest("sendResetPasswordEmail");
 
@@ -1118,20 +1119,28 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			if (customer == null)
 			{
-				throw new ServiceException(Type.CUSTOMER_NOT_FOUND);
+				throw new TNotFoundException_t("email", email);
 			}
 		}
 		catch (ServiceException se)
 		{
 			LOG.error("Problem generating password reset for user " + email, se);
-			throw new ServiceException_t(se.getType().getCode(), se.getMessage());
+			throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
+		}
+		catch (InvalidInputException e)
+		{
+			LOG.warn("Invalid input on password reset " + email, e);
+			throw ExceptionUtil.safelyTranslate(e);
 		}
 
 	}
 
 	@Override
-	public void resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws ServiceException_t, TException
+	public void resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws TServiceException_t,
+			TUserException_t, TNotFoundException_t, TException
 	{
+		Customer customer = null;
+
 		beginRequest("resetPassword");
 
 		if (LOG.isDebugEnabled())
@@ -1141,17 +1150,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (StringUtils.isEmpty(newPassword))
 		{
-			throw new ServiceException_t(ServiceException.Type.PASS_REQUIRED.getCode(),
-					ServiceException.Type.PASS_REQUIRED.getMessage());
+			throw new TUserException_t(ErrorCode_t.PASS_REQUIRED);
 		}
 
 		if (StringUtils.isEmpty(resetPasswordCode))
 		{
-			throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_REQUIRED.getCode(),
-					ServiceException.Type.PASS_RESET_CODE_REQUIRED.getMessage());
+			throw new TUserException_t(ErrorCode_t.PASS_RESET_CODE_REQUIRED);
 		}
-
-		Customer customer = null;
 
 		try
 		{
@@ -1160,21 +1165,19 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (ServiceException se)
 		{
 			LOG.error("Problem resetPassword for customerId " + customerId, se);
-			throw new ServiceException_t(se.getType().getCode(), se.getMessage());
+			throw ExceptionUtil.safelyTranslate(se);
 		}
 
 		if (customer != null)
 		{
 			if (!customer.getResetPasswordCode().equals(resetPasswordCode))
 			{
-				throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_INVALID.getCode(),
-						ServiceException.Type.PASS_RESET_CODE_INVALID.getMessage());
+				throw new TUserException_t(ErrorCode_t.PASS_RESET_CODE_INVALID);
 			}
 
 			if (Calendar.getInstance().getTime().getTime() > customer.getResetPasswordExpires().getTime())
 			{
-				throw new ServiceException_t(ServiceException.Type.PASS_RESET_CODE_EXPIRED.getCode(),
-						ServiceException.Type.PASS_RESET_CODE_EXPIRED.getMessage());
+				throw new TServiceException_t(ErrorCode_t.PASS_RESET_CODE_EXPIRED);
 			}
 
 			try
@@ -1182,24 +1185,28 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				customer.setPassword(newPassword);
 				customerService.save(customer);
 			}
-			catch (ServiceException e)
+			catch (ServiceException se)
 			{
-				throw new ServiceException_t(e.getType().getCode(), e.getMessage());
+				LOG.error("Problem setting new pass/saving customerId " + customerId, se);
+				throw ExceptionUtil.safelyTranslate(se);
 			}
 		}
 		else
 		{
 			LOG.warn("Customer not found customerId:" + customerId);
-			throw new ServiceException_t(ServiceException.Type.CUSTOMER_NOT_FOUND.getCode(),
-					ServiceException.Type.CUSTOMER_NOT_FOUND.getMessage());
+			throw new TNotFoundException_t("customer", customerId);
 		}
 
 	}
 
 	@Override
-	public TransactionResult purchaseByCard(final String dealOfferId, final PaymentDetail paymentDetail) throws ServiceException_t, TException
+	public TransactionResult_t purchaseByCard(final String dealOfferId, final PaymentDetail_t paymentDetail) throws TServiceException_t,
+			TUserException_t,
+			TNotFoundException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		TransactionResult_t transactionResult_t = null;
 
 		beginRequest("purchaseByCard");
 
@@ -1208,14 +1215,35 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.debug("purchaseByCard customerId " + token.getAccountId());
 		}
 
-		return null;
+		try
+		{
+			final TransactionResult transactionResult = customerService.purchaseByCard(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
+					ConversionUtil.convertFromThrift(paymentDetail));
+			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem purchaseByCard: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		catch (NotFoundException e)
+		{
+			LOG.error("Problem purchaseByCard: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+
+		return transactionResult_t;
 
 	}
 
 	@Override
-	public TransactionResult purchaseByCode(String dealOfferId, String paymentCode) throws ServiceException_t, TException
+	public TransactionResult_t purchaseByCode(String dealOfferId, String paymentCode) throws TServiceException_t, TUserException_t,
+			TNotFoundException_t,
+			TException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

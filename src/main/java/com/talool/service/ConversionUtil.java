@@ -32,10 +32,12 @@ import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.PaymentDetail_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
+import com.talool.api.thrift.TransactionResult_t;
 import com.talool.core.Category;
 import com.talool.core.Customer;
 import com.talool.core.Deal;
@@ -52,6 +54,9 @@ import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
+import com.talool.payment.Card;
+import com.talool.payment.PaymentDetail;
+import com.talool.payment.TransactionResult;
 import com.talool.service.util.Constants;
 import com.talool.thrift.ThriftUtil;
 
@@ -532,6 +537,50 @@ public final class ConversionUtil
 		}
 
 		return thriftAct;
+
+	}
+
+	public static TransactionResult_t convertToThrift(final TransactionResult transactionResult)
+	{
+		if (transactionResult == null)
+		{
+			return null;
+		}
+
+		final TransactionResult_t transactionResult_t = new TransactionResult_t();
+		transactionResult_t.setMessage(transactionResult.getMessage());
+		transactionResult_t.setSuccess(transactionResult.isSuccess());
+
+		return transactionResult_t;
+
+	}
+
+	public static PaymentDetail convertFromThrift(final PaymentDetail_t paymentDetail_t)
+	{
+		if (paymentDetail_t == null)
+		{
+			return null;
+		}
+
+		final PaymentDetail paymentDetail = new PaymentDetail();
+		paymentDetail.setEncryptedFields(paymentDetail_t.encryptedFields);
+		paymentDetail.setSaveCard(paymentDetail_t.saveCard);
+
+		final Card card = new Card();
+		card.setAccountNumber(paymentDetail_t.getCard().getAccountNumber()).
+				setSecurityCode(paymentDetail_t.getCard().getSecurityCode()).
+				setExpirationMonth(paymentDetail_t.getCard().getExpirationMonth()).
+				setExpirationYear(paymentDetail_t.getCard().getExpirationYear()).
+				setZipCode(paymentDetail_t.getCard().getZipCode());
+
+		paymentDetail.setCard(card);
+
+		if (paymentDetail_t.getPaymentMetadataSize() > 0)
+		{
+			paymentDetail.setPaymentMetadata(paymentDetail_t.getPaymentMetadata());
+		}
+
+		return paymentDetail;
 
 	}
 
