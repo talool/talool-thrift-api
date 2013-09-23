@@ -45,7 +45,8 @@ public class TServletTaloolService extends TServlet
 		else
 		{
 			RequestUtils.setRequest(request);
-			super.doGet(request, response);
+			final PrintWriter out = response.getWriter();
+			out.println("Not Supported");
 		}
 	}
 
