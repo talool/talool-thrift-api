@@ -1238,12 +1238,41 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public TransactionResult_t purchaseByCode(String dealOfferId, String paymentCode) throws TServiceException_t, TUserException_t,
+	public TransactionResult_t purchaseByCode(final String dealOfferId, final String paymentCode) throws TServiceException_t, TUserException_t,
 			TNotFoundException_t,
 			TException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+
+		TransactionResult_t transactionResult_t = null;
+
+		beginRequest("purchaseByCode");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("purchaseByCode customerId " + token.getAccountId());
+		}
+
+		try
+		{
+			final TransactionResult transactionResult = customerService.purchaseByCode(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
+					paymentCode);
+			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem purchaseByCode: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		catch (NotFoundException e)
+		{
+			LOG.error("Problem purchaseByCode: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+
+		return transactionResult_t;
+
 	}
 
 }
