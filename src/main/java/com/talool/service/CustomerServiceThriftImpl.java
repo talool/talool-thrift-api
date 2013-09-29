@@ -255,7 +255,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			if (customer == null)
 			{
-				throw new ServiceException_t(ErrorCode.CUSTOMER_NOT_FOUND.getCode(), ErrorCode.CUSTOMER_NOT_FOUND.getMessage());
+				throw new ServiceException_t(ErrorCode.EMAIL_OR_PASS_INVALID.getCode(), ErrorCode.EMAIL_OR_PASS_INVALID.getMessage());
 			}
 			try
 			{
