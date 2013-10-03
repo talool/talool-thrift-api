@@ -40,7 +40,6 @@ import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
-import com.talool.core.DomainFactory;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
@@ -79,8 +78,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final transient ActivityService activityService = FactoryManager.get()
 			.getServiceFactory().getActivityService();
-
-	private static final transient DomainFactory domainFactory = FactoryManager.get().getDomainFactory();
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
@@ -187,7 +184,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			token = TokenUtil.createTokenAccess(updatedCustomer);
 
-			LOG.info("Sending token:" + token.getToken());
 		}
 		catch (Exception e)
 		{
@@ -219,10 +215,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		responseTimer.get().watch.stop();
 
-		// yes i want to log INFO level so that we can enable dynamic logging in
-		// prod
-		// id necessary without logging DEBUG level
-		LOG.info(responseTimer.get().method + "/" + responseTimer.get().watch.getTime());
+		LOG.debug(responseTimer.get().method + "/" + responseTimer.get().watch.getTime());
 
 	}
 
@@ -1102,7 +1095,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		beginRequest("sendResetPasswordEmail");
 
-		LOG.info("sendResetPasswordEmail " + email);
+		LOG.debug("sendResetPasswordEmail " + email);
 
 		if (LOG.isDebugEnabled())
 		{
@@ -1136,10 +1129,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws TServiceException_t,
+	public CTokenAccess_t resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws TServiceException_t,
 			TUserException_t, TNotFoundException_t, TException
 	{
 		Customer customer = null;
+		CTokenAccess_t token = null;
 
 		beginRequest("resetPassword");
 
@@ -1184,6 +1178,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			{ // encrypts and sets
 				customer.setPassword(newPassword);
 				customerService.save(customer);
+				token = TokenUtil.createTokenAccess(ConversionUtil.convertToThrift(customer));
 			}
 			catch (ServiceException se)
 			{
@@ -1196,6 +1191,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.warn("Customer not found customerId:" + customerId);
 			throw new TNotFoundException_t("customer", customerId);
 		}
+
+		return token;
 
 	}
 
