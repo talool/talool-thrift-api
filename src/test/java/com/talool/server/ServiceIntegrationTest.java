@@ -49,10 +49,10 @@ import com.talool.service.ErrorCode;
 public class ServiceIntegrationTest
 {
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
@@ -713,7 +713,27 @@ public class ServiceIntegrationTest
 	{
 		try
 		{
+
 			client.sendResetPasswordEmail("chris@talool.com");
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void testCodeActivation() throws ServiceException_t, TException
+	{
+		try
+		{
+			CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+			tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+			// client.activateCode("4d54d8ef-febb-4719-b9f0-a73578a41803", "A00OOZ");
+			client.activateCode("4d54d8ef-febb-4719-b9f0-a73578a41803", "OOOOBZ0");
 
 		}
 		catch (Exception e)
