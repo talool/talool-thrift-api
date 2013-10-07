@@ -1209,7 +1209,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("purchaseByCard customerId " + token.getAccountId());
+			LOG.debug(String.format("purchaseByCard customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
 		}
 
 		try
@@ -1247,7 +1247,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug("purchaseByCode customerId " + token.getAccountId());
+			LOG.debug(String.format("purchaseByCode customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
 		}
 
 		try
