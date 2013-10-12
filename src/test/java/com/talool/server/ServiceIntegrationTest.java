@@ -49,10 +49,11 @@ import com.talool.service.ErrorCode;
 public class ServiceIntegrationTest
 {
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
 	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://api.talool.com/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
@@ -123,12 +124,13 @@ public class ServiceIntegrationTest
 	public void testRegisterCustomerByEmail()
 			throws ServiceException_t, TException
 	{
+
 		final long now = System.currentTimeMillis();
 		Customer_t customer = new Customer_t();
 		customer.setFirstName("Chris-" + now);
 		customer.setLastName("Lintz-" + now);
 		customer.setSex(Sex_t.M);
-		customer.setEmail("chris-" + now + "@talool.com");
+		customer.setEmail("christopher.justin@gmail.com");
 
 		CTokenAccess_t accessToken = client.createAccount(customer, "pass123");
 
@@ -750,8 +752,8 @@ public class ServiceIntegrationTest
 		// local-www.talool.com:8080/rpw/9aa5272e-20bd-45e6-a406-f408ec63914f/eN5dTlMIlZUHZGTy
 		try
 		{
-			client.resetPassword("9aa5272e-20bd-45e6-a406-f408ec63914f", "tq0N96hHSnWzECWI", "walkon03");
-
+			CTokenAccess_t token = client.resetPassword("614c2a04-1142-4ac9-a5f0-111ace872eec", "P6GrwZv1bJISxdmM", "walkon03");
+			System.out.println("here");
 		}
 		catch (Exception e)
 		{

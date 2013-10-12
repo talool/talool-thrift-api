@@ -1,6 +1,7 @@
 package com.talool.service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -1093,6 +1094,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	@Override
 	public void sendResetPasswordEmail(final String email) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
+		Customer customer = null;
 		beginRequest("sendResetPasswordEmail");
 
 		LOG.debug("sendResetPasswordEmail " + email);
@@ -1104,26 +1106,46 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			final Customer customer = customerService.getCustomerByEmail(email);
-			if (customer != null)
-			{
-				customerService.createPasswordReset(customer);
-			}
+			customer = customerService.getCustomerByEmail(email);
 
-			if (customer == null)
-			{
-				throw new TNotFoundException_t("email", email);
-			}
 		}
 		catch (ServiceException se)
 		{
-			LOG.error("Problem generating password reset for user " + email, se);
+			LOG.error("Problem finding customer by email: " + email, se);
 			throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
 		}
 		catch (InvalidInputException e)
 		{
 			LOG.warn("Invalid input on password reset " + email, e);
 			throw ExceptionUtil.safelyTranslate(e);
+		}
+
+		if (customer == null)
+		{
+			throw new TNotFoundException_t("email", email);
+		}
+
+		try
+		{
+			if (customer.getSocialAccounts().get(taloolService.getSocialNetwork(SocialNetwork.NetworkName.Facebook)) != null)
+			{
+				throw new ServiceException_t(ErrorCode.UNKNOWN.getCode(), "Cannot change Facebook account passwords");
+			}
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("Problem checking for facebook account for user " + email, se);
+			throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
+		}
+
+		try
+		{
+			customerService.createPasswordReset(customer);
+		}
+		catch (ServiceException se)
+		{
+			LOG.error("Problem generating password reset for user " + email, se);
+			throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
 		}
 
 	}
@@ -1169,14 +1191,17 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				throw new TUserException_t(ErrorCode_t.PASS_RESET_CODE_INVALID);
 			}
 
-			if (Calendar.getInstance().getTime().getTime() > customer.getResetPasswordExpires().getTime())
+			final Date now = Calendar.getInstance().getTime();
+			if (now.getTime() > customer.getResetPasswordExpires().getTime())
 			{
+				LOG.warn(String.format("reset pass expired customerId %s now %s expiresTime %s", customerId, now, customer.getResetPasswordExpires()));
 				throw new TServiceException_t(ErrorCode_t.PASS_RESET_CODE_EXPIRED);
 			}
 
 			try
 			{ // encrypts and sets
 				customer.setPassword(newPassword);
+				customer.setResetPasswordCode(null);
 				customerService.save(customer);
 				token = TokenUtil.createTokenAccess(ConversionUtil.convertToThrift(customer));
 			}
