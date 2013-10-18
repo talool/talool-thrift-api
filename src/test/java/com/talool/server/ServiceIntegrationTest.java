@@ -28,6 +28,7 @@ import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
@@ -52,8 +53,8 @@ public class ServiceIntegrationTest
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
-	private static final String TEST_URL = "http://api.talool.com/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
@@ -571,14 +572,27 @@ public class ServiceIntegrationTest
 
 	}
 
+	@Test
 	public void testGetGiftsByUser() throws ServiceException_t, TException
 	{
-		CTokenAccess_t tok = client.authenticate("christopher.justin@gmail.com", "pass123");
+		CTokenAccess_t tok = client.authenticate("chris@talool.com", "Walkon2013");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tok.getToken());
 
-		List<Activity_t> gifts = client.getActivities(null);
+		try
+		{
+			// http://dev-www.talool.com/gift/5ec08aa5-4099-4663-b074-ce1e7878ae95
+			Gift_t gift = client.getGift("5ec08aa5-4099-4663-b074-ce1e7878ae95");
 
-		System.out.println(gifts.size());
+			if (gift == null)
+			{
+				System.out.println("Chris");
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	@Test

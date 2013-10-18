@@ -21,7 +21,6 @@ import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
-import com.talool.api.thrift.ErrorCode_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
@@ -809,12 +808,27 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			final Gift gift = customerService.getGift(UUID.fromString(giftId));
-			thriftGift = ConversionUtil.convertToThrift(gift);
+
+			// return null if gift does not belong to user!
+			if (gift != null && !gift.getToCustomer().getId().toString().equals(token.getAccountId()))
+			{
+				throw new ServiceException_t(ErrorCode.NOT_GIFT_RECIPIENT.getCode(), ErrorCode.NOT_GIFT_RECIPIENT.getMessage());
+			}
+			else
+			{
+				thriftGift = ConversionUtil.convertToThrift(gift);
+			}
+
 		}
 		catch (ServiceException e)
 		{
 			LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
 			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
+		}
+		catch (ServiceException_t e)
+		{
+			LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
+			throw e;
 		}
 		finally
 		{
@@ -1166,12 +1180,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (StringUtils.isEmpty(newPassword))
 		{
-			throw new TUserException_t(ErrorCode_t.PASS_REQUIRED);
+			throw new TUserException_t(ErrorCode.PASS_REQUIRED.getCode());
 		}
 
 		if (StringUtils.isEmpty(resetPasswordCode))
 		{
-			throw new TUserException_t(ErrorCode_t.PASS_RESET_CODE_REQUIRED);
+			throw new TUserException_t(ErrorCode.PASS_RESET_CODE_REQUIRED.getCode());
 		}
 
 		try
@@ -1188,14 +1202,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			if (!customer.getResetPasswordCode().equals(resetPasswordCode))
 			{
-				throw new TUserException_t(ErrorCode_t.PASS_RESET_CODE_INVALID);
+				throw new TUserException_t(ErrorCode.PASS_RESET_CODE_INVALID.getCode());
 			}
 
 			final Date now = Calendar.getInstance().getTime();
 			if (now.getTime() > customer.getResetPasswordExpires().getTime())
 			{
 				LOG.warn(String.format("reset pass expired customerId %s now %s expiresTime %s", customerId, now, customer.getResetPasswordExpires()));
-				throw new TServiceException_t(ErrorCode_t.PASS_RESET_CODE_EXPIRED);
+				throw new TServiceException_t(ErrorCode.PASS_RESET_CODE_EXPIRED.getCode());
 			}
 
 			try
@@ -1265,7 +1279,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
-
 		TransactionResult_t transactionResult_t = null;
 
 		beginRequest("purchaseByCode");
