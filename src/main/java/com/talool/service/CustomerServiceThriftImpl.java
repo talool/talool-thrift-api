@@ -1314,7 +1314,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public CTokenAccessResponse_t loginFacebook(final String facebookId, final String facebookTokenAccess) throws ServiceException_t, TException
+	public CTokenAccessResponse_t loginFacebook(final String facebookId, final String facebookTokenAccess)
+			throws TServiceException_t, TException
 	{
 		beginRequest("loginFacebook");
 

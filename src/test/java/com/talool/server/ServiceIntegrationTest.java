@@ -144,7 +144,8 @@ public class ServiceIntegrationTest
 
 	}
 
-	public void testFacebookLogin() throws ServiceException_t, TException
+	@Test
+	public void testFacebookLogin() throws TException
 	{
 		CTokenAccessResponse_t response = client.loginFacebook("630941208", null);
 		System.out.println(response);
