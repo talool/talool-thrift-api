@@ -20,6 +20,7 @@ import org.junit.rules.ExpectedException;
 
 import com.talool.api.thrift.AcquireStatus_t;
 import com.talool.api.thrift.Activity_t;
+import com.talool.api.thrift.CTokenAccessResponse_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerServiceConstants;
@@ -141,6 +142,12 @@ public class ServiceIntegrationTest
 		Assert.assertNotNull(accessToken.getCustomer().getCustomerId());
 		Assert.assertEquals(customer.getSex(), accessToken.getCustomer().getSex());
 
+	}
+
+	public void testFacebookLogin() throws ServiceException_t, TException
+	{
+		CTokenAccessResponse_t response = client.loginFacebook("630941208", null);
+		System.out.println(response);
 	}
 
 	@Test

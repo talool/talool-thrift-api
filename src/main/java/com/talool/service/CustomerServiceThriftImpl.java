@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.talool.api.thrift.Activity_t;
+import com.talool.api.thrift.CTokenAccessResponse_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerService_t;
@@ -84,6 +85,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final ImmutableList<Activity_t> EMPTY_ACTIVITIES = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
+
+	private static final CTokenAccessResponse_t NULL_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
 
 	// a thread local convenience
 	private static ResponseTimer responseTimer = new ResponseTimer();
@@ -1310,4 +1313,41 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	}
 
+	@Override
+	public CTokenAccessResponse_t loginFacebook(final String facebookId, final String facebookTokenAccess) throws ServiceException_t, TException
+	{
+		beginRequest("loginFacebook");
+
+		if (StringUtils.isEmpty(facebookId))
+		{
+			LOG.warn("facebookId is null");
+			return NULL_TOKEN_ACCESS_RESPONSE;
+		}
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("loginFacebook facebookId %s", facebookId));
+		}
+
+		try
+		{
+			final Customer customer = customerService.getCustomerBySocialLoginId(facebookId);
+
+			if (customer != null)
+			{
+				final CTokenAccessResponse_t tokenAccessResponse = new CTokenAccessResponse_t();
+				final Customer_t customer_t = ConversionUtil.convertToThrift(customer);
+				tokenAccessResponse.setTokenAccess(TokenUtil.createTokenAccess(customer_t));
+				return tokenAccessResponse;
+			}
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem loginFacebook: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+
+		return NULL_TOKEN_ACCESS_RESPONSE;
+	}
 }
