@@ -589,7 +589,7 @@ public class ServiceIntegrationTest
 		try
 		{
 			// http://dev-www.talool.com/gift/5ec08aa5-4099-4663-b074-ce1e7878ae95
-			Gift_t gift = client.getGift("5ec08aa5-4099-4663-b074-ce1e7878ae95");
+			Gift_t gift = client.getGift("3fac749c-901f-41ec-94ad-f33e5d2e647a");
 
 			if (gift == null)
 			{

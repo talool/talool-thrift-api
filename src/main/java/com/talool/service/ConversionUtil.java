@@ -28,6 +28,7 @@ import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.GiftStatus_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
@@ -389,6 +390,8 @@ public final class ConversionUtil
 		thriftGift.setFromCustomer(convertToThrift(gift.getFromCustomer()));
 		thriftGift.setGiftId(gift.getId().toString());
 		thriftGift.setDeal(convertToThrift(gift.getDealAcquire().getDeal()));
+
+		thriftGift.setGiftStatus(GiftStatus_t.valueOf(gift.getGiftStatus().name()));
 		return thriftGift;
 	}
 
