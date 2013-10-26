@@ -719,15 +719,33 @@ public class ServiceIntegrationTest
 
 	}
 
-	@Ignore
+	@Test
 	public void testDealAcquiresForCustomer() throws ServiceException_t, TException
 	{
-		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
 		List<Merchant_t> merchantsAcquired = client.getMerchantAcquires(null);
 
-		List<DealAcquire_t> dealAcquires = client.getDealAcquires(merchantsAcquired.get(0).getMerchantId(), null);
+		Merchant_t theMerch = null;
+
+		for (Merchant_t merc : merchantsAcquired)
+		{
+			if (merc.getName().startsWith("95"))
+			{
+				theMerch = merc;
+			}
+		}
+
+		List<DealAcquire_t> dealAcquires = client.getDealAcquires(theMerch.getMerchantId(), null);
+
+		for (DealAcquire_t dac : dealAcquires)
+		{
+			if (dac.getDealAcquireId().toString().equals("6a1f1663-4ab3-407e-a520-a3c379334082"))
+			{
+				System.out.println(dac.getGiftDetail());
+			}
+		}
 
 		System.out.println(dealAcquires.size());
 	}

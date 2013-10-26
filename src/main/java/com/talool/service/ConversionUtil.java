@@ -28,6 +28,7 @@ import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.GiftDetail_t;
 import com.talool.api.thrift.GiftStatus_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
@@ -392,6 +393,7 @@ public final class ConversionUtil
 		thriftGift.setDeal(convertToThrift(gift.getDealAcquire().getDeal()));
 
 		thriftGift.setGiftStatus(GiftStatus_t.valueOf(gift.getGiftStatus().name()));
+
 		return thriftGift;
 	}
 
@@ -459,6 +461,19 @@ public final class ConversionUtil
 
 		thriftDealAcquire.setStatus(AcquireStatus_t.valueOf(dealAcquire.getAcquireStatus().toString()));
 
+		if (dealAcquire.getGift() != null)
+		{
+			final GiftDetail_t giftDetail = new GiftDetail_t(dealAcquire.getGift().getId().toString(), dealAcquire.getGift().getCreated().getTime());
+			giftDetail.setFromFirstName(dealAcquire.getGift().getFromCustomer().getFirstName());
+			giftDetail.setFromLastName(dealAcquire.getGift().getFromCustomer().getLastName());
+			giftDetail.setFromEmail(dealAcquire.getGift().getFromCustomer().getEmail());
+			giftDetail.setToEmail(dealAcquire.getGift().getToCustomer().getEmail());
+			giftDetail.setToFirstName(dealAcquire.getGift().getToCustomer().getFirstName());
+			giftDetail.setToLastName(dealAcquire.getGift().getToCustomer().getLastName());
+
+			thriftDealAcquire.setGiftDetail(giftDetail);
+
+		}
 		return thriftDealAcquire;
 
 	}
