@@ -54,6 +54,7 @@ import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
 import com.talool.payment.TransactionResult;
+import com.talool.payment.braintree.BraintreeUtil;
 import com.talool.service.util.Constants;
 import com.talool.service.util.ExceptionUtil;
 import com.talool.service.util.TokenUtil;
@@ -1252,6 +1253,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug(String.format("purchaseByCard customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
+			LOG.debug(BraintreeUtil.getDebugString());
 		}
 
 		try
