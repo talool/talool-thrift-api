@@ -52,6 +52,8 @@ import com.talool.core.MerchantLocation;
 import com.talool.core.SearchOptions;
 import com.talool.core.Sex;
 import com.talool.core.activity.Activity;
+import com.talool.core.gift.EmailGift;
+import com.talool.core.gift.FaceBookGift;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ServiceException;
 import com.talool.core.social.CustomerSocialAccount;
@@ -464,12 +466,30 @@ public final class ConversionUtil
 		if (dealAcquire.getGift() != null)
 		{
 			final GiftDetail_t giftDetail = new GiftDetail_t(dealAcquire.getGift().getId().toString(), dealAcquire.getGift().getCreated().getTime());
-			giftDetail.setFromFirstName(dealAcquire.getGift().getFromCustomer().getFirstName());
-			giftDetail.setFromLastName(dealAcquire.getGift().getFromCustomer().getLastName());
+			giftDetail.setFromName(dealAcquire.getGift().getFromCustomer().getFirstName() + " " + dealAcquire.getGift().getFromCustomer().getLastName());
 			giftDetail.setFromEmail(dealAcquire.getGift().getFromCustomer().getEmail());
-			giftDetail.setToEmail(dealAcquire.getGift().getToCustomer().getEmail());
-			giftDetail.setToFirstName(dealAcquire.getGift().getToCustomer().getFirstName());
-			giftDetail.setToLastName(dealAcquire.getGift().getToCustomer().getLastName());
+
+			// toCustomer may be null because they haven't registered
+			final Customer toCustomer = dealAcquire.getGift().getToCustomer();
+			if (toCustomer == null)
+			{
+				if (dealAcquire.getGift() instanceof EmailGift)
+				{
+					final EmailGift emailGift = (EmailGift) dealAcquire.getGift();
+					giftDetail.setToEmail(emailGift.getToEmail());
+					giftDetail.setToName(emailGift.getReceipientName());
+				}
+				else
+				{
+					final FaceBookGift fbGift = (FaceBookGift) dealAcquire.getGift();
+					giftDetail.setToName(fbGift.getReceipientName());
+				}
+			}
+			else
+			{
+				giftDetail.setToEmail(toCustomer.getEmail());
+				giftDetail.setToName(toCustomer.getFirstName() + " " + toCustomer.getLastName());
+			}
 
 			thriftDealAcquire.setGiftDetail(giftDetail);
 
