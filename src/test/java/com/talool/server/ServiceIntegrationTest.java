@@ -48,17 +48,16 @@ import com.talool.service.ErrorCode;
  * 
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
