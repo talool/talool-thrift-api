@@ -1,10 +1,13 @@
 package com.talool.server;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -23,10 +26,13 @@ import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.CTokenAccessResponse_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
+import com.talool.api.thrift.CoreConstants;
 import com.talool.api.thrift.CustomerServiceConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
+import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
+import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
@@ -48,17 +54,16 @@ import com.talool.service.ErrorCode;
  * 
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -73,9 +78,10 @@ public class ServiceIntegrationTest
 	private static final String TEST_USER_FIRST = "Chris";
 	private static final String TEST_USER_LAST = "Lintz";
 
-	private static final Location_t BOULDER_LOCATION = new Location_t(-105.2700, 40.0150);
-	private static final Location_t DENVER_LOCATION = new Location_t(-104.9842, 39.7392);
-	private static final Location_t BRAZIL_LOCATION = new Location_t(-47.4384, -15.6778);
+	private static final Location_t Boulder_CO = new Location_t(-105.2700, 40.0150);
+	private static final Location_t Denver_CO = new Location_t(-104.9842, 39.7392);
+	private static final Location_t Binghamton_NY = new Location_t(-75.98, 42.23);
+	private static final Location_t Rochester_NY = new Location_t(-77.6114, 43.1656);
 
 	private static THttpClient tHttpClient;
 	private static TProtocol protocol;
@@ -134,6 +140,8 @@ public class ServiceIntegrationTest
 		customer.setLastName("Lintz-" + now);
 		customer.setSex(Sex_t.M);
 		customer.setEmail("christopher.justin@gmail.com");
+
+		customer.setBirthDate(DateUtils.addYears(Calendar.getInstance().getTime(), -35).getTime());
 
 		CTokenAccess_t accessToken = client.createAccount(customer, "pass123");
 
@@ -388,10 +396,10 @@ public class ServiceIntegrationTest
 		Assert.assertNotNull(dealAcquires.get(1).getDealAcquireId());
 		Assert.assertNotNull(dealAcquires.get(0).getDealAcquireId());
 
-		String redemptionCode = client.redeem(dealAcquires.get(0).getDealAcquireId(), BOULDER_LOCATION);
+		String redemptionCode = client.redeem(dealAcquires.get(0).getDealAcquireId(), Boulder_CO);
 		Assert.assertNotNull(redemptionCode);
 
-		redemptionCode = client.redeem(dealAcquires.get(1).getDealAcquireId(), BOULDER_LOCATION);
+		redemptionCode = client.redeem(dealAcquires.get(1).getDealAcquireId(), Boulder_CO);
 
 		Assert.assertNotNull(redemptionCode);
 
@@ -427,7 +435,7 @@ public class ServiceIntegrationTest
 		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
-		List<Merchant_t> merchants = client.getMerchantAcquiresWithLocation(searchOptions, BOULDER_LOCATION);
+		List<Merchant_t> merchants = client.getMerchantAcquiresWithLocation(searchOptions, Boulder_CO);
 
 		Assert.assertTrue(merchants.size() > 0);
 
@@ -528,7 +536,7 @@ public class ServiceIntegrationTest
 		searchOptions.setAscending(true);
 		searchOptions.setMaxResults(10);
 
-		List<Merchant_t> merchants = client.getMerchantsWithin(BOULDER_LOCATION, 1, searchOptions);
+		List<Merchant_t> merchants = client.getMerchantsWithin(Boulder_CO, 1, searchOptions);
 
 		Assert.assertEquals(2, merchants.size());
 
@@ -559,7 +567,7 @@ public class ServiceIntegrationTest
 		}
 
 		// ensure no merchants are here
-		merchants = client.getMerchantsWithin(DENVER_LOCATION, 10, searchOptions);
+		merchants = client.getMerchantsWithin(Denver_CO, 10, searchOptions);
 		Assert.assertEquals(0, merchants.size());
 
 	}
@@ -803,4 +811,23 @@ public class ServiceIntegrationTest
 
 	}
 
+	@Test
+	public void testDealOfferGeoSummaryWithin() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, null);
+
+		Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
+
+		for (DealOfferGeoSummary_t summary : response.getDealOfferGeoSummaries())
+		{
+			System.out.println("dealOffer title: " + summary.getDealOffer().getTitle());
+			System.out.println("dealOffer distanceInMeters: " + summary.getDistanceInMeters());
+			System.out.println("Total deals in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_DEALS));
+			System.out.println("Total merchants in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_MERCHANTS));
+		}
+
+	}
 }

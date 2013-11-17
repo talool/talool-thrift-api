@@ -25,6 +25,7 @@ import com.talool.api.thrift.Address_t;
 import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
+import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
@@ -45,6 +46,7 @@ import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
+import com.talool.core.DealOfferGeoSummary;
 import com.talool.core.FactoryManager;
 import com.talool.core.Location;
 import com.talool.core.Merchant;
@@ -638,4 +640,40 @@ public final class ConversionUtil
 
 		return categories_t;
 	}
+
+	public static List<DealOfferGeoSummary_t> convertToThriftDealOfferGeoSummaries(final List<DealOfferGeoSummary> dealOfferSummaries)
+	{
+		if (dealOfferSummaries == null)
+		{
+			return null;
+		}
+
+		final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = new ArrayList<DealOfferGeoSummary_t>(dealOfferSummaries.size());
+
+		for (final DealOfferGeoSummary dealOfferSummary : dealOfferSummaries)
+		{
+			final DealOfferGeoSummary_t dealOfferGeoSummary_t = new DealOfferGeoSummary_t();
+
+			if (dealOfferSummary.getClosestMerchantInMeters() != null)
+			{
+				dealOfferGeoSummary_t.setClosestMerchantInMeters(dealOfferSummary.getClosestMerchantInMeters());
+			}
+			if (dealOfferSummary.getDistanceInMeters() != null)
+			{
+				dealOfferGeoSummary_t.setDistanceInMeters(dealOfferSummary.getDistanceInMeters());
+			}
+
+			dealOfferGeoSummary_t.setDealOffer(convertToThrift(dealOfferSummary.getDealOffer()));
+
+			dealOfferGeoSummary_t.setLongMetrics(dealOfferSummary.getLongMetrics());
+
+			dealOfferGeoSummary_t.setDoubleMetrics(dealOfferSummary.getDoubleMetrics());
+
+			dealOfferGeoSummaries_t.add(dealOfferGeoSummary_t);
+
+		}
+
+		return dealOfferGeoSummaries_t;
+	}
+
 }

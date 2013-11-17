@@ -20,6 +20,8 @@ import com.talool.api.thrift.Category_t;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
+import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
+import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
@@ -41,6 +43,7 @@ import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
+import com.talool.core.DealOfferGeoSummary;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
@@ -88,6 +91,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
 	private static final CTokenAccessResponse_t NULL_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
+	private static final DealOfferGeoSummariesResponse_t NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t();
 
 	// a thread local convenience
 	private static ResponseTimer responseTimer = new ResponseTimer();
@@ -192,7 +196,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		catch (Exception e)
 		{
 			LOG.error("Problem registering customer: " + e, e);
-			throw new ServiceException_t(1000, e.getLocalizedMessage());
+			throw new ServiceException_t(ErrorCode.UNKNOWN.getCode(), e.getLocalizedMessage());
 		}
 
 		return token;
@@ -1352,5 +1356,43 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return NULL_TOKEN_ACCESS_RESPONSE;
+	}
+
+	@Override
+	public DealOfferGeoSummariesResponse_t getDealOfferGeoSummariesWithin(final Location_t location, final int maxMiles,
+			final SearchOptions_t searchOptions) throws TServiceException_t, TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		DealOfferGeoSummariesResponse_t response = null;
+
+		beginRequest("getDealOfferGeoSummariesWithin");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("getDealOfferGeoSummariesWithin email %s location %s maxMiles %d searchOpts %s",
+					token.getEmail(), location == null ? null : location.toString(), maxMiles,
+					searchOptions == null ? null : searchOptions.toString()));
+		}
+
+		try
+		{
+			final List<DealOfferGeoSummary> summaries = taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
+					ConversionUtil.convertFromThrift(searchOptions));
+
+			if (CollectionUtils.isNotEmpty(summaries))
+			{
+				final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(summaries);
+				response = new DealOfferGeoSummariesResponse_t();
+				response.setDealOfferGeoSummaries(dealOfferGeoSummaries_t);
+			}
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getDealOfferGeoSummariesWithin: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+
+		return response == null ? NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE : response;
+
 	}
 }
