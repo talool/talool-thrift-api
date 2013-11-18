@@ -1169,6 +1169,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem generating password reset for user " + email, se);
 			throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
 		}
+		finally
+		{
+			endRequest();
+		}
 
 	}
 
@@ -1232,6 +1236,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				LOG.error("Problem setting new pass/saving customerId " + customerId, se);
 				throw ExceptionUtil.safelyTranslate(se);
 			}
+			finally
+			{
+				endRequest();
+			}
 		}
 		else
 		{
@@ -1277,6 +1285,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem purchaseByCard: " + e.getLocalizedMessage(), e);
 			throw ExceptionUtil.safelyTranslate(e);
 		}
+		finally
+		{
+			endRequest();
+		}
 
 		return transactionResult_t;
 
@@ -1313,6 +1325,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			LOG.error("Problem purchaseByCode: " + e.getLocalizedMessage(), e);
 			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
 		}
 
 		return transactionResult_t;
@@ -1354,6 +1370,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			LOG.error("Problem loginFacebook: " + e.getLocalizedMessage(), e);
 			throw ExceptionUtil.safelyTranslate(e);
 		}
+		finally
+		{
+			endRequest();
+		}
 
 		return NULL_TOKEN_ACCESS_RESPONSE;
 	}
@@ -1369,7 +1389,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("getDealOfferGeoSummariesWithin email %s location %s maxMiles %d searchOpts %s",
+			LOG.debug(String.format("getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s",
 					token.getEmail(), location == null ? null : location.toString(), maxMiles,
 					searchOptions == null ? null : searchOptions.toString()));
 		}
@@ -1390,6 +1410,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			LOG.error("Problem getDealOfferGeoSummariesWithin: " + e.getLocalizedMessage(), e);
 			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
 		}
 
 		return response == null ? NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE : response;

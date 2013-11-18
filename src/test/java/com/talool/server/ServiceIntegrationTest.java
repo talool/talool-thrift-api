@@ -817,7 +817,13 @@ public class ServiceIntegrationTest
 		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
-		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, null);
+		final SearchOptions_t searchOpts = new SearchOptions_t();
+		searchOpts.setSortProperty("distanceInMeters");
+		searchOpts.setAscending(false);
+		searchOpts.setMaxResults(100);
+		searchOpts.setPage(0);
+
+		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
 
 		Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
 
