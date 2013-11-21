@@ -43,7 +43,7 @@ import com.talool.core.Customer;
 import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
-import com.talool.core.DealOfferGeoSummary;
+import com.talool.core.DealOfferGeoSummariesResult;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
@@ -91,7 +91,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
 	private static final CTokenAccessResponse_t NULL_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
-	private static final DealOfferGeoSummariesResponse_t NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t();
+	private static final DealOfferGeoSummariesResponse_t NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t(false);
 
 	// a thread local convenience
 	private static ResponseTimer responseTimer = new ResponseTimer();
@@ -1380,28 +1380,30 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	@Override
 	public DealOfferGeoSummariesResponse_t getDealOfferGeoSummariesWithin(final Location_t location, final int maxMiles,
-			final SearchOptions_t searchOptions) throws TServiceException_t, TException
+			final SearchOptions_t searchOptions, final SearchOptions_t fallbackSearchOptions) throws TServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		DealOfferGeoSummariesResponse_t response = null;
+		DealOfferGeoSummariesResult result = null;
 
 		beginRequest("getDealOfferGeoSummariesWithin");
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s",
+			LOG.debug(String.format("getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s",
 					token.getEmail(), location == null ? null : location.toString(), maxMiles,
-					searchOptions == null ? null : searchOptions.toString()));
+					searchOptions == null ? null : searchOptions.toString(),
+					fallbackSearchOptions == null ? null : fallbackSearchOptions.toString()));
 		}
 
 		try
 		{
-			final List<DealOfferGeoSummary> summaries = taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
-					ConversionUtil.convertFromThrift(searchOptions));
+			result = taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
+					ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions));
 
-			if (CollectionUtils.isNotEmpty(summaries))
+			if (result != null && CollectionUtils.isNotEmpty(result.getSummaries()))
 			{
-				final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(summaries);
+				final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(result.getSummaries());
 				response = new DealOfferGeoSummariesResponse_t();
 				response.setDealOfferGeoSummaries(dealOfferGeoSummaries_t);
 			}
@@ -1416,7 +1418,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			endRequest();
 		}
 
-		return response == null ? NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE : response;
-
+		if (response != null)
+		{
+			response.setFallbackResponse(result.usedFallback());
+			return response;
+		}
+		else
+		{
+			return NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE;
+		}
 	}
 }

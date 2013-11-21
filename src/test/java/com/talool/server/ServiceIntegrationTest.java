@@ -57,10 +57,10 @@ import com.talool.service.ErrorCode;
 public class ServiceIntegrationTest
 {
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
@@ -823,13 +823,24 @@ public class ServiceIntegrationTest
 		searchOpts.setMaxResults(100);
 		searchOpts.setPage(0);
 
-		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
+		final SearchOptions_t fallbackSearchOpts = new SearchOptions_t();
+		fallbackSearchOpts.setSortProperty("price");
+		fallbackSearchOpts.setAscending(true);
+		fallbackSearchOpts.setMaxResults(100);
+		fallbackSearchOpts.setPage(0);
+
+		// DealOfferGeoSummariesResponse_t response =
+		// client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
+		Location_t loc = new Location_t();
+
+		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(loc, 9000, searchOpts, fallbackSearchOpts);
 
 		Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
 
 		for (DealOfferGeoSummary_t summary : response.getDealOfferGeoSummaries())
 		{
 			System.out.println("dealOffer title: " + summary.getDealOffer().getTitle());
+			System.out.println("dealOffer price: " + summary.getDealOffer().getPrice());
 			System.out.println("dealOffer distanceInMeters: " + summary.getDistanceInMeters());
 			System.out.println("Total deals in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_DEALS));
 			System.out.println("Total merchants in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_MERCHANTS));
