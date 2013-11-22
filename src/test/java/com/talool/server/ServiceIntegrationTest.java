@@ -57,10 +57,10 @@ import com.talool.service.ErrorCode;
 public class ServiceIntegrationTest
 {
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
@@ -833,7 +833,7 @@ public class ServiceIntegrationTest
 		// client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
 		Location_t loc = new Location_t();
 
-		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(loc, 9000, searchOpts, fallbackSearchOpts);
+		DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
 
 		Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
 

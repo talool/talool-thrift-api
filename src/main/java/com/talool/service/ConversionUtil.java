@@ -296,14 +296,14 @@ public final class ConversionUtil
 			dealOffer_t.setImageUrl(dealOffer.getDealOfferLogo().getMediaUrl());
 		}
 
-		if (dealOffer.getDealOfferBackgroundImage() != null)
+		if (dealOffer.getDealOfferBackground() != null)
 		{
-			dealOffer_t.setDealOfferBackgroundImage(dealOffer.getDealOfferBackgroundImage().getMediaUrl());
+			dealOffer_t.setDealOfferBackgroundImage(dealOffer.getDealOfferBackground().getMediaUrl());
 		}
 
-		if (dealOffer.getDealOfferMerchantLogo() != null)
+		if (dealOffer.getDealOfferIcon() != null)
 		{
-			dealOffer_t.setDealOfferMerchantLogo(dealOffer.getDealOfferMerchantLogo().getMediaUrl());
+			dealOffer_t.setDealOfferMerchantLogo(dealOffer.getDealOfferIcon().getMediaUrl());
 		}
 
 		dealOffer_t.setMerchant(convertToThrift(dealOffer.getMerchant()));
