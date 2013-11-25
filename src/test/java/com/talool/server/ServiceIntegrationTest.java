@@ -39,6 +39,7 @@ import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.MerchantsResponse_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
@@ -808,6 +809,25 @@ public class ServiceIntegrationTest
 		{
 			e.printStackTrace();
 		}
+
+	}
+
+	@Test
+	public void testGetMerchantsByDealOfferId() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setSortProperty("merchant.name");
+		searchOptions.setPage(0);
+		searchOptions.setAscending(false);
+		searchOptions.setMaxResults(10);
+
+		MerchantsResponse_t response = client.getMerchantsByDealOfferId("a3e08a7c-a47b-4043-a264-ee910f5db474", searchOptions);
+
+		Assert.assertTrue(response.getMerchants().size() > 0);
 
 	}
 

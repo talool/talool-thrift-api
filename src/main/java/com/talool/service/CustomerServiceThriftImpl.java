@@ -27,6 +27,7 @@ import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
+import com.talool.api.thrift.MerchantsResponse_t;
 import com.talool.api.thrift.PaymentDetail_t;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
@@ -90,8 +91,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
-	private static final CTokenAccessResponse_t NULL_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
-	private static final DealOfferGeoSummariesResponse_t NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t(false);
+	private static final CTokenAccessResponse_t EMPTY_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
+	private static final DealOfferGeoSummariesResponse_t EMPTY_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t(false);
 
 	// a thread local convenience
 	private static ResponseTimer responseTimer = new ResponseTimer();
@@ -1344,7 +1345,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		if (StringUtils.isEmpty(facebookId))
 		{
 			LOG.warn("facebookId is null");
-			return NULL_TOKEN_ACCESS_RESPONSE;
+			return EMPTY_TOKEN_ACCESS_RESPONSE;
 		}
 
 		if (LOG.isDebugEnabled())
@@ -1375,7 +1376,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			endRequest();
 		}
 
-		return NULL_TOKEN_ACCESS_RESPONSE;
+		return EMPTY_TOKEN_ACCESS_RESPONSE;
 	}
 
 	@Override
@@ -1425,7 +1426,45 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 		else
 		{
-			return NULL_DEAL_OFFER_GEO_SUMMARIES_RESPONSE;
+			return EMPTY_DEAL_OFFER_GEO_SUMMARIES_RESPONSE;
 		}
+	}
+
+	@Override
+	public MerchantsResponse_t getMerchantsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions) throws ServiceException_t,
+			TException
+	{
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		final MerchantsResponse_t response = new MerchantsResponse_t();
+
+		beginRequest("getMerchantsByDealOfferId");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("getMerchantsByDealOfferId email: %s", token.getEmail()));
+		}
+
+		try
+		{
+			final List<Merchant> merchants = taloolService.getMerchantsByDealOfferId(UUID.fromString(dealOfferId),
+					ConversionUtil.convertFromThrift(searchOptions));
+
+			if (CollectionUtils.isNotEmpty(merchants))
+			{
+				response.setMerchants(ConversionUtil.convertToThriftMerchants(merchants));
+			}
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getMerchantsByDealOfferId: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
+		}
+
+		return response;
 	}
 }
