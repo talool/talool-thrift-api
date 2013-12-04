@@ -55,6 +55,7 @@ import com.talool.service.ErrorCode;
  * 
  */
 
+@Ignore
 public class ServiceIntegrationTest
 {
 
