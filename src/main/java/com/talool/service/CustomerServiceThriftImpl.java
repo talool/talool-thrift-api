@@ -1266,7 +1266,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug(String.format("purchaseByCard customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
-			LOG.debug(BraintreeUtil.getDebugString());
+			LOG.debug(BraintreeUtil.get().getDebugString());
 		}
 
 		try
