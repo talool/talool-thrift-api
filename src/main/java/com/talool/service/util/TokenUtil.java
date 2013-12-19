@@ -101,14 +101,14 @@ public class TokenUtil
 			throw new ServiceException_t(101, "Invalid token token");
 		}
 
-		if (throwExceptionOnExpired)
-		{
-			if (System.currentTimeMillis() > token.getExpires())
-			{
-				LOG.error("Token has expired");
-				throw new ServiceException_t(1005, "Token has expired. Invalid request");
-			}
-		}
+		// if (throwExceptionOnExpired)
+		// {
+		// if (System.currentTimeMillis() > token.getExpires())
+		// {
+		// LOG.error("Token has expired");
+		// throw new ServiceException_t(1005, "Token has expired. Invalid request");
+		// }
+		// }
 
 		return token;
 	}
