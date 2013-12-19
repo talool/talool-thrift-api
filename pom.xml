@@ -7,14 +7,15 @@
 		<version>1.0.4</version>
 	</parent>
 	<artifactId>talool-thrift-api</artifactId>
-	<version>1.0.8-SNAPSHOT</version>
+	<version>1.0.8</version>
 	<packaging>war</packaging>
 	<name>Talool Thrift API</name>
 	<scm>
 		<connection>scm:git:git@github.com:talool/talool-thrift-api.git</connection>
 		<url>scm:git:git@github.com:talool/talool-thrift-api.git</url>
 		<developerConnection>scm:git:git@github.com:talool/talool-thrift-api.git</developerConnection>
-	</scm>
+	  <tag>talool-thrift-api-1.0.8</tag>
+  </scm>
 	<repositories>
 		<repository>
 			<id>talool-maven-releases</id>
