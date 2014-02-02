@@ -952,7 +952,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			deals = taloolService.getDealsByDealOfferId(UUID.fromString(dealOfferId),
-					ConversionUtil.convertFromThrift(searchOptions), EAGER_DEAL_PROPS);
+					ConversionUtil.convertFromThrift(searchOptions), true);
 
 			return ConversionUtil.convertToThriftDeals(deals);
 		}

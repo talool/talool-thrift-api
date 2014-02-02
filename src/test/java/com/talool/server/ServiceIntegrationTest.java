@@ -57,17 +57,16 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -511,8 +510,37 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
+	public void testGeatDealOffer() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		SearchOptions_t searchOptions = new SearchOptions_t();
+		searchOptions.setSortProperty("title");
+		searchOptions.setPage(0);
+		searchOptions.setAscending(true);
+		searchOptions.setMaxResults(1000);
+
+		// taloolchris
+		List<Deal_t> deals =
+				client.getDealsByDealOfferId("a2ae2cfa-4677-4e22-89c8-bc555e428ccc",
+						null);
+
+		// List<Deal_t> deals =
+		// client.getDealsByDealOfferId("a067de54-d63d-4613-8d60-9d995765cd52",
+		// searchOptions);
+
+		for (final Deal_t deal : deals)
+		{
+			System.out.println(deal);
+		}
+	}
+
+	@Test
 	public void testGetDealsByDealOfferId() throws ServiceException_t, TException
 	{
+		// a2ae2cfa-4677-4e22-89c8-bc555e428ccc
 		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
 
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
