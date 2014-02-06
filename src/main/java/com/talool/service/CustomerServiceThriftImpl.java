@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1466,5 +1468,40 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return response;
+	}
+
+	/**
+	 * This is just a stub method for now logging headers. Fill in with Iris
+	 * service
+	 */
+	@Override
+	public List<Activity_t> getMessages(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t, TException
+	{
+		final StringBuilder sb = new StringBuilder();
+		final HttpServletRequest request = RequestUtils.getRequest();
+		final String apnDeviceToken = request.getHeader(Constants.APN_DEVICE_TOKEN);
+		final String deviceId = request.getHeader(Constants.DEVICE_ID);
+		final String gcmDeviceToken = request.getHeader(Constants.GCM_DEVICE_TOKEN);
+
+		if (LOG.isDebugEnabled())
+		{
+			sb.append("getMessages location: ").append(location.toString());
+			if (deviceId != null)
+			{
+				sb.append(", deviceId: ").append(deviceId);
+			}
+			if (apnDeviceToken != null)
+			{
+				sb.append(", apnDeviceToken: ").append(apnDeviceToken);
+			}
+			if (gcmDeviceToken != null)
+			{
+				sb.append(", gcmDeviceToken: ").append(gcmDeviceToken);
+			}
+
+			LOG.debug(sb.toString());
+		}
+
+		return getActivities(searchOptions);
 	}
 }

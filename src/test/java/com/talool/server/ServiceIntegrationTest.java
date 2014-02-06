@@ -57,17 +57,16 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://dev-api1:8080/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -81,6 +80,18 @@ public class ServiceIntegrationTest
 	private static final String TEST_USER_PASS = "pass123";
 	private static final String TEST_USER_FIRST = "Chris";
 	private static final String TEST_USER_LAST = "Lintz";
+
+	public static final String GCM_DEVICE_TOKEN = "GcmDeviceToken";
+
+	/**
+	 * Generic deviceId for mobile
+	 */
+	public static final String DEVICE_ID = "DeviceId";
+
+	/**
+	 * Apple push notification device token
+	 */
+	public static final String APN_DEVICE_TOKEN = "ApnDeviceToken";
 
 	private static final Location_t Boulder_CO = new Location_t(-105.2700, 40.0150);
 	private static final Location_t Denver_CO = new Location_t(-104.9842, 39.7392);
@@ -771,6 +782,19 @@ public class ServiceIntegrationTest
 		act = acts.get(0);
 
 		Assert.assertTrue(act.actionTaken);
+
+	}
+
+	@Test
+	public void testGetMessages() throws ServiceException_t, TException
+	{
+		tHttpClient.setCustomHeader(DEVICE_ID, "deviceId123");
+		tHttpClient.setCustomHeader(GCM_DEVICE_TOKEN, "gcmDeviceToken123");
+
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Activity_t> acts = client.getMessages(null, Boulder_CO);
 
 	}
 
