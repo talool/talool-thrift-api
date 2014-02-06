@@ -1479,13 +1479,18 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	{
 		final StringBuilder sb = new StringBuilder();
 		final HttpServletRequest request = RequestUtils.getRequest();
-		final String apnDeviceToken = request.getHeader(Constants.APN_DEVICE_TOKEN);
-		final String deviceId = request.getHeader(Constants.DEVICE_ID);
-		final String gcmDeviceToken = request.getHeader(Constants.GCM_DEVICE_TOKEN);
+		final String apnDeviceToken = request.getHeader(Constants.HEADER_APN_DEVICE_TOKEN);
+		final String deviceId = request.getHeader(Constants.HEADER_DEVICE_ID);
+		final String gcmDeviceToken = request.getHeader(Constants.HEADER_GCM_DEVICE_TOKEN);
+		final String userAgent = request.getHeader(Constants.HEADER_USER_AGENT);
 
 		if (LOG.isDebugEnabled())
 		{
-			sb.append("getMessages location: ").append(location.toString());
+			sb.append("getMessages location: ").append(location == null ? "null" : location.toString());
+			if (userAgent != null)
+			{
+				sb.append(", userAgent: ").append(userAgent);
+			}
 			if (deviceId != null)
 			{
 				sb.append(", deviceId: ").append(deviceId);

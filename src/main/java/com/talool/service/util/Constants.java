@@ -15,16 +15,18 @@ public final class Constants
 	/**
 	 * Android GCM token
 	 */
-	public static final String GCM_DEVICE_TOKEN = "GcmDeviceToken";
+	public static final String HEADER_GCM_DEVICE_TOKEN = "GcmDeviceToken";
 
 	/**
 	 * Generic deviceId for mobile
 	 */
-	public static final String DEVICE_ID = "DeviceId";
+	public static final String HEADER_DEVICE_ID = "DeviceId";
 
 	/**
 	 * Apple push notification device token
 	 */
-	public static final String APN_DEVICE_TOKEN = "ApnDeviceToken";
+	public static final String HEADER_APN_DEVICE_TOKEN = "ApnDeviceToken";
+
+	public static final String HEADER_USER_AGENT = "User-Agent";
 
 }
