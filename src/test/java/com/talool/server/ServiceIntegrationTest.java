@@ -64,7 +64,7 @@ public class ServiceIntegrationTest
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api1:8080/1.1";
+	private static final String TEST_URL = "http://dev-api.talool.com/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
@@ -446,7 +446,7 @@ public class ServiceIntegrationTest
 		searchOptions.setSortProperty("merchant.name");
 		searchOptions.setPage(0);
 		searchOptions.setAscending(true);
-		searchOptions.setMaxResults(10);
+		searchOptions.setMaxResults(10000);
 
 		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
@@ -455,6 +455,10 @@ public class ServiceIntegrationTest
 
 		for (final Merchant_t merch : merchants)
 		{
+			if (merch.getName().contains("Dance"))
+			{
+				System.out.println(merch);
+			}
 			// System.out.println(merch.getName());
 			if (merch.getName().startsWith("Backcountry"))
 			{
@@ -479,8 +483,22 @@ public class ServiceIntegrationTest
 		searchOptions.setAscending(true);
 		searchOptions.setMaxResults(10);
 
-		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+		// CTokenAccess_t tokenAccess = client.authenticate(TEST_USER,
+		// TEST_USER_PASS);
+		// tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME,
+		// tokenAccess.getToken());
+
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		List<Merchant_t> merchs = client.getMerchantAcquires(null);
+		for (Merchant_t merch : merchs)
+		{
+			if (merch.getName().contains("Dance"))
+			{
+				System.out.println(merch);
+			}
+		}
 
 		List<Category_t> cats = client.getCategories();
 		Category_t foodCat = null;
@@ -523,7 +541,7 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
-	public void testGeatDealOffer() throws ServiceException_t, TException
+	public void testGetDealOffer() throws ServiceException_t, TException
 	{
 		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
 
@@ -536,9 +554,7 @@ public class ServiceIntegrationTest
 		searchOptions.setMaxResults(1000);
 
 		// taloolchris
-		List<Deal_t> deals =
-				client.getDealsByDealOfferId("a2ae2cfa-4677-4e22-89c8-bc555e428ccc",
-						null);
+		List<Deal_t> deals = client.getDealsByDealOfferId("84dc11d6-bae5-43db-a517-08f11614803d", null);
 
 		// List<Deal_t> deals =
 		// client.getDealsByDealOfferId("a067de54-d63d-4613-8d60-9d995765cd52",
@@ -546,7 +562,11 @@ public class ServiceIntegrationTest
 
 		for (final Deal_t deal : deals)
 		{
-			System.out.println(deal);
+			if (deal.getMerchant().getName().contains("Dance"))
+			{
+				System.out.println(deal);
+			}
+
 		}
 	}
 
