@@ -5,7 +5,7 @@
 
 	<display-name>Talool API Service</display-name>
 
-<!--  
+    <!--  
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
@@ -33,16 +33,26 @@
 
 	<servlet>
 		<description></description>
-		<display-name>TServletExample</display-name>
-		<servlet-name>TServletExample</servlet-name>
+		<display-name>API Thrift Servlet</display-name>
+		<servlet-name>ThriftServlet</servlet-name>
 		<servlet-class>com.talool.service.TServletTaloolService</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TServletExample</servlet-name>
+		<servlet-name>ThriftServlet</servlet-name>
 		<url-pattern>/1.1</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+   		<display-name>Sendgrid Webhook Servlet</display-name>
+        <servlet-name>SendgridWebhookServlet</servlet-name>
+        <servlet-class>com.talool.servlet.SendgridWebhookServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SendgridWebhookServlet</servlet-name>
+        <url-pattern>/sg</url-pattern>
+    </servlet-mapping>
 	
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
