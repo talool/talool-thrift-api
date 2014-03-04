@@ -57,7 +57,6 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
@@ -146,8 +145,7 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
-	public void testRegisterCustomerByEmail()
-			throws ServiceException_t, TException
+	public void testRegisterCustomerByEmail() throws ServiceException_t, TException
 	{
 
 		final long now = System.currentTimeMillis();
@@ -155,7 +153,7 @@ public class ServiceIntegrationTest
 		customer.setFirstName("Chris-" + now);
 		customer.setLastName("Lintz-" + now);
 		customer.setSex(Sex_t.M);
-		customer.setEmail("christopher.justin@gmail.com");
+		customer.setEmail("christopher.justin" + System.currentTimeMillis() + "@gmail.com");
 
 		customer.setBirthDate(DateUtils.addYears(Calendar.getInstance().getTime(), -35).getTime());
 
@@ -706,7 +704,15 @@ public class ServiceIntegrationTest
 		giftGiver.setSex(Sex_t.M);
 		giftGiver.setEmail(email);
 
-		client.createAccount(giftGiver, password);
+		try
+		{
+			client.createAccount(giftGiver, password);
+
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 
 		String giftReceiverEmail = "giftReceiver-" + now + "@talool.com";
 		String giftReceiverFbId = "fBGiftReceiverId-" + now;
@@ -739,7 +745,14 @@ public class ServiceIntegrationTest
 		socialAccounts.put(SocialNetwork_t.Facebook, new SocialAccount_t(SocialNetwork_t.Facebook, giftReceiverFbId));
 		giftReceiver.setSocialAccounts(socialAccounts);
 
-		client.createAccount(giftReceiver, password);
+		try
+		{
+			client.createAccount(giftReceiver, password);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 
 		giftId = client.giftToEmail(dealAcquires.get(1).getDealAcquireId(), "someemail@" + "test.talool.com", "Someone");
 		Assert.assertNotNull(giftId);
@@ -856,7 +869,7 @@ public class ServiceIntegrationTest
 		try
 		{
 
-			client.sendResetPasswordEmail("chris@talool.com");
+			client.sendResetPasswordEmail("chriwqdw@talool.com");
 
 		}
 		catch (Exception e)
