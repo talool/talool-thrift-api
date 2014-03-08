@@ -74,7 +74,7 @@ import com.talool.thrift.ThriftUtil;
  */
 public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 {
-	private static final Logger LOG = LoggerFactory.getLogger(TaloolServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceThriftImpl.class);
 
 	private static final int CATEGORY_REFRESH_INTERVAL = 600000;
 

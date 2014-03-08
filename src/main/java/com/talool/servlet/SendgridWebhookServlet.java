@@ -53,7 +53,9 @@ public class SendgridWebhookServlet extends HttpServlet
 	};
 
 	public void init() throws ServletException
-	{}
+	{
+		LOG.info(SendgridWebhookServlet.class.getSimpleName() + " initialized");
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
