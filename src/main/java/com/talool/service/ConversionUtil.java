@@ -286,11 +286,6 @@ public final class ConversionUtil
 		dealOffer_t.setDealType(DealType_t.valueOf(dealOffer.getType().toString()));
 		dealOffer_t.setLocationName(dealOffer.getLocationName());
 
-		if (dealOffer.getExpires() != null)
-		{
-			dealOffer_t.setExpires(dealOffer.getExpires().getTime());
-		}
-
 		if (dealOffer.getDealOfferLogo() != null)
 		{
 			dealOffer_t.setImageUrl(dealOffer.getDealOfferLogo().getMediaUrl());
