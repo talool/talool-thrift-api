@@ -45,6 +45,7 @@ import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
+import com.talool.api.thrift.ValidateCodeResponse_t;
 import com.talool.service.ErrorCode;
 
 /**
@@ -56,7 +57,6 @@ import com.talool.service.ErrorCode;
  *         TODO - create testGetAcquiredMerchantsLocation that tests mutliple
  *         locations not being null
  */
-
 @Ignore
 public class ServiceIntegrationTest
 {
@@ -64,10 +64,10 @@ public class ServiceIntegrationTest
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	private static final String TEST_URL = "http://dev-api.talool.com/1.1";
+	// private static final String TEST_URL = "http://dev-api.talool.com/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	// private static final String TEST_URL = "http://localhost:8082/1.1";
+	private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -323,7 +323,14 @@ public class ServiceIntegrationTest
 		searchOptions.setMaxResults(10);
 
 		// lets first cleanup any lingering favorites (should be zero)
-		CTokenAccess_t tokenAccess = client.authenticate(TEST_USER, TEST_USER_PASS);
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		client.addFavoriteMerchant("10ddf6d2-50e5-4f6c-bd64-1bea63a21fc8");
+
+		// lets first cleanup any lingering favorites (should be zero)
+		// CTokenAccess_t tokenAccess = client.authenticate(TEST_USER,
+		// TEST_USER_PASS);
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 		List<Merchant_t> favoriteMerchants = client.getFavoriteMerchants(searchOptions);
 		for (Merchant_t merc : favoriteMerchants)
@@ -518,6 +525,24 @@ public class ServiceIntegrationTest
 
 		Assert.assertEquals(MERCHANT_KITCHEN, merchants.get(1).getName());
 		Assert.assertNotNull(merchants.get(1).getCategory());
+	}
+
+	@Test
+	public void testValidateCodes() throws ServiceException_t, TException
+	{
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		// visions credit union
+		ValidateCodeResponse_t response = client.validateCode("26JI0UR", "7a1b928b-aed3-4cd8-8ed8-bf758eafcaf0");
+		Assert.assertTrue(response.isValid());
+		Assert.assertEquals(response.getCodeType(), CoreConstants.MERCHANT_CODE);
+
+		// payback book
+		response = client.validateCode("3NHDFUY", "231d6a36-1a40-44c6-ba25-402f42d05f6d");
+		Assert.assertTrue(response.isValid());
+		Assert.assertEquals(response.getCodeType(), CoreConstants.ACTIVATION_CODE);
+
 	}
 
 	@Test
@@ -938,7 +963,7 @@ public class ServiceIntegrationTest
 	@Test
 	public void testDealOfferGeoSummaryWithin() throws ServiceException_t, TException
 	{
-		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
 		final SearchOptions_t searchOpts = new SearchOptions_t();
@@ -968,6 +993,11 @@ public class ServiceIntegrationTest
 			System.out.println("dealOffer distanceInMeters: " + summary.getDistanceInMeters());
 			System.out.println("Total deals in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_DEALS));
 			System.out.println("Total merchants in dealOffer: " + summary.getLongMetrics().get(CoreConstants.METRIC_TOTAL_MERCHANTS));
+			if (summary.getDealOffer().getProperties() != null)
+			{
+				System.out.println("properties: " + summary.getDealOffer().getProperties());
+			}
+
 		}
 
 	}

@@ -63,6 +63,7 @@ import com.talool.core.social.SocialNetwork;
 import com.talool.payment.Card;
 import com.talool.payment.PaymentDetail;
 import com.talool.payment.TransactionResult;
+import com.talool.service.ConversionUtil.ConversionOptions;
 import com.talool.service.util.Constants;
 import com.talool.thrift.ThriftUtil;
 
@@ -305,6 +306,12 @@ public final class ConversionUtil
 		dealOffer_t.setPrice(dealOffer.getPrice());
 		dealOffer_t.setSummary(dealOffer.getSummary());
 		dealOffer_t.setTitle(dealOffer.getTitle());
+
+		// setting deal offer properties as the raw key/value map
+		if (dealOffer.getProperties() != null && !CollectionUtils.isEmpty(dealOffer.getProperties().getAllProperties()))
+		{
+			dealOffer_t.setProperties(dealOffer.getProperties().getAllProperties());;
+		}
 
 		return dealOffer_t;
 	}

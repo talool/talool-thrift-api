@@ -19,6 +19,7 @@ import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.CTokenAccessResponse_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
+import com.talool.api.thrift.CoreConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
@@ -40,6 +41,7 @@ import com.talool.api.thrift.TServiceException_t;
 import com.talool.api.thrift.TUserException_t;
 import com.talool.api.thrift.Token_t;
 import com.talool.api.thrift.TransactionResult_t;
+import com.talool.api.thrift.ValidateCodeResponse_t;
 import com.talool.cache.TagCache;
 import com.talool.core.AccountType;
 import com.talool.core.Customer;
@@ -1508,5 +1510,59 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		}
 
 		return getActivities(searchOptions);
+	}
+
+	@Override
+	/**
+	 * Validate a code with a dealOfferId.  Algorithm to validate a code:
+	 * 
+	 * First try and validate as a merchant code.  If that is successful return the response. 
+	 * If it is unsuccessful, validate against activation codes (book codes).
+	 */
+	public ValidateCodeResponse_t validateCode(final String code, final String dealOfferId) throws TServiceException_t, TException
+	{
+		TokenUtil.getTokenFromRequest(true);
+		final ValidateCodeResponse_t response = new ValidateCodeResponse_t();
+		final UUID dealOfferUuid = UUID.fromString(dealOfferId);
+		boolean isValid = false;
+
+		beginRequest("validateCode");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("validateCode code: %s dealOfferId %s", code, dealOfferId));
+		}
+
+		try
+		{
+			isValid = taloolService.isMerchantCodeValid(code, dealOfferUuid);
+			if (isValid)
+			{
+				response.setCodeType(CoreConstants.MERCHANT_CODE);
+			}
+			else
+			{
+				// validate code against activation codes (a.k.a printed book codes)
+				isValid = customerService.isActivationCodeValid(code, dealOfferUuid);
+				if (isValid)
+				{
+					response.setCodeType(CoreConstants.ACTIVATION_CODE);
+				}
+			}
+
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem getMerchantsByDealOfferId: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
+		}
+
+		response.setValid(isValid);
+		return response;
+
 	}
 }
