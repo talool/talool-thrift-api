@@ -3,6 +3,7 @@ package com.talool.service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -102,8 +103,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static ResponseTimer responseTimer = new ResponseTimer();
 
 	private CategoryThread categoryThread;
-
-	private static String[] EAGER_DEAL_PROPS = { "image", "merchant.locations" };
 
 	private class CategoryThread extends Thread
 	{
@@ -1256,8 +1255,21 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	}
 
+	/**
+	 * Gateway purchase by credit card
+	 * 
+	 * @deprecated replaced by y {@link #buyWithCard()}
+	 */
 	@Override
 	public TransactionResult_t purchaseByCard(final String dealOfferId, final PaymentDetail_t paymentDetail) throws TServiceException_t,
+			TUserException_t,
+			TNotFoundException_t, TException
+	{
+		return doPurchaseByCard(dealOfferId, paymentDetail, null);
+	}
+
+	private TransactionResult_t doPurchaseByCard(final String dealOfferId, final PaymentDetail_t paymentDetail,
+			final Map<String, String> paymentProperties) throws TServiceException_t,
 			TUserException_t,
 			TNotFoundException_t, TException
 	{
@@ -1276,7 +1288,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			final TransactionResult transactionResult = customerService.purchaseByCard(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
-					ConversionUtil.convertFromThrift(paymentDetail));
+					ConversionUtil.convertFromThrift(paymentDetail), paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
 
 		}
@@ -1299,8 +1311,21 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	}
 
+	/**
+	 * Gateway purchase by gateway code
+	 * 
+	 * @deprecated replaced by y {@link #buyWithCode()}
+	 */
 	@Override
 	public TransactionResult_t purchaseByCode(final String dealOfferId, final String paymentCode) throws TServiceException_t, TUserException_t,
+			TNotFoundException_t,
+			TException
+	{
+		return doPurchaseByCode(dealOfferId, paymentCode, null);
+	}
+
+	protected TransactionResult_t doPurchaseByCode(final String dealOfferId, final String paymentCode, final Map<String, String> paymentProperties)
+			throws TServiceException_t, TUserException_t,
 			TNotFoundException_t,
 			TException
 	{
@@ -1317,9 +1342,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			final TransactionResult transactionResult = customerService.purchaseByCode(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
-					paymentCode);
+					paymentCode, paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
-
 		}
 		catch (ServiceException e)
 		{
@@ -1565,4 +1589,20 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		return response;
 
 	}
+
+	@Override
+	public TransactionResult_t purchaseWithCard(final String dealOfferId, final PaymentDetail_t paymentDetail,
+			final Map<String, String> paymentProperties)
+			throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
+	{
+		return doPurchaseByCard(dealOfferId, paymentDetail, paymentProperties);
+	}
+
+	@Override
+	public TransactionResult_t purchaseWithCode(final String dealOfferId, final String paymentCode, final Map<String, String> paymentProperties)
+			throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
+	{
+		return doPurchaseByCode(dealOfferId, paymentCode, paymentProperties);
+	}
+
 }
