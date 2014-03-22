@@ -20,7 +20,6 @@ import com.talool.api.thrift.Activity_t;
 import com.talool.api.thrift.CTokenAccessResponse_t;
 import com.talool.api.thrift.CTokenAccess_t;
 import com.talool.api.thrift.Category_t;
-import com.talool.api.thrift.CoreConstants;
 import com.talool.api.thrift.CustomerService_t;
 import com.talool.api.thrift.Customer_t;
 import com.talool.api.thrift.DealAcquire_t;
@@ -33,6 +32,7 @@ import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.MerchantsResponse_t;
 import com.talool.api.thrift.PaymentDetail_t;
+import com.talool.api.thrift.PropertyConstants;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.SocialAccount_t;
@@ -1562,7 +1562,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			isValid = taloolService.isMerchantCodeValid(code, dealOfferUuid);
 			if (isValid)
 			{
-				response.setCodeType(CoreConstants.MERCHANT_CODE);
+				response.setCodeType(PropertyConstants.MERCHANT_CODE);
 			}
 			else
 			{
@@ -1570,7 +1570,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				isValid = customerService.isActivationCodeValid(code, dealOfferUuid);
 				if (isValid)
 				{
-					response.setCodeType(CoreConstants.ACTIVATION_CODE);
+					response.setCodeType(PropertyConstants.ACTIVATION_CODE);
 				}
 			}
 
