@@ -40,6 +40,7 @@ import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
 import com.talool.api.thrift.Merchant_t;
 import com.talool.api.thrift.MerchantsResponse_t;
+import com.talool.api.thrift.PropertyConstants;
 import com.talool.api.thrift.SearchOptions_t;
 import com.talool.api.thrift.ServiceException_t;
 import com.talool.api.thrift.Sex_t;
@@ -536,12 +537,12 @@ public class ServiceIntegrationTest
 		// visions credit union
 		ValidateCodeResponse_t response = client.validateCode("26JI0UR", "7a1b928b-aed3-4cd8-8ed8-bf758eafcaf0");
 		Assert.assertTrue(response.isValid());
-		Assert.assertEquals(response.getCodeType(), CoreConstants.MERCHANT_CODE);
+		Assert.assertEquals(response.getCodeType(), PropertyConstants.MERCHANT_CODE);
 
 		// payback book
 		response = client.validateCode("3NHDFUY", "231d6a36-1a40-44c6-ba25-402f42d05f6d");
 		Assert.assertTrue(response.isValid());
-		Assert.assertEquals(response.getCodeType(), CoreConstants.ACTIVATION_CODE);
+		Assert.assertEquals(response.getCodeType(), PropertyConstants.ACTIVATION_CODE);
 
 	}
 
