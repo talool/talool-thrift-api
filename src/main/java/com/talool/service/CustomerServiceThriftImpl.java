@@ -2,6 +2,8 @@ package com.talool.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -58,6 +60,7 @@ import com.talool.core.service.ActivityService;
 import com.talool.core.service.CustomerService;
 import com.talool.core.service.InvalidInputException;
 import com.talool.core.service.NotFoundException;
+import com.talool.core.service.RequestHeaderSupport;
 import com.talool.core.service.ServiceException;
 import com.talool.core.service.TaloolService;
 import com.talool.core.social.CustomerSocialAccount;
@@ -250,6 +253,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			try
 			{
+				setThreadLocalServiceHeaders(customerService);
 				customer = customerService.authenticateCustomer(email, password);
 			}
 			catch (ServiceException e)
@@ -374,6 +378,38 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	}
 
+	private void setThreadLocalServiceHeaders(final RequestHeaderSupport requestHeaderSupportService)
+	{
+		requestHeaderSupportService.setRequestHeaders(getRequestHeaders());
+	}
+
+	/**
+	 * Gets single header values only. Duplicate headers are not supported in this
+	 * call currenty. For example, multiple "Set-Cookie" headers are not supported
+	 * 
+	 * @return
+	 */
+	private Map<String, String> getRequestHeaders()
+	{
+		final Map<String, String> requestHeaders = new HashMap<String, String>();
+		final HttpServletRequest request = RequestUtils.getRequest();
+
+		@SuppressWarnings("unchecked")
+		Enumeration<String> headerNames = request.getHeaderNames();
+
+		while (headerNames.hasMoreElements())
+		{
+			String headerName = headerNames.nextElement();
+			if (headerName != null)
+			{
+				requestHeaders.put(headerName, request.getHeader(headerName));
+			}
+
+		}
+
+		return requestHeaders;
+	}
+
 	@Override
 	public List<DealAcquire_t> getDealAcquires(final String merchantId,
 			final SearchOptions_t searchOptions) throws ServiceException_t, TException
@@ -402,6 +438,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()),
 					UUID.fromString(merchantId), null);
 
@@ -447,6 +484,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		final UUID customerUuid = UUID.fromString(token.getAccountId());
 		final UUID dealAcquireUuid = UUID.fromString(dealAcquireId);
+
+		setThreadLocalServiceHeaders(customerService);
 
 		try
 		{
@@ -1085,6 +1124,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			merchants = customerService.getMerchantAcquires(UUID.fromString(token.getAccountId()),
 					ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(location));
 
@@ -1132,8 +1172,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			customer = customerService.getCustomerByEmail(email);
-
 		}
 		catch (ServiceException se)
 		{
@@ -1193,6 +1233,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			LOG.debug("resetPassword customerId " + customerId);
 		}
+
+		setThreadLocalServiceHeaders(customerService);
 
 		if (StringUtils.isEmpty(newPassword))
 		{
@@ -1287,6 +1329,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			final TransactionResult transactionResult = customerService.purchaseByCard(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
 					ConversionUtil.convertFromThrift(paymentDetail), paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
@@ -1341,6 +1384,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			final TransactionResult transactionResult = customerService.purchaseByCode(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
 					paymentCode, paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
@@ -1383,6 +1427,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(customerService);
 			final Customer customer = customerService.getCustomerBySocialLoginId(facebookId);
 
 			if (customer != null)
@@ -1427,6 +1472,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(taloolService);
 			result = taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
 					ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions));
 
@@ -1474,6 +1520,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
+			setThreadLocalServiceHeaders(taloolService);
 			final List<Merchant> merchants = taloolService.getMerchantsByDealOfferId(UUID.fromString(dealOfferId),
 					ConversionUtil.convertFromThrift(searchOptions));
 

@@ -58,7 +58,7 @@ import com.talool.service.ErrorCode;
  *         TODO - create testGetAcquiredMerchantsLocation that tests mutliple
  *         locations not being null
  */
-@Ignore
+
 public class ServiceIntegrationTest
 {
 
