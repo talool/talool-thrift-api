@@ -59,6 +59,7 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
+@Ignore
 public class ServiceIntegrationTest
 {
 
@@ -177,8 +178,7 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
-	public void testSocialAccounts()
-			throws ServiceException_t, TException
+	public void testSocialAccounts() throws ServiceException_t, TException
 	{
 		long now = System.currentTimeMillis();
 		String email = "chris-" + now + "@talool.com";
@@ -231,8 +231,7 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
-	public void testDuplicateRegisterCustomer()
-			throws ServiceException_t, TException
+	public void testDuplicateRegisterCustomer() throws ServiceException_t, TException
 	{
 		thrown.expect(ServiceException_t.class);
 		thrown.expect(new ServiceExceptionMatcher(ErrorCode.EMAIL_ALREADY_TAKEN.getCode()));
@@ -303,8 +302,7 @@ public class ServiceIntegrationTest
 
 	@Ignore
 	// TODO FILL IN INTEGRATION TEST
-	public void testAddSocialAccounts()
-			throws ServiceException_t, TException
+	public void testAddSocialAccounts() throws ServiceException_t, TException
 	{
 		// test adding social account
 		SocialAccount_t twitterAccount = new SocialAccount_t();
@@ -648,8 +646,7 @@ public class ServiceIntegrationTest
 
 		Assert.assertEquals(MERCHANT_CENTRO, merchant.getName());
 		Assert.assertEquals(-105.2841748, merchant.getLocations().get(0).getLocation().getLongitude(), 0);
-		Assert.assertEquals(40.0169992,
-				merchant.getLocations().get(0).getLocation().getLatitude(), 0);
+		Assert.assertEquals(40.0169992, merchant.getLocations().get(0).getLocation().getLatitude(), 0);
 
 		for (MerchantLocation_t mloc : merchant.getLocations())
 		{
@@ -659,10 +656,8 @@ public class ServiceIntegrationTest
 		merchant = merchants.get(1);
 
 		Assert.assertEquals(MERCHANT_KITCHEN, merchant.getName());
-		Assert.assertEquals(-105.281686,
-				merchant.getLocations().get(0).getLocation().getLongitude(), 0);
-		Assert.assertEquals(40.017663,
-				merchant.getLocations().get(0).getLocation().getLatitude(), 0);
+		Assert.assertEquals(-105.281686, merchant.getLocations().get(0).getLocation().getLongitude(), 0);
+		Assert.assertEquals(40.017663, merchant.getLocations().get(0).getLocation().getLatitude(), 0);
 
 		for (MerchantLocation_t mloc : merchant.getLocations())
 		{

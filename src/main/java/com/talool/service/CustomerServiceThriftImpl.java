@@ -29,6 +29,7 @@ import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.EmailBodyResponse_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
@@ -52,6 +53,7 @@ import com.talool.core.Deal;
 import com.talool.core.DealAcquire;
 import com.talool.core.DealOffer;
 import com.talool.core.DealOfferGeoSummariesResult;
+import com.talool.core.DealOfferPurchase;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
 import com.talool.core.activity.Activity;
@@ -67,10 +69,12 @@ import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
 import com.talool.payment.TransactionResult;
 import com.talool.payment.braintree.BraintreeUtil;
+import com.talool.service.mail.FreemarkerUtil;
 import com.talool.service.util.Constants;
 import com.talool.service.util.ExceptionUtil;
 import com.talool.service.util.TokenUtil;
 import com.talool.thrift.ThriftUtil;
+import com.talool.utils.KeyValue;
 
 /**
  * 
@@ -84,14 +88,11 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	private static final int CATEGORY_REFRESH_INTERVAL = 600000;
 
-	private static final transient TaloolService taloolService = FactoryManager.get()
-			.getServiceFactory().getTaloolService();
+	private static final transient TaloolService taloolService = FactoryManager.get().getServiceFactory().getTaloolService();
 
-	private static final transient CustomerService customerService = FactoryManager.get()
-			.getServiceFactory().getCustomerService();
+	private static final transient CustomerService customerService = FactoryManager.get().getServiceFactory().getCustomerService();
 
-	private static final transient ActivityService activityService = FactoryManager.get()
-			.getServiceFactory().getActivityService();
+	private static final transient ActivityService activityService = FactoryManager.get().getServiceFactory().getActivityService();
 
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
@@ -100,7 +101,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
 	private static final CTokenAccessResponse_t EMPTY_TOKEN_ACCESS_RESPONSE = new CTokenAccessResponse_t();
-	private static final DealOfferGeoSummariesResponse_t EMPTY_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t(false);
+	private static final DealOfferGeoSummariesResponse_t EMPTY_DEAL_OFFER_GEO_SUMMARIES_RESPONSE = new DealOfferGeoSummariesResponse_t(
+			false);
 
 	// a thread local convenience
 	private static ResponseTimer responseTimer = new ResponseTimer();
@@ -153,8 +155,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public CTokenAccess_t createAccount(final Customer_t customer, final String password)
-			throws ServiceException_t, TException
+	public CTokenAccess_t createAccount(final Customer_t customer, final String password) throws ServiceException_t, TException
 	{
 		CTokenAccess_t token = null;
 
@@ -169,8 +170,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			if (taloolService.emailExists(AccountType.CUS, customer.getEmail()))
 			{
 				LOG.error("Email already taken: " + customer.getEmail());
-				throw new ServiceException_t(ErrorCode.EMAIL_ALREADY_TAKEN.getCode(),
-						ErrorCode.EMAIL_ALREADY_TAKEN.getMessage());
+				throw new ServiceException_t(ErrorCode.EMAIL_ALREADY_TAKEN.getCode(), ErrorCode.EMAIL_ALREADY_TAKEN.getMessage());
 			}
 		}
 		catch (ServiceException e)
@@ -235,8 +235,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public CTokenAccess_t authenticate(final String email, final String password)
-			throws ServiceException_t, TException
+	public CTokenAccess_t authenticate(final String email, final String password) throws ServiceException_t, TException
 	{
 		CTokenAccess_t token = null;
 		Customer customer = null;
@@ -317,8 +316,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	/**
 	 * Deprecated - see  getMerchantAcquiresWithLocation(SearchOptions_t searchOptions, Location_t location) 
 	 */
-	public List<Merchant_t> getMerchantAcquires(final SearchOptions_t searchOptions)
-			throws ServiceException_t, TException
+	public List<Merchant_t> getMerchantAcquires(final SearchOptions_t searchOptions) throws ServiceException_t, TException
 	{
 
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
@@ -331,14 +329,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			if (searchOptions != null)
 			{
-				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s",
-						token.getAccountId(), searchOptions.toString()));
+				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s", token.getAccountId(),
+						searchOptions.toString()));
 			}
 			else
 			{
-				LOG.debug(String.format(
-						"CustomerId %s getMerchantAcquiress with no searchOptions",
-						token.getAccountId()));
+				LOG.debug(String.format("CustomerId %s getMerchantAcquiress with no searchOptions", token.getAccountId()));
 			}
 
 		}
@@ -359,8 +355,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				}
 
 				LOG.debug(String.format("getMerchantAcquires - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
-						byteTotal,
-						FileUtils.byteCountToDisplaySize(byteTotal)));
+						byteTotal, FileUtils.byteCountToDisplaySize(byteTotal)));
 
 			}
 
@@ -411,8 +406,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<DealAcquire_t> getDealAcquires(final String merchantId,
-			final SearchOptions_t searchOptions) throws ServiceException_t, TException
+	public List<DealAcquire_t> getDealAcquires(final String merchantId, final SearchOptions_t searchOptions) throws ServiceException_t,
+			TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<DealAcquire> dealAcquires = null;
@@ -423,15 +418,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			if (searchOptions != null)
 			{
-				LOG.debug(String.format(
-						"CustomerId %s getting deal acquires for merchantId %s and searchOptions %s",
-						token.getAccountId(), merchantId, searchOptions));
+				LOG.debug(String.format("CustomerId %s getting deal acquires for merchantId %s and searchOptions %s", token.getAccountId(),
+						merchantId, searchOptions));
 			}
 			else
 			{
-				LOG.debug(String.format(
-						"CustomerId %s getting deal acquires for merchantId %s and no searchOptions",
-						token.getAccountId(), merchantId));
+				LOG.debug(String.format("CustomerId %s getting deal acquires for merchantId %s and no searchOptions", token.getAccountId(),
+						merchantId));
 			}
 
 		}
@@ -439,8 +432,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			setThreadLocalServiceHeaders(customerService);
-			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()),
-					UUID.fromString(merchantId), null);
+			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null);
 
 			if (CollectionUtils.isEmpty(dealAcquires))
 			{
@@ -468,8 +460,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public String redeem(final String dealAcquireId, final Location_t location)
-			throws ServiceException_t, TException
+	public String redeem(final String dealAcquireId, final Location_t location) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		String redemptionCode = null;
@@ -478,8 +469,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s redeeming dealAcquireId %s", token.getAccountId(),
-					dealAcquireId));
+			LOG.debug(String.format("CustomerId %s redeeming dealAcquireId %s", token.getAccountId(), dealAcquireId));
 		}
 
 		final UUID customerUuid = UUID.fromString(token.getAccountId());
@@ -608,8 +598,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 				byteTotal += ThriftUtil.serialize(merchant, Constants.PROTOCOL_FACTORY).length;
 			}
 
-			LOG.debug(String.format("getMerchantsWithin - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
-					byteTotal,
+			LOG.debug(String.format("getMerchantsWithin - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(), byteTotal,
 					FileUtils.byteCountToDisplaySize(byteTotal)));
 
 		}
@@ -672,8 +661,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			merchants = customerService
-					.getFavoriteMerchants(UUID.fromString(token.getAccountId()), ConversionUtil.convertFromThrift(searchOptions));
+			merchants = customerService.getFavoriteMerchants(UUID.fromString(token.getAccountId()),
+					ConversionUtil.convertFromThrift(searchOptions));
 
 			return ConversionUtil.convertToThriftMerchants(merchants);
 		}
@@ -696,8 +685,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	@Override
 	public List<Merchant_t> getMerchantAcquiresByCategory(final int categoryId, final SearchOptions_t searchOptions)
-			throws ServiceException_t,
-			TException
+			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
@@ -740,15 +728,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t,
-			TException
+	public void addSocialAccount(final SocialAccount_t socialAccount_t) throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s adding social account %s", token.getAccountId(),
-					socialAccount_t.toString()));
+			LOG.debug(String.format("CustomerId %s adding social account %s", token.getAccountId(), socialAccount_t.toString()));
 		}
 
 		try
@@ -772,8 +758,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	@Override
 	public String giftToFacebook(final String dealAcquireId, final String facebookId, final String receipientName)
-			throws ServiceException_t,
-			TException
+			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		UUID giftId = null;
@@ -782,15 +767,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s giftToFacebook dealAcquireId %s facebookId %s receipientName %s",
-					token.getAccountId(),
+			LOG.debug(String.format("CustomerId %s giftToFacebook dealAcquireId %s facebookId %s receipientName %s", token.getAccountId(),
 					dealAcquireId, facebookId, receipientName));
 		}
 
 		try
 		{
-			giftId = customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
-					facebookId, receipientName);
+			giftId = customerService.giftToFacebook(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId), facebookId,
+					receipientName);
 
 			return giftId.toString();
 		}
@@ -807,8 +791,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public String giftToEmail(final String dealAcquireId, final String email, final String receipientName)
-			throws ServiceException_t,
+	public String giftToEmail(final String dealAcquireId, final String email, final String receipientName) throws ServiceException_t,
 			TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
@@ -818,16 +801,15 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("CustomerId %s giftToEmail dealAcquireId %s email %s receipientName %s",
-					token.getAccountId(),
+			LOG.debug(String.format("CustomerId %s giftToEmail dealAcquireId %s email %s receipientName %s", token.getAccountId(),
 					dealAcquireId, email, receipientName));
 		}
 
 		try
 		{
 
-			giftId = customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId),
-					email, receipientName);
+			giftId = customerService.giftToEmail(UUID.fromString(token.getAccountId()), UUID.fromString(dealAcquireId), email,
+					receipientName);
 
 			return giftId.toString();
 		}
@@ -982,8 +964,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<Deal_t> getDealsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions)
-			throws ServiceException_t, TException
+	public List<Deal_t> getDealsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions) throws ServiceException_t,
+			TException
 	{
 		TokenUtil.getTokenFromRequest(true);
 
@@ -993,8 +975,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		try
 		{
-			deals = taloolService.getDealsByDealOfferId(UUID.fromString(dealOfferId),
-					ConversionUtil.convertFromThrift(searchOptions), true);
+			deals = taloolService.getDealsByDealOfferId(UUID.fromString(dealOfferId), ConversionUtil.convertFromThrift(searchOptions), true);
 
 			return ConversionUtil.convertToThriftDeals(deals);
 		}
@@ -1097,8 +1078,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public List<Merchant_t> getMerchantAcquiresWithLocation(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t,
-			TException
+	public List<Merchant_t> getMerchantAcquiresWithLocation(final SearchOptions_t searchOptions, final Location_t location)
+			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		List<Merchant> merchants = null;
@@ -1110,14 +1091,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		{
 			if (searchOptions != null)
 			{
-				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s",
-						token.getAccountId(), searchOptions.toString()));
+				LOG.debug(String.format("CustomerId %s getMerchantAcquires with searchOptions %s", token.getAccountId(),
+						searchOptions.toString()));
 			}
 			else
 			{
-				LOG.debug(String.format(
-						"CustomerId %s getMerchantAcquiress with no searchOptions",
-						token.getAccountId()));
+				LOG.debug(String.format("CustomerId %s getMerchantAcquiress with no searchOptions", token.getAccountId()));
 			}
 
 		}
@@ -1138,9 +1117,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					byteTotal += ThriftUtil.serialize(merchant, Constants.PROTOCOL_FACTORY).length;
 				}
 
-				LOG.debug(String.format("getMerchantAcquiresWithLocation - serializing %d merchants totalBytes %d (%s)", thriftMerchants.size(),
-						byteTotal,
-						FileUtils.byteCountToDisplaySize(byteTotal)));
+				LOG.debug(String.format("getMerchantAcquiresWithLocation - serializing %d merchants totalBytes %d (%s)",
+						thriftMerchants.size(), byteTotal, FileUtils.byteCountToDisplaySize(byteTotal)));
 
 			}
 
@@ -1158,7 +1136,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public void sendResetPasswordEmail(final String email) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
+	public void sendResetPasswordEmail(final String email) throws TServiceException_t, TUserException_t, TNotFoundException_t,
+			TException
 	{
 		Customer customer = null;
 		beginRequest("sendResetPasswordEmail");
@@ -1221,8 +1200,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public CTokenAccess_t resetPassword(final String customerId, final String resetPasswordCode, final String newPassword) throws TServiceException_t,
-			TUserException_t, TNotFoundException_t, TException
+	public CTokenAccess_t resetPassword(final String customerId, final String resetPasswordCode, final String newPassword)
+			throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		Customer customer = null;
 		CTokenAccess_t token = null;
@@ -1266,7 +1245,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			final Date now = Calendar.getInstance().getTime();
 			if (now.getTime() > customer.getResetPasswordExpires().getTime())
 			{
-				LOG.warn(String.format("reset pass expired customerId %s now %s expiresTime %s", customerId, now, customer.getResetPasswordExpires()));
+				LOG.warn(String.format("reset pass expired customerId %s now %s expiresTime %s", customerId, now,
+						customer.getResetPasswordExpires()));
 				throw new TServiceException_t(ErrorCode.PASS_RESET_CODE_EXPIRED.getCode());
 			}
 
@@ -1304,16 +1284,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	 */
 	@Override
 	public TransactionResult_t purchaseByCard(final String dealOfferId, final PaymentDetail_t paymentDetail) throws TServiceException_t,
-			TUserException_t,
-			TNotFoundException_t, TException
+			TUserException_t, TNotFoundException_t, TException
 	{
 		return doPurchaseByCard(dealOfferId, paymentDetail, null);
 	}
 
 	private TransactionResult_t doPurchaseByCard(final String dealOfferId, final PaymentDetail_t paymentDetail,
-			final Map<String, String> paymentProperties) throws TServiceException_t,
-			TUserException_t,
-			TNotFoundException_t, TException
+			final Map<String, String> paymentProperties) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 
@@ -1330,8 +1307,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			setThreadLocalServiceHeaders(customerService);
-			final TransactionResult transactionResult = customerService.purchaseByCard(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
-					ConversionUtil.convertFromThrift(paymentDetail), paymentProperties);
+			final TransactionResult transactionResult = customerService.purchaseByCard(UUID.fromString(token.getAccountId()),
+					UUID.fromString(dealOfferId), ConversionUtil.convertFromThrift(paymentDetail), paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
 
 		}
@@ -1360,17 +1337,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	 * @deprecated replaced by y {@link #buyWithCode()}
 	 */
 	@Override
-	public TransactionResult_t purchaseByCode(final String dealOfferId, final String paymentCode) throws TServiceException_t, TUserException_t,
-			TNotFoundException_t,
-			TException
+	public TransactionResult_t purchaseByCode(final String dealOfferId, final String paymentCode) throws TServiceException_t,
+			TUserException_t, TNotFoundException_t, TException
 	{
 		return doPurchaseByCode(dealOfferId, paymentCode, null);
 	}
 
-	protected TransactionResult_t doPurchaseByCode(final String dealOfferId, final String paymentCode, final Map<String, String> paymentProperties)
-			throws TServiceException_t, TUserException_t,
-			TNotFoundException_t,
-			TException
+	protected TransactionResult_t doPurchaseByCode(final String dealOfferId, final String paymentCode,
+			final Map<String, String> paymentProperties) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		TransactionResult_t transactionResult_t = null;
@@ -1385,8 +1359,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			setThreadLocalServiceHeaders(customerService);
-			final TransactionResult transactionResult = customerService.purchaseByCode(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId),
-					paymentCode, paymentProperties);
+			final TransactionResult transactionResult = customerService.purchaseByCode(UUID.fromString(token.getAccountId()),
+					UUID.fromString(dealOfferId), paymentCode, paymentProperties);
 			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
 		}
 		catch (ServiceException e)
@@ -1409,8 +1383,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public CTokenAccessResponse_t loginFacebook(final String facebookId, final String facebookTokenAccess)
-			throws TServiceException_t, TException
+	public CTokenAccessResponse_t loginFacebook(final String facebookId, final String facebookTokenAccess) throws TServiceException_t,
+			TException
 	{
 		beginRequest("loginFacebook");
 
@@ -1464,9 +1438,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		if (LOG.isDebugEnabled())
 		{
-			LOG.debug(String.format("getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s",
-					token.getEmail(), location == null ? null : location.toString(), maxMiles,
-					searchOptions == null ? null : searchOptions.toString(),
+			LOG.debug(String.format(
+					"getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s", token.getEmail(),
+					location == null ? null : location.toString(), maxMiles, searchOptions == null ? null : searchOptions.toString(),
 					fallbackSearchOptions == null ? null : fallbackSearchOptions.toString()));
 		}
 
@@ -1478,7 +1452,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 			if (result != null && CollectionUtils.isNotEmpty(result.getSummaries()))
 			{
-				final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(result.getSummaries());
+				final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(result
+						.getSummaries());
 				response = new DealOfferGeoSummariesResponse_t();
 				response.setDealOfferGeoSummaries(dealOfferGeoSummaries_t);
 			}
@@ -1505,8 +1480,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public MerchantsResponse_t getMerchantsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions) throws ServiceException_t,
-			TException
+	public MerchantsResponse_t getMerchantsByDealOfferId(final String dealOfferId, final SearchOptions_t searchOptions)
+			throws ServiceException_t, TException
 	{
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		final MerchantsResponse_t response = new MerchantsResponse_t();
@@ -1548,7 +1523,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	 * service
 	 */
 	@Override
-	public List<Activity_t> getMessages(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t, TException
+	public List<Activity_t> getMessages(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t,
+			TException
 	{
 		final StringBuilder sb = new StringBuilder();
 		final HttpServletRequest request = RequestUtils.getRequest();
@@ -1639,17 +1615,64 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 	@Override
 	public TransactionResult_t purchaseWithCard(final String dealOfferId, final PaymentDetail_t paymentDetail,
-			final Map<String, String> paymentProperties)
-			throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
+			final Map<String, String> paymentProperties) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		return doPurchaseByCard(dealOfferId, paymentDetail, paymentProperties);
 	}
 
 	@Override
-	public TransactionResult_t purchaseWithCode(final String dealOfferId, final String paymentCode, final Map<String, String> paymentProperties)
-			throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
+	public TransactionResult_t purchaseWithCode(final String dealOfferId, final String paymentCode,
+			final Map<String, String> paymentProperties) throws TServiceException_t, TUserException_t, TNotFoundException_t, TException
 	{
 		return doPurchaseByCode(dealOfferId, paymentCode, paymentProperties);
 	}
 
+	@Override
+	public EmailBodyResponse_t getEmailBody(final String templateId, final String entityId) throws TServiceException_t, TException
+	{
+		TokenUtil.getTokenFromRequest(true);
+		final EmailBodyResponse_t response = new EmailBodyResponse_t();
+
+		beginRequest("validateCode");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("getEmailBody templateId: %s entityId %s", entityId, entityId));
+		}
+
+		try
+		{
+
+			final ActivityEmailTemplateType type = ActivityEmailTemplateType.getByTemplateId(Integer.valueOf(templateId));
+
+			switch (type)
+			{
+				case BasicFundRaiser:
+
+					final DealOfferPurchase dop = taloolService.getDealOfferPurchase(UUID.fromString(entityId));
+					final String merchantCode = dop.getPropertyValue(KeyValue.merchantCode);
+					final Merchant fundraiser = ServiceFactory.get().getTaloolService().getFundraiserByTrackingCode(merchantCode);
+
+					response.setEmailBody(FreemarkerUtil.get().renderFundraiserEmail(dop.getDealOffer(), fundraiser, merchantCode));
+
+					break;
+
+				case Unknown:
+					LOG.error("Email template is unknown. Will not render on client until default template is installed!");
+
+			}
+		}
+		catch (Exception e)
+		{
+			LOG.error("Problem getEmailBody: " + e.getLocalizedMessage(), e);
+			// TODO we need to default to a template rather than thrown an exception
+			// to client. Lets swallow exception for now
+		}
+		finally
+		{
+			endRequest();
+		}
+
+		return response;
+	}
 }
