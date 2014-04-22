@@ -29,7 +29,7 @@ import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
-import com.talool.api.thrift.EmailResponse_t;
+import com.talool.api.thrift.EmailMessageResponse_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
@@ -1629,10 +1629,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public EmailResponse_t getEmailBody(final String templateId, final String entityId) throws TServiceException_t, TException
+	public EmailMessageResponse_t getEmailMessage(final String templateId, final String entityId) throws TServiceException_t, TException
 	{
 		TokenUtil.getTokenFromRequest(true);
-		final EmailResponse_t response = new EmailResponse_t();
+		final EmailMessageResponse_t response = new EmailMessageResponse_t();
 
 		beginRequest("validateCode");
 
