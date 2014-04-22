@@ -61,6 +61,7 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
+@Ignore
 public class ServiceIntegrationTest
 {
 
