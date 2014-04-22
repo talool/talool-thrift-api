@@ -35,6 +35,7 @@ import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
+import com.talool.api.thrift.EmailResponse_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
@@ -47,6 +48,7 @@ import com.talool.api.thrift.Sex_t;
 import com.talool.api.thrift.SocialAccount_t;
 import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.api.thrift.ValidateCodeResponse_t;
+import com.talool.service.ActivityEmailTemplateType;
 import com.talool.service.ErrorCode;
 
 /**
@@ -59,17 +61,16 @@ import com.talool.service.ErrorCode;
  *         locations not being null
  */
 
-@Ignore
 public class ServiceIntegrationTest
 {
 
 	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	// dev-api1
-	// private static final String TEST_URL = "http://dev-api.talool.com/1.1";
+	private static final String TEST_URL = "http://dev-api.talool.com/1.1";
 	// private static final String TEST_URL = "http://api.talool.com/1.1";
 
-	private static final String TEST_URL = "http://localhost:8082/1.1";
+	// private static final String TEST_URL = "http://localhost:8082/1.1";
 
 	private static final String MERCHANT_KITCHEN = "The Kitchen";
 	private static final int MERCHANT_DEAL_CNT = 6;
@@ -995,6 +996,21 @@ public class ServiceIntegrationTest
 			}
 
 		}
+
+	}
+
+	@Test
+	public void testEmailBodyRequest() throws ServiceException_t, TException
+	{
+		String dealOfferPurchaseId = "713702c7-e783-4c0b-b26a-4fec36e78367";
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+		EmailResponse_t response = client.getEmailBody(ActivityEmailTemplateType.BasicFundRaiser.getTemplateIdAsString(),
+				dealOfferPurchaseId);
+
+		Assert.assertNotNull(response.getBody());
+		Assert.assertNotNull(response.getSubject());
 
 	}
 }

@@ -29,7 +29,7 @@ import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
-import com.talool.api.thrift.EmailBodyResponse_t;
+import com.talool.api.thrift.EmailResponse_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.Merchant_t;
@@ -69,6 +69,7 @@ import com.talool.core.social.CustomerSocialAccount;
 import com.talool.core.social.SocialNetwork;
 import com.talool.payment.TransactionResult;
 import com.talool.payment.braintree.BraintreeUtil;
+import com.talool.service.mail.EmailMessage;
 import com.talool.service.mail.FreemarkerUtil;
 import com.talool.service.util.Constants;
 import com.talool.service.util.ExceptionUtil;
@@ -1628,10 +1629,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public EmailBodyResponse_t getEmailBody(final String templateId, final String entityId) throws TServiceException_t, TException
+	public EmailResponse_t getEmailBody(final String templateId, final String entityId) throws TServiceException_t, TException
 	{
 		TokenUtil.getTokenFromRequest(true);
-		final EmailBodyResponse_t response = new EmailBodyResponse_t();
+		final EmailResponse_t response = new EmailResponse_t();
 
 		beginRequest("validateCode");
 
@@ -1652,8 +1653,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					final DealOfferPurchase dop = taloolService.getDealOfferPurchase(UUID.fromString(entityId));
 					final String merchantCode = dop.getPropertyValue(KeyValue.merchantCode);
 					final Merchant fundraiser = ServiceFactory.get().getTaloolService().getFundraiserByTrackingCode(merchantCode);
+					final EmailMessage message = FreemarkerUtil.get().renderFundraiserEmail(dop, fundraiser, merchantCode);
 
-					response.setEmailBody(FreemarkerUtil.get().renderFundraiserEmail(dop.getDealOffer(), fundraiser, merchantCode));
+					response.setSubject(message.getSubject());
+					response.setBody(message.getBody());
 
 					break;
 
