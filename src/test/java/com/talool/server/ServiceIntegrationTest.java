@@ -35,7 +35,7 @@ import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
 import com.talool.api.thrift.Deal_t;
-import com.talool.api.thrift.EmailResponse_t;
+import com.talool.api.thrift.EmailMessageResponse_t;
 import com.talool.api.thrift.Gift_t;
 import com.talool.api.thrift.Location_t;
 import com.talool.api.thrift.MerchantLocation_t;
@@ -1007,7 +1007,7 @@ public class ServiceIntegrationTest
 		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
-		EmailResponse_t response = client.getEmailBody(ActivityEmailTemplateType.BasicFundRaiser.getTemplateIdAsString(),
+		EmailMessageResponse_t response = client.getEmailMessage(ActivityEmailTemplateType.BasicFundRaiser.getTemplateIdAsString(),
 				dealOfferPurchaseId);
 
 		Assert.assertNotNull(response.getBody());
