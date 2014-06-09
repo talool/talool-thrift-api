@@ -568,7 +568,7 @@ public class ServiceIntegrationTest
 	@Test
 	public void testGetDealOffer() throws ServiceException_t, TException
 	{
-		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "Walkon2013");
+		CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
 
 		tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
 
@@ -579,7 +579,7 @@ public class ServiceIntegrationTest
 		searchOptions.setMaxResults(1000);
 
 		// taloolchris
-		List<Deal_t> deals = client.getDealsByDealOfferId("84dc11d6-bae5-43db-a517-08f11614803d", null);
+		List<Deal_t> deals = client.getDealsByDealOfferId("4d54d8ef-febb-4719-b9f0-a73578a41803", null);
 
 		// List<Deal_t> deals =
 		// client.getDealsByDealOfferId("a067de54-d63d-4613-8d60-9d995765cd52",
@@ -587,11 +587,7 @@ public class ServiceIntegrationTest
 
 		for (final Deal_t deal : deals)
 		{
-			if (deal.getMerchant().getName().contains("Dance"))
-			{
-				System.out.println(deal);
-			}
-
+			System.out.println(deal.expires);
 		}
 	}
 
@@ -986,6 +982,7 @@ public class ServiceIntegrationTest
 
 		for (DealOfferGeoSummary_t summary : response.getDealOfferGeoSummaries())
 		{
+			System.out.println("dealOffer expires: " + summary.getDealOffer().getExpires());
 			System.out.println("dealOffer title: " + summary.getDealOffer().getTitle());
 			System.out.println("dealOffer price: " + summary.getDealOffer().getPrice());
 			System.out.println("dealOffer distanceInMeters: " + summary.getDistanceInMeters());

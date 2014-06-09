@@ -54,6 +54,17 @@
         <url-pattern>/sg</url-pattern>
     </servlet-mapping>
 	
+     <servlet>
+   		<display-name>Braintree Webhook Servlet</display-name>
+        <servlet-name>BraintreeWebhookService</servlet-name>
+        <servlet-class>com.talool.servlet.BraintreeWebhookServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BraintreeWebhookService</servlet-name>
+        <url-pattern>/bt</url-pattern>
+    </servlet-mapping>
+    
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
