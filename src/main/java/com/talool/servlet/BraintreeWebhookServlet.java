@@ -55,6 +55,10 @@ public class BraintreeWebhookServlet extends HttpServlet
 		final String btSignatureParam = req.getParameter(BT_SIGNATURE_PARAM);
 		final String btPayloadParam = req.getParameter(BT_PAYLOAD);
 
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("Received braintree webhook request");
+		}
 		try
 		{
 			ServiceFactory.get().getTaloolService().processBraintreeNotification(btSignatureParam, btPayloadParam);
