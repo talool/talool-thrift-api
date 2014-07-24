@@ -56,7 +56,7 @@ import com.talool.core.DealOfferGeoSummariesResult;
 import com.talool.core.DealOfferPurchase;
 import com.talool.core.FactoryManager;
 import com.talool.core.Merchant;
-import com.talool.core.MerchantCode;
+import com.talool.core.MerchantCodeGroup;
 import com.talool.core.activity.Activity;
 import com.talool.core.gift.Gift;
 import com.talool.core.service.ActivityService;
@@ -1654,8 +1654,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 					final DealOfferPurchase dop = taloolService.getDealOfferPurchase(UUID.fromString(entityId));
 					final String merchantCode = dop.getPropertyValue(KeyValue.merchantCode);
 					final Merchant fundraiser = taloolService.getFundraiserByTrackingCode(merchantCode);
-					final MerchantCode code = taloolService.getMerchantCodeForCode(merchantCode);
-					final String student = code.getMerchantCodeGroupId().getCodeGroupTitle();
+					final MerchantCodeGroup group = taloolService.getMerchantCodeGroupForCode(merchantCode);
+					final String student = group.getCodeGroupTitle();
 					final EmailMessage message = FreemarkerUtil.get().renderFundraiserEmail(dop, fundraiser, merchantCode, student);
 
 					response.setSubject(message.getSubject());
