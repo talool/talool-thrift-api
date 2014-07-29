@@ -1723,8 +1723,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	}
 
 	@Override
-	public String generateBraintreeClientToken(String dealAcquireId,
-			Location_t location) throws ServiceException_t, TException {
+	public String generateBraintreeClientToken() throws ServiceException_t, TException {
 
 		final Token_t token = TokenUtil.getTokenFromRequest(true);
 		String btToken;
