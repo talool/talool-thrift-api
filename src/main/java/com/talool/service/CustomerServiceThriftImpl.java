@@ -1681,4 +1681,75 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 
 		return response;
 	}
+
+	@Override
+	public TransactionResult_t purchaseWithNonce(String dealOfferId,
+			String nonce, Map<String, String> paymentProperties)
+			throws TServiceException_t, TUserException_t, TNotFoundException_t,
+			TException {
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		TransactionResult_t transactionResult_t = null;
+
+		beginRequest("purchaseWithNonce");
+
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(String.format("purchaseWithNonce customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
+		}
+
+		try
+		{
+			setThreadLocalServiceHeaders(customerService);
+			final TransactionResult transactionResult = customerService.purchaseByNonce(UUID.fromString(token.getAccountId()),
+					UUID.fromString(dealOfferId), nonce, paymentProperties);
+			transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem purchaseWithNonce: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		catch (NotFoundException e)
+		{
+			LOG.error("Problem purchaseWithNonce: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
+		}
+
+		return transactionResult_t;
+	}
+
+	@Override
+	public String generateBraintreeClientToken(String dealAcquireId,
+			Location_t location) throws ServiceException_t, TException {
+
+		final Token_t token = TokenUtil.getTokenFromRequest(true);
+		String btToken;
+		
+		beginRequest("generateBraintreeClientToken");
+
+		try
+		{
+			btToken = customerService.generateBraintreeClientToken(UUID.fromString(token.getAccountId()));
+		}
+		catch (ServiceException e)
+		{
+			LOG.error("Problem generateBraintreeClientToken for customerId: " + token.getAccountId(), e);
+			throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
+		}
+		catch (NotFoundException e)
+		{
+			LOG.error("Problem generateBraintreeClientToken: " + e.getLocalizedMessage(), e);
+			throw ExceptionUtil.safelyTranslate(e);
+		}
+		finally
+		{
+			endRequest();
+		}
+		
+		return btToken;
+	}
 }

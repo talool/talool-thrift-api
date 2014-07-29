@@ -45,12 +45,12 @@
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-thrift</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-service</artifactId>
-			<version>1.0.13</version>
+			<version>1.0.14-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.cli-parser</groupId>
