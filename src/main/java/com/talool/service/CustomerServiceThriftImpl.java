@@ -434,20 +434,20 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 		try
 		{
 			setThreadLocalServiceHeaders(customerService);
-			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null);
+			
+			Calendar c = Calendar.getInstance();
+			c.roll(Calendar.DAY_OF_YEAR, -31);
+			Date expiresAfter = c.getTime();
+			
+			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null, expiresAfter);
 
 			if (CollectionUtils.isEmpty(dealAcquires))
 			{
 				LOG.error("No deals available for merchant: " + merchantId);
-				throw new ServiceException_t(1088, "No deals available for merchant");
 			}
 
 			return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
 
-		}
-		catch (ServiceException_t se)
-		{
-			throw se;
 		}
 		catch (Exception ex)
 		{
