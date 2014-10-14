@@ -99,6 +99,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 	private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
 	private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
 	private static final ImmutableList<Activity_t> EMPTY_ACTIVITIES = ImmutableList.of();
+	private static final ImmutableList<DealAcquire_t> EMPTY_ACQUIRES = ImmutableList.of();
 
 	private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
@@ -441,12 +442,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface
 			
 			dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null, expiresAfter);
 
-			if (CollectionUtils.isEmpty(dealAcquires))
-			{
-				LOG.error("No deals available for merchant: " + merchantId);
-			}
-
-			return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
+			return CollectionUtils.isEmpty(dealAcquires) ? EMPTY_ACQUIRES : ConversionUtil.convertToThriftDealAcquires(dealAcquires);
 
 		}
 		catch (Exception ex)
