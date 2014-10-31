@@ -61,7 +61,7 @@ import com.talool.service.ErrorCode;
  *         null
  */
 
-
+@Ignore
 public class ServiceIntegrationTest {
 
   private static final String TEST_URL = "http://localhost:8082/1.1";
