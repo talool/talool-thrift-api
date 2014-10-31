@@ -1226,6 +1226,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
    * @param request
    * @return
    */
+  @SuppressWarnings("rawtypes")
   DevicePresence updateDevicePresence(final UUID customerId, final HttpServletRequest request, final Location_t location) {
     final StringBuilder sb = new StringBuilder();
 
@@ -1252,32 +1253,15 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     // non-blocking
     DevicePresenceManager.get().updateDevicePresence(devicePresence);
 
-    LOG.info("Dumping http headers");
-    Enumeration headerNames = request.getHeaderNames();
-    while (headerNames.hasMoreElements()) {
-      String headerName = (String) headerNames.nextElement();
-      LOG.info(headerName + " : " + request.getHeader(headerName));
-    }
-
-
     if (LOG.isDebugEnabled()) {
-      sb.append("getMessages location: ").append(location == null ? "null" : location.toString());
-      if (userAgent != null) {
-        sb.append(", userAgent: ").append(userAgent);
+      sb.append("headers:");
+      Enumeration headerNames = request.getHeaderNames();
+      while (headerNames.hasMoreElements()) {
+        String headerName = (String) headerNames.nextElement();
+        sb.append(" ").append(headerName).append("->").append(request.getHeader(headerName));
       }
-      if (deviceId != null) {
-        sb.append(", deviceId: ").append(deviceId);
-      }
-      if (apnDeviceToken != null) {
-        sb.append(", apnDeviceToken: ").append(apnDeviceToken);
-      }
-      if (gcmDeviceToken != null) {
-        sb.append(", gcmDeviceToken: ").append(gcmDeviceToken);
-      }
-
-      if (LOG.isDebugEnabled()) {
-        LOG.debug(sb.toString());
-      }
+      sb.append(" location: ").append(location == null ? "null" : location.toString());
+      LOG.debug(sb.toString());
     }
 
     return devicePresence;

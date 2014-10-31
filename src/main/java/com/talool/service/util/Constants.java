@@ -19,14 +19,14 @@ public final class Constants {
   /**
    * Generic deviceId for mobile
    */
-  public static final String HEADER_DEVICE_ID = "DeviceId";
+  public static final String HEADER_DEVICE_ID = "deviceid";
 
   /**
    * Apple push notification device token
    */
   public static final String HEADER_APN_DEVICE_TOKEN = "ApnDeviceToken";
 
-  public static final String HEADER_USER_AGENT = "User-Agent";
+  public static final String HEADER_USER_AGENT = "user-agent";
 
   public static final String HEADER_X_CLIENT = "x-client";
 
