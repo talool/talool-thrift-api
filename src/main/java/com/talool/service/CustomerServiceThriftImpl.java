@@ -1264,9 +1264,9 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     devicePresence.setIp(clientIp);
 
     if (apnDeviceToken != null) {
-      devicePresence.setDeviceId(apnDeviceToken);
+      devicePresence.setDeviceToken(apnDeviceToken);
     } else if (gcmDeviceToken != null) {
-      devicePresence.setDeviceId(gcmDeviceToken);
+      devicePresence.setDeviceToken(gcmDeviceToken);
     }
 
     // non-blocking
