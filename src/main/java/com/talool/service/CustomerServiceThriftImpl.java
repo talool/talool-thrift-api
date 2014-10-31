@@ -87,6 +87,7 @@ import com.talool.utils.KeyValue;
  * 
  * @author clintz
  */
+
 public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceThriftImpl.class);
 
@@ -101,6 +102,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   private static final ImmutableList<Merchant_t> EMPTY_MERCHANTS = ImmutableList.of();
   private static final ImmutableList<Category_t> EMPTY_CATEGORIES = ImmutableList.of();
   private static final ImmutableList<Activity_t> EMPTY_ACTIVITIES = ImmutableList.of();
+  private static final ImmutableList<DealAcquire_t> EMPTY_ACQUIRES = ImmutableList.of();
 
   private volatile List<Category_t> categories = EMPTY_CATEGORIES;
 
@@ -366,17 +368,24 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
     try {
       setThreadLocalServiceHeaders(customerService);
-      dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null);
 
-      if (CollectionUtils.isEmpty(dealAcquires)) {
-        LOG.error("No deals available for merchant: " + merchantId);
-        throw new ServiceException_t(1088, "No deals available for merchant");
+
+
+      final HttpServletRequest request = RequestUtils.getRequest();
+      final String userAgent = request.getHeader(Constants.HEADER_USER_AGENT);
+      Calendar c = Calendar.getInstance();
+      if (StringUtils.containsIgnoreCase(userAgent, "iphone")) {
+        // Pass an old date for iphone, bc the data is managed on the device
+        c.roll(Calendar.YEAR, -2);
+      } else {
+        // Pass the date for Android, bc any filtering of expired offers needs to happen here
+        c.roll(Calendar.DAY_OF_YEAR, -31);
       }
 
-      return ConversionUtil.convertToThriftDealAcquires(dealAcquires);
+      dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null, c.getTime());
 
-    } catch (ServiceException_t se) {
-      throw se;
+      return CollectionUtils.isEmpty(dealAcquires) ? EMPTY_ACQUIRES : ConversionUtil.convertToThriftDealAcquires(dealAcquires);
+
     } catch (Exception ex) {
       LOG.error("There was a problem retrieving deals for merchant: " + merchantId, ex);
       throw new ServiceException_t(1087, "There was a problem retrieving deals for merchant");
@@ -684,10 +693,20 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
     try {
       final Gift gift = customerService.getGift(UUID.fromString(giftId));
-      thriftGift = ConversionUtil.convertToThrift(gift);
+
+      // return null if gift does not belong to user!
+      if (gift != null && !gift.getToCustomer().getId().toString().equals(token.getAccountId())) {
+        throw new ServiceException_t(ErrorCode.NOT_GIFT_RECIPIENT.getCode(), ErrorCode.NOT_GIFT_RECIPIENT.getMessage());
+      } else {
+        thriftGift = ConversionUtil.convertToThrift(gift);
+      }
+
     } catch (ServiceException e) {
       LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
       throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
+    } catch (ServiceException_t e) {
+      LOG.error("Problem getGifts for customerId: " + token.getAccountId(), e);
+      throw e;
     } finally {
       endRequest();
     }
