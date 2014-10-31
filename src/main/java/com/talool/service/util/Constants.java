@@ -8,25 +8,26 @@ import org.apache.thrift.protocol.TBinaryProtocol.Factory;
  * @author clintz
  * 
  */
-public final class Constants
-{
-	public static final Factory PROTOCOL_FACTORY = new TBinaryProtocol.Factory();
+public final class Constants {
+  public static final Factory PROTOCOL_FACTORY = new TBinaryProtocol.Factory();
 
-	/**
-	 * Android GCM token
-	 */
-	public static final String HEADER_GCM_DEVICE_TOKEN = "GcmDeviceToken";
+  /**
+   * Android GCM token
+   */
+  public static final String HEADER_GCM_DEVICE_TOKEN = "GcmDeviceToken";
 
-	/**
-	 * Generic deviceId for mobile
-	 */
-	public static final String HEADER_DEVICE_ID = "DeviceId";
+  /**
+   * Generic deviceId for mobile
+   */
+  public static final String HEADER_DEVICE_ID = "deviceid";
 
-	/**
-	 * Apple push notification device token
-	 */
-	public static final String HEADER_APN_DEVICE_TOKEN = "ApnDeviceToken";
+  /**
+   * Apple push notification device token
+   */
+  public static final String HEADER_APN_DEVICE_TOKEN = "ApnDeviceToken";
 
-	public static final String HEADER_USER_AGENT = "User-Agent";
+  public static final String HEADER_USER_AGENT = "user-agent";
+
+  public static final String HEADER_X_CLIENT = "x-client";
 
 }

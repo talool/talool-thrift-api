@@ -4,10 +4,10 @@
 	<parent>
 		<groupId>com.talool</groupId>
 		<artifactId>talool-base</artifactId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 	</parent>
 	<artifactId>talool-thrift-api</artifactId>
-	<version>1.0.20-SNAPSHOT</version>
+	<version>1.0.22-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Talool Thrift API</name>
 	<scm>
@@ -45,12 +45,12 @@
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-thrift</artifactId>
-			<version>1.0.9</version>
+			<version>1.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>com.talool</groupId>
 			<artifactId>talool-service</artifactId>
-			<version>1.0.20</version>
+			<version>1.0.23</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.cli-parser</groupId>
