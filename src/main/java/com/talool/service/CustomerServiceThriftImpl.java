@@ -326,8 +326,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   }
 
   /**
-   * Gets single header values only. Duplicate headers are not supported in this call currenty. For
-   * example, multiple "Set-Cookie" headers are not supported
+   * Gets single header values only. Duplicate headers are not supported in this call. For example,
+   * multiple "Set-Cookie" headers are not supported
    * 
    * @return
    */
@@ -1245,10 +1245,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
    * @param request
    * @return
    */
-  @SuppressWarnings("rawtypes")
   DevicePresence updateDevicePresence(final UUID customerId, final HttpServletRequest request, final Location_t location) {
-    final StringBuilder sb = new StringBuilder();
-
     final String apnDeviceToken = request.getHeader(Constants.HEADER_APN_DEVICE_TOKEN);
     final String deviceId = request.getHeader(Constants.HEADER_DEVICE_ID);
     final String gcmDeviceToken = request.getHeader(Constants.HEADER_GCM_DEVICE_TOKEN);
@@ -1273,18 +1270,25 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     DevicePresenceManager.get().updateDevicePresence(devicePresence);
 
     if (LOG.isDebugEnabled()) {
-      sb.append("headers:");
-      Enumeration headerNames = request.getHeaderNames();
-      while (headerNames.hasMoreElements()) {
-        String headerName = (String) headerNames.nextElement();
-        sb.append(" ").append(headerName).append("->").append(request.getHeader(headerName));
-      }
-      sb.append(" location: ").append(location == null ? "null" : location.toString());
-      LOG.debug(sb.toString());
+      LOG.debug("location: " + location == null ? "null" : location.toString());
+      dumpHttpHeadersToLog();
     }
 
     return devicePresence;
 
+  }
+
+  @SuppressWarnings("rawtypes")
+  void dumpHttpHeadersToLog() {
+    final HttpServletRequest request = RequestUtils.getRequest();
+    final StringBuilder sb = new StringBuilder();
+    sb.append("headers:");
+    Enumeration headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+      String headerName = (String) headerNames.nextElement();
+      sb.append(" ").append(headerName).append("->").append(request.getHeader(headerName));
+    }
+    LOG.debug(sb.toString());
   }
 
   @Override
@@ -1397,10 +1401,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
     if (LOG.isDebugEnabled()) {
       LOG.debug(String.format("purchaseWithNonce customerId %s dealOfferId %s", token.getAccountId(), dealOfferId));
+      dumpHttpHeadersToLog();
     }
 
     try {
       setThreadLocalServiceHeaders(customerService);
+
       final TransactionResult transactionResult =
           customerService.purchaseByNonce(UUID.fromString(token.getAccountId()), UUID.fromString(dealOfferId), nonce, paymentProperties);
       transactionResult_t = ConversionUtil.convertToThrift(transactionResult);
