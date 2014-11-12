@@ -1413,9 +1413,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     } catch (ServiceException e) {
       LOG.error("Problem purchaseWithNonce: " + e.getLocalizedMessage(), e);
       throw ExceptionUtil.safelyTranslate(e);
-    } catch (NotFoundException e) {
+    } catch (Exception e) {
       LOG.error("Problem purchaseWithNonce: " + e.getLocalizedMessage(), e);
-      throw ExceptionUtil.safelyTranslate(e);
     } finally {
       endRequest();
     }
