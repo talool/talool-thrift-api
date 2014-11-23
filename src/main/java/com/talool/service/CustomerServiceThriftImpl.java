@@ -1150,6 +1150,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     final Token_t token = TokenUtil.getTokenFromRequest(true);
     DealOfferGeoSummariesResponse_t response = null;
     DealOfferGeoSummariesResult result = null;
+    // supports free books?
+    final boolean supportsFreeBooks = RequestUtils.getRequest().getHeader(Constants.HEADER_X_SUPPORTS_FREE_BOOKS) != null;
 
     beginRequest("getDealOfferGeoSummariesWithin");
 
@@ -1161,9 +1163,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
     try {
       setThreadLocalServiceHeaders(taloolService);
+
       result =
           taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
-              ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions));
+              ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions), supportsFreeBooks);
 
       if (result != null && CollectionUtils.isNotEmpty(result.getSummaries())) {
         final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(result.getSummaries());

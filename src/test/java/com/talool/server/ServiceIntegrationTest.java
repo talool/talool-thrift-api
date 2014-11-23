@@ -34,6 +34,7 @@ import com.talool.api.thrift.DealAcquire_t;
 import com.talool.api.thrift.DealOfferGeoSummariesResponse_t;
 import com.talool.api.thrift.DealOfferGeoSummary_t;
 import com.talool.api.thrift.DealOffer_t;
+import com.talool.api.thrift.DealType_t;
 import com.talool.api.thrift.Deal_t;
 import com.talool.api.thrift.EmailMessageResponse_t;
 import com.talool.api.thrift.Gift_t;
@@ -60,7 +61,6 @@ import com.talool.service.ErrorCode;
  *         TODO - create testGetAcquiredMerchantsLocation that tests mutliple locations not being
  *         null
  */
-
 @Ignore
 public class ServiceIntegrationTest {
 
@@ -918,4 +918,55 @@ public class ServiceIntegrationTest {
     Assert.assertNotNull(response.getSubject());
 
   }
+
+  @Test
+  public void tesFreeBookSupport() throws ServiceException_t, TException {
+
+    CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+    tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+    final SearchOptions_t searchOpts = new SearchOptions_t();
+    searchOpts.setSortProperty("distanceInMeters");
+    searchOpts.setAscending(false);
+    searchOpts.setMaxResults(100);
+    searchOpts.setPage(0);
+
+    final SearchOptions_t fallbackSearchOpts = new SearchOptions_t();
+    fallbackSearchOpts.setSortProperty("price");
+    fallbackSearchOpts.setAscending(true);
+    fallbackSearchOpts.setMaxResults(100);
+    fallbackSearchOpts.setPage(0);
+
+
+    DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
+
+    boolean hasFreeBooks = false;
+
+    for (DealOfferGeoSummary_t dof : response.getDealOfferGeoSummaries()) {
+      if (dof.getDealOffer().getDealType().equals(DealType_t.FREE_BOOK)) {
+        if (hasFreeBooks != true) {
+          hasFreeBooks = true;
+        }
+      }
+    }
+
+    Assert.assertTrue(hasFreeBooks);
+
+    // tHttpClient.setCustomHeader(Constants.HEADER_X_SUPPORTS_FREE_BOOKS, "");
+    response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
+    hasFreeBooks = false;
+
+    for (DealOfferGeoSummary_t dof : response.getDealOfferGeoSummaries()) {
+      if (dof.getDealOffer().getDealType().equals(DealType_t.FREE_BOOK)) {
+        if (hasFreeBooks != true) {
+          hasFreeBooks = true;
+        }
+      }
+    }
+
+    Assert.assertFalse(hasFreeBooks);
+  }
+
+
+
 }
