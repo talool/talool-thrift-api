@@ -809,18 +809,13 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   public List<Activity_t> getActivities(final SearchOptions_t searchOptions) throws ServiceException_t, TException {
     final Token_t token = TokenUtil.getTokenFromRequest(true);
 
-    beginRequest("getActivities");
-
     try {
       final List<Activity> activities =
           activityService.getActivities(UUID.fromString(token.getAccountId()), ConversionUtil.convertFromThrift(searchOptions));
 
       return CollectionUtils.isEmpty(activities) ? EMPTY_ACTIVITIES : ConversionUtil.convertToThriftActivites(activities);
     } catch (ServiceException e) {
-      LOG.error(e.getMessage(), e);
       throw new ServiceException_t(e.getErrorCode().getCode(), e.getMessage());
-    } finally {
-      endRequest();
     }
   }
 
@@ -1225,21 +1220,31 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   @Override
   public List<Activity_t> getMessages(final SearchOptions_t searchOptions, final Location_t location) throws ServiceException_t, TException {
     final Token_t token = TokenUtil.getTokenFromRequest(true);
+    List<Activity_t> acts = null;
+
+    beginRequest("getMessages");
 
     try {
       final UUID customerId = UUID.fromString(token.getAccountId());
       if (LOG.isDebugEnabled()) {
-        LOG.debug("getMessages called: " + customerId);
+        LOG.debug("getMessages called: " + token.getEmail());
       }
       final HttpServletRequest request = RequestUtils.getRequest();
       updateDevicePresence(customerId, request, location);
+    } catch (Exception e) {
+      LOG.error("Problem getMessages: " + token.getEmail() + " " + e.getLocalizedMessage(), e);
+    }
+
+    try {
+      acts = getActivities(searchOptions);
     } catch (Exception e) {
       LOG.error("Problem getMessages: " + e.getLocalizedMessage(), e);
     } finally {
       endRequest();
     }
 
-    return getActivities(searchOptions);
+
+    return acts == null ? EMPTY_ACTIVITIES : acts;
   }
 
   /**

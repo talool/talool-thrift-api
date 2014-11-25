@@ -61,7 +61,7 @@ import com.talool.service.ErrorCode;
  *         TODO - create testGetAcquiredMerchantsLocation that tests mutliple locations not being
  *         null
  */
-@Ignore
+
 public class ServiceIntegrationTest {
 
   private static final String TEST_URL = "http://localhost:8082/1.1";
@@ -944,15 +944,15 @@ public class ServiceIntegrationTest {
 
     for (DealOfferGeoSummary_t dof : response.getDealOfferGeoSummaries()) {
       if (dof.getDealOffer().getDealType().equals(DealType_t.FREE_BOOK)) {
-        if (hasFreeBooks != true) {
-          hasFreeBooks = true;
-        }
+        hasFreeBooks = true;
+        break;
       }
     }
 
-    Assert.assertTrue(hasFreeBooks);
 
-    // tHttpClient.setCustomHeader(Constants.HEADER_X_SUPPORTS_FREE_BOOKS, "");
+    Assert.assertFalse(hasFreeBooks);
+
+    tHttpClient.setCustomHeader("X-Supports-Free-Books", "");
     response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
     hasFreeBooks = false;
 
@@ -964,7 +964,7 @@ public class ServiceIntegrationTest {
       }
     }
 
-    Assert.assertFalse(hasFreeBooks);
+    Assert.assertTrue(hasFreeBooks);
   }
 
 
