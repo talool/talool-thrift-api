@@ -379,7 +379,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
         c.roll(Calendar.YEAR, -2);
       } else {
         // Pass the date for Android, bc any filtering of expired offers needs to happen here
-        c.roll(Calendar.DAY_OF_YEAR, -31);
+        c.add(Calendar.DAY_OF_YEAR, -31);
       }
 
       dealAcquires = customerService.getDealAcquires(UUID.fromString(token.getAccountId()), UUID.fromString(merchantId), null, c.getTime());
