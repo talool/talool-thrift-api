@@ -694,8 +694,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     try {
       final Gift gift = customerService.getGift(UUID.fromString(giftId));
 
-      // return null if gift does not belong to user!
-      if (gift != null && !gift.getToCustomer().getId().toString().equals(token.getAccountId())) {
+      // throw exception if toCustomer is a valid talool account and the token doesn't match
+      if (gift != null && gift.getToCustomer() != null && (!gift.getToCustomer().getId().toString().equals(token.getAccountId()))) {
         throw new ServiceException_t(ErrorCode.NOT_GIFT_RECIPIENT.getCode(), ErrorCode.NOT_GIFT_RECIPIENT.getMessage());
       } else {
         thriftGift = ConversionUtil.convertToThrift(gift);
