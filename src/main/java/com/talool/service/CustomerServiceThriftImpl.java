@@ -152,6 +152,14 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
   @Override
   public CTokenAccess_t createAccount(final Customer_t customer, final String password) throws ServiceException_t, TException {
     CTokenAccess_t token = null;
+    UUID whiteLabelPublisherMerchantId = null;
+    // white label header?
+    final String whiteLabelIdHeader = RequestUtils.getRequest().getHeader(Constants.HEADER_X_WHITE_LABEL_ID);
+
+    if (StringUtils.isNotEmpty(whiteLabelIdHeader)) {
+      whiteLabelPublisherMerchantId = UUID.fromString(whiteLabelIdHeader);
+    }
+
 
     if (LOG.isDebugEnabled()) {
       LOG.debug("createAccount received for :" + customer);
@@ -179,7 +187,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
       }
 
-      customerService.createAccount(taloolCustomer, password);
+      customerService.createAccount(taloolCustomer, password, whiteLabelPublisherMerchantId);
 
       final Customer_t updatedCustomer = ConversionUtil.convertToThrift(taloolCustomer);
 
@@ -1145,15 +1153,26 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     final Token_t token = TokenUtil.getTokenFromRequest(true);
     DealOfferGeoSummariesResponse_t response = null;
     DealOfferGeoSummariesResult result = null;
+    UUID whiteLabelPublisherMerchantId = null;
+
     // supports free books?
     final boolean supportsFreeBooks = RequestUtils.getRequest().getHeader(Constants.HEADER_X_SUPPORTS_FREE_BOOKS) != null;
+    // white label header?
+    final String whiteLabelIdHeader = RequestUtils.getRequest().getHeader(Constants.HEADER_X_WHITE_LABEL_ID);
+
+    if (StringUtils.isNotEmpty(whiteLabelIdHeader)) {
+      whiteLabelPublisherMerchantId = UUID.fromString(whiteLabelIdHeader);
+    }
+
 
     beginRequest("getDealOfferGeoSummariesWithin");
 
     if (LOG.isDebugEnabled()) {
-      LOG.debug(String.format("getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s",
-          token.getEmail(), location == null ? null : location.toString(), maxMiles, searchOptions == null ? null : searchOptions.toString(),
-          fallbackSearchOptions == null ? null : fallbackSearchOptions.toString()));
+      LOG.debug(String.format(
+          "getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s whiteLabelId: %s", token
+              .getEmail(), location == null ? null : location.toString(), maxMiles, searchOptions == null ? null : searchOptions.toString(),
+          fallbackSearchOptions == null ? null : fallbackSearchOptions.toString(), whiteLabelPublisherMerchantId == null ? "null"
+              : whiteLabelPublisherMerchantId.toString()));
     }
 
     try {
@@ -1161,7 +1180,8 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
 
       result =
           taloolService.getDealOfferGeoSummariesWithin(ConversionUtil.convertFromThrift(location), maxMiles,
-              ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions), supportsFreeBooks);
+              ConversionUtil.convertFromThrift(searchOptions), ConversionUtil.convertFromThrift(fallbackSearchOptions), supportsFreeBooks,
+              whiteLabelPublisherMerchantId);
 
       if (result != null && CollectionUtils.isNotEmpty(result.getSummaries())) {
         final List<DealOfferGeoSummary_t> dealOfferGeoSummaries_t = ConversionUtil.convertToThriftDealOfferGeoSummaries(result.getSummaries());
@@ -1278,7 +1298,6 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     DevicePresenceManager.get().updateDevicePresence(devicePresence);
 
     if (LOG.isDebugEnabled()) {
-      LOG.debug("location: " + location == null ? "null" : location.toString());
       dumpHttpHeadersToLog();
     }
 
