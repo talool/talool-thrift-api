@@ -51,6 +51,7 @@ import com.talool.api.thrift.SocialNetwork_t;
 import com.talool.api.thrift.ValidateCodeResponse_t;
 import com.talool.service.ActivityEmailTemplateType;
 import com.talool.service.ErrorCode;
+import com.talool.service.util.Constants;
 
 /**
  * Integration tests for the Thrift service . A running Thrift server needs to be running on the
@@ -61,6 +62,7 @@ import com.talool.service.ErrorCode;
  *         TODO - create testGetAcquiredMerchantsLocation that tests mutliple locations not being
  *         null
  */
+
 @Ignore
 public class ServiceIntegrationTest {
 
@@ -142,6 +144,8 @@ public class ServiceIntegrationTest {
     }
 
   }
+
+
 
   @Test
   public void testRegisterCustomerByEmail() throws ServiceException_t, TException {
@@ -867,6 +871,75 @@ public class ServiceIntegrationTest {
   }
 
   @Test
+  public void testWhiteLabelRegisterCustomerByEmail() throws ServiceException_t, TException {
+    String payBackBookMerchantId = "17907b38-9ce4-4fcd-afff-85ac009b2117";
+    final long now = System.currentTimeMillis();
+    Customer_t customer = new Customer_t();
+    customer.setFirstName("Chris-" + now);
+    customer.setLastName("Lintz-" + now);
+    customer.setSex(Sex_t.M);
+    customer.setEmail("christopher.justin" + System.currentTimeMillis() + "@gmail.com");
+
+    customer.setBirthDate(DateUtils.addYears(Calendar.getInstance().getTime(), -35).getTime());
+
+    // need to write code to discover the proper whiteLabelPublisherId
+    tHttpClient.setCustomHeader(Constants.HEADER_X_WHITE_LABEL_ID, payBackBookMerchantId);
+
+    CTokenAccess_t accessToken = client.createAccount(customer, "pass123");
+
+    Assert.assertNotNull(accessToken.getToken());
+    Assert.assertEquals(customer.getEmail(), accessToken.getCustomer().getEmail());
+    Assert.assertEquals(customer.getLastName(), accessToken.getCustomer().getLastName());
+    Assert.assertNotNull(accessToken.getCustomer().getCustomerId());
+    Assert.assertEquals(customer.getSex(), accessToken.getCustomer().getSex());
+
+  }
+
+  @Test
+  public void testWhiteLabelDealOfferGeoSummaryWithin() throws ServiceException_t, TException {
+    String payBackBookMerchantId = "17907b38-9ce4-4fcd-afff-85ac009b2117";
+    CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
+    tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+
+    // need to write code to discover the proper whiteLabelPublisherId
+    tHttpClient.setCustomHeader(Constants.HEADER_X_WHITE_LABEL_ID, payBackBookMerchantId);
+
+    final SearchOptions_t searchOpts = new SearchOptions_t();
+    searchOpts.setSortProperty("distanceInMeters");
+    searchOpts.setAscending(false);
+    searchOpts.setMaxResults(2000);
+    searchOpts.setPage(0);
+
+    final SearchOptions_t fallbackSearchOpts = new SearchOptions_t();
+    fallbackSearchOpts.setSortProperty("price");
+    fallbackSearchOpts.setAscending(true);
+    fallbackSearchOpts.setMaxResults(100);
+    fallbackSearchOpts.setPage(0);
+
+
+    // test no location
+    DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
+    Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
+
+    // test a location
+    response = client.getDealOfferGeoSummariesWithin(Boulder_CO, 2000, searchOpts, fallbackSearchOpts);
+    Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
+
+    // test a location and a bogus white label
+    tHttpClient.setCustomHeader(Constants.HEADER_X_WHITE_LABEL_ID, "19907b38-9ce4-4fcd-afff-85ac009b2117");
+    response = client.getDealOfferGeoSummariesWithin(Boulder_CO, 2000, searchOpts, fallbackSearchOpts);
+    Assert.assertTrue(CollectionUtils.isEmpty(response.getDealOfferGeoSummaries()));
+
+    // test with no location and a bogus white label
+    tHttpClient.setCustomHeader(Constants.HEADER_X_WHITE_LABEL_ID, "19907b38-9ce4-4fcd-afff-85ac009b2117");
+    response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
+    Assert.assertTrue(CollectionUtils.isEmpty(response.getDealOfferGeoSummaries()));
+
+
+
+  }
+
+  @Test
   public void testDealOfferGeoSummaryWithin() throws ServiceException_t, TException {
     CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
     tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
@@ -885,7 +958,7 @@ public class ServiceIntegrationTest {
 
     // DealOfferGeoSummariesResponse_t response =
     // client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
-    Location_t loc = new Location_t();
+    // Location_t loc = new Location_t();
 
     DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
 

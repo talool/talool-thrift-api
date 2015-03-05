@@ -35,4 +35,9 @@ public class Constants {
    */
   public static final String HEADER_X_SUPPORTS_FREE_BOOKS = "x-supports-free-books";
 
+  /**
+   * White labelId
+   */
+  public static final String HEADER_X_WHITE_LABEL_ID = "x-white-label-id";
+
 }
