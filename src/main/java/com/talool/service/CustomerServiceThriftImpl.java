@@ -166,10 +166,10 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     }
 
     try {
-      // test of account exits
+      // test if account exits
       if (taloolService.emailExists(AccountType.CUS, customer.getEmail())) {
         LOG.error("Email already taken: " + customer.getEmail());
-        throw new ServiceException_t(ErrorCode.EMAIL_ALREADY_TAKEN.getCode(), ErrorCode.EMAIL_ALREADY_TAKEN.getMessage());
+        throw new ServiceException_t(ErrorCode.ACCOUNT_ALREADY_TAKEN.getCode(), ErrorCode.ACCOUNT_ALREADY_TAKEN.getMessage());
       }
     } catch (ServiceException e) {
       LOG.error("Problem registering customer: " + e, e);
@@ -177,24 +177,22 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     }
 
     try {
-
       final Customer taloolCustomer = ConversionUtil.convertFromThrift(customer);
       if (customer.getSocialAccounts() != null) {
         for (final SocialAccount_t sac : customer.getSocialAccounts().values()) {
           final CustomerSocialAccount taloolSocialAccount = ConversionUtil.convertFromThrift(sac, taloolCustomer);
           taloolCustomer.addSocialAccount(taloolSocialAccount);
         }
-
       }
 
       customerService.createAccount(taloolCustomer, password, whiteLabelPublisherMerchantId);
-
       final Customer_t updatedCustomer = ConversionUtil.convertToThrift(taloolCustomer);
-
       token = TokenUtil.createTokenAccess(updatedCustomer);
-
+    } catch (ServiceException se) {
+      LOG.error("Problem creating account: " + se.getLocalizedMessage(), se);
+      throw new ServiceException_t(se.getErrorCode().getCode(), se.getMessage());
     } catch (Exception e) {
-      LOG.error("Problem registering customer: " + e, e);
+      LOG.error("Problem creating customer: " + e.getLocalizedMessage(), e);
       throw new ServiceException_t(ErrorCode.UNKNOWN.getCode(), e.getLocalizedMessage());
     }
 

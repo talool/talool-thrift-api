@@ -230,7 +230,7 @@ public class ServiceIntegrationTest {
   @Test
   public void testDuplicateRegisterCustomer() throws ServiceException_t, TException {
     thrown.expect(ServiceException_t.class);
-    thrown.expect(new ServiceExceptionMatcher(ErrorCode.EMAIL_ALREADY_TAKEN.getCode()));
+    thrown.expect(new ServiceExceptionMatcher(ErrorCode.ACCOUNT_ALREADY_TAKEN.getCode()));
 
     Customer_t customer = new Customer_t();
     customer.setFirstName(TEST_USER_FIRST);
