@@ -63,7 +63,7 @@ import com.talool.service.util.Constants;
  *         null
  */
 
-
+@Ignore
 public class ServiceIntegrationTest {
 
   // private static final String TEST_URL = "http://localhost:8082/1.1";
