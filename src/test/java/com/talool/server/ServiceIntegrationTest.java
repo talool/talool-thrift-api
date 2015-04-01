@@ -66,10 +66,10 @@ import com.talool.service.util.Constants;
 @Ignore
 public class ServiceIntegrationTest {
 
-  private static final String TEST_URL = "http://localhost:8082/1.1";
+  // private static final String TEST_URL = "http://localhost:8082/1.1";
 
   // dev-api1
-  // private static final String TEST_URL = "http://dev-api.talool.com/1.1";
+  private static final String TEST_URL = "http://dev-api.talool.com/1.1";
   // private static final String TEST_URL = "http://api.talool.com/1.1";
 
   // private static final String TEST_URL = "http://localhost:8082/1.1";
@@ -943,6 +943,7 @@ public class ServiceIntegrationTest {
   public void testDealOfferGeoSummaryWithin() throws ServiceException_t, TException {
     CTokenAccess_t tokenAccess = client.authenticate("chris@talool.com", "pass123");
     tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+    tHttpClient.setCustomHeader("x-supports-free-books", "true");
 
     final SearchOptions_t searchOpts = new SearchOptions_t();
     searchOpts.setSortProperty("distanceInMeters");
@@ -957,10 +958,13 @@ public class ServiceIntegrationTest {
     fallbackSearchOpts.setPage(0);
 
     // DealOfferGeoSummariesResponse_t response =
-    // client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
-    // Location_t loc = new Location_t();
+    // / client.getDealOfferGeoSummariesWithin(Rochester_NY, 200, searchOpts);
+    // // Location_t loc = new Location_t();
 
-    DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 2000, searchOpts, fallbackSearchOpts);
+    tHttpClient.setCustomHeader(CustomerServiceConstants.CTOKEN_NAME, tokenAccess.getToken());
+    tHttpClient.setCustomHeader("x-supports-free-books", "true");
+
+    DealOfferGeoSummariesResponse_t response = client.getDealOfferGeoSummariesWithin(null, 20000, searchOpts, fallbackSearchOpts);
 
     Assert.assertTrue(CollectionUtils.isNotEmpty(response.getDealOfferGeoSummaries()));
 
