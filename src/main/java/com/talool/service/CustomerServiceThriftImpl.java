@@ -1156,7 +1156,12 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     // supports free books?
     final boolean supportsFreeBooks = RequestUtils.getRequest().getHeader(Constants.HEADER_X_SUPPORTS_FREE_BOOKS) != null;
     // white label header?
-    final String whiteLabelIdHeader = RequestUtils.getRequest().getHeader(Constants.HEADER_X_WHITE_LABEL_ID);
+    // HACK TO FIX DEPLOYMENT OF DEV BUILD TO ITUNES FOR CHAMBERPG
+    String whiteLabelIdHeader = RequestUtils.getRequest().getHeader(Constants.HEADER_X_WHITE_LABEL_ID);
+    if (whiteLabelIdHeader.equalsIgnoreCase("c6679895-7fc7-499c-a063-2aa9b2bbde4c"))
+    {
+      whiteLabelIdHeader = "d8b03445-63e7-4376-8a8b-8b43c659cada";
+    }
 
     if (StringUtils.isNotEmpty(whiteLabelIdHeader)) {
       whiteLabelPublisherMerchantId = UUID.fromString(whiteLabelIdHeader);
@@ -1168,7 +1173,7 @@ public class CustomerServiceThriftImpl implements CustomerService_t.Iface {
     if (LOG.isDebugEnabled()) {
       LOG.debug(String.format(
           "getDealOfferGeoSummariesWithin email: %s location: %s maxMiles: %d searchOpts: %s fallbackSeachOpts: %s whiteLabelId: %s", token
-              .getEmail(), location == null ? null : location.toString(), maxMiles, searchOptions == null ? null : searchOptions.toString(),
+                      .getEmail(), location == null ? null : location.toString(), maxMiles, searchOptions == null ? null : searchOptions.toString(),
           fallbackSearchOptions == null ? null : fallbackSearchOptions.toString(), whiteLabelPublisherMerchantId == null ? "null"
               : whiteLabelPublisherMerchantId.toString()));
     }
